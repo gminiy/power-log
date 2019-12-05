@@ -12,7 +12,13 @@ module.exports = (sequelize, DataTypes) => {
   Exercise.associate = function(models) {
     Exercise.belongsTo(models.User, {
       foreignKey: 'userId',
+      target: 'id',
       as: 'user',
+    });
+    Exercise.hasMany(models.Record, {
+      foreignKey: 'exerciseId',
+      source: 'id',
+      as: 'records',
     });
   };
   return Exercise;
