@@ -2,6 +2,8 @@ const createError = require('http-errors');
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+
 exports.register = async (req, res, next) => {
   const schema = Joi.object().keys({
     id: Joi.string()
@@ -20,7 +22,13 @@ exports.register = async (req, res, next) => {
     if (exist) return next(createError(409, 'id conflict'));
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ id, hashedPassword });
-    return res.json(user);
+
+    // 자동 로그인, 토큰 발급. 30일 유효.
+    const token = generateToken({ id: user.id });
+    res.set({
+      'jwt': token
+    });
+    return res.json({ id: user.id })
   } catch (e) {
     return next(e);
   }
@@ -33,3 +41,14 @@ exports.login = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
   res.send('logout');
 };
+
+const generateToken = dataObj => {
+  const token = jwt.sign(
+    dataObj,
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '30d'
+    }
+  );
+  return token;
+}
