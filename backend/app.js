@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sequelize = require('./models').sequelize;
+const router = require('./routes');
 const app = express();
 
 // connect to Sequelize
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', router);
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
