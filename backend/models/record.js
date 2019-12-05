@@ -14,7 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'exerciseId',
       target: 'id',
       as: 'exercises',
-    })
+    });
+    Record.hasMany(models.Set, {
+      foreignKey: 'recordId',
+      target: 'id',
+      as: 'sets',
+    });
   };
   return Record;
 };
