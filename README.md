@@ -13,7 +13,7 @@
 
 ## Backend
 - node.js, express
-- MySQL, sequelize
+- MongoDB, Mongoose
 
 ## deploy
 - 미정
