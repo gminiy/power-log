@@ -26,7 +26,7 @@ exports.list = async (req, res, next) => {
 
     return res.json(exercises);
   } catch (e) {
-    next(e);
+    return next(e);
   }
 };
 
@@ -39,5 +39,15 @@ exports.remove = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  return res.send('update');
+  const { id } = req.params;
+  const { name } = req.body;
+  if (!id || !name) return next(createError(400, 'id and name are required'));
+  try {
+    const result = await Exercise.update({ name }, { where: { id }});
+    if (!result[0]) return next(createError(404));
+
+    return res.send();
+  } catch (e) {
+    return next(e);
+  }
 };
