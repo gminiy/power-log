@@ -7,7 +7,7 @@ const sequelize = require('./models').sequelize;
 const router = require('./routes');
 const app = express();
 // middlewares
-const { decodeJwt } = require('./middlewares/jwtMiddleware');
+const { decodeJwt } = require('./middlewares/jwtMiddlewares');
 
 // connect to Sequelize
 sequelize.sync();
