@@ -63,10 +63,6 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.logout = async (req, res, next) => {
-  res.send('logout');
-};
-
 const generateToken = dataObj => {
   const token = jwt.sign(
     dataObj,
