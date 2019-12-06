@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { Exercise, Record } = require('../../models');
+const { Record } = require('../../models');
 
 exports.register = async (req, res, next) => {
   const { volume, exerciseId } = req.body;
@@ -14,20 +14,6 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.list = async (req, res, next) => {
-  // if (!req.user.id) return next(createError(401));
-  // try {
-  //   const exercises = await Exercise.findAll({ 
-  //     where: { userId: req.user.id },
-  //     attributes: ['id', 'name'],
-  //   });
-
-  //   return res.json(exercises);
-  // } catch (e) {
-  //   return next(e);
-  // }
-};
-
 exports.read = async (req, res, next) => {
   return res.send('read');
 };
@@ -37,15 +23,15 @@ exports.remove = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  // const { id } = req.params;
-  // const { name } = req.body;
-  // if (!id || !name) return next(createError(400, 'id and name are required'));
-  // try {
-  //   const result = await Exercise.update({ name }, { where: { id }});
-  //   if (!result[0]) return next(createError(404));
+  const { id } = req.params;
+  const { volume } = req.body;
+  if (!id || !volume) return next(createError(400, 'id and volume are required'));
+  try {
+    const result = await Record.update({ volume }, { where: { id }});
+    if (!result[0]) return next(createError(404));
 
-  //   return res.send();
-  // } catch (e) {
-  //   return next(e);
-  // }
+    return res.send();
+  } catch (e) {
+    return next(e);
+  }
 };
