@@ -5,6 +5,7 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res, next) => {
+  // validation
   const schema = Joi.object().keys({
     id: Joi.string()
       .min(3)
@@ -18,8 +19,11 @@ exports.register = async (req, res, next) => {
   if(result.error) return next(createError(400));
   const { id, password } = req.body;
   try {
+    // 해당 id 유저가 있는지 확인, 있으면 conflict error
     const exist = await User.findOne({ where: { id }});
     if (exist) return next(createError(409, 'id conflict'));
+    
+    //password 암호화해서 저장
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ id, hashedPassword });
 
@@ -28,6 +32,7 @@ exports.register = async (req, res, next) => {
     res.set({
       'jwt': token
     });
+
     return res.json({ id: user.id })
   } catch (e) {
     return next(e);
@@ -35,7 +40,27 @@ exports.register = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  res.send('login');
+  const { id, password } = req.body;
+  if (!id || !password) return next(createError(400, 'ID, Password are required'));
+  try {
+    // 입력 id 유저 찾기
+    const user = await User.findOne({ where: { id } });
+    if (!user) return next(createError(401, 'ID is wrong'));
+    
+    // password, id 비교
+    const valid = await bcrypt.compare(password, user.hashedPassword);
+    if (!valid) return next(createError(401, 'Password is wrong'));
+
+    // 로그인 성공, 토큰 발급, 30일 유효
+    const token = generateToken({ id: user.id });
+    res.set({
+      'jwt': token,
+    });
+
+    return res.json({ id: user.id });
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.logout = async (req, res, next) => {
