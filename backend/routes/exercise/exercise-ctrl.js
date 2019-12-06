@@ -16,18 +16,28 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.list = (req, res, next) => {
-  return res.send('list');
+exports.list = async (req, res, next) => {
+  if (!req.user.id) return next(createError(401));
+  try {
+    const exercises = await Exercise.findAll({ 
+      where: { userId: req.user.id },
+      attributes: ['id', 'name'],
+    });
+
+    return res.json(exercises);
+  } catch (e) {
+    next(e);
+  }
 };
 
-exports.read = (req, res, next) => {
+exports.read = async (req, res, next) => {
   return res.send('read');
 };
 
-exports.remove = (req, res, next) => {
+exports.remove = async (req, res, next) => {
   return res.send('remove');
 };
 
-exports.update = (req, res, next) => {
+exports.update = async (req, res, next) => {
   return res.send('update');
 };
