@@ -3,6 +3,7 @@ const { User } = require('../../models');
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+//require('dotenv').config();
 
 exports.register = async (req, res, next) => {
   // validation
