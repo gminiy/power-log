@@ -13,12 +13,16 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.read = async (req, res, next) => {
-  return res.send('read');
-};
-
 exports.remove = async (req, res, next) => {
-  return res.send('remove');
+  const { id } = req.params;
+  if (!id) return next(createError(400, 'id is required'));
+  try {
+    const result = await Set.remove({ where: { id }});
+
+    return res.json(result);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.update = async (req, res, next) => {
