@@ -4,9 +4,8 @@ const { Set } = require('../../models');
 exports.register = async (req, res, next) => {
   const { weight, reps, recordId } = req.body;
   if (!weight || !reps || !recordId) return next(createError(400, 'weight and reps are required'));
-  const setData = { weight, reps, recordId }
   try {
-    const set = await Set.create(setData);
+    const set = await Set.create({ weight, reps, recordId });
 
     return res.json(set);
   } catch (e) {

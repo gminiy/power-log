@@ -4,9 +4,8 @@ const { Record } = require('../../models');
 exports.register = async (req, res, next) => {
   const { volume, exerciseId } = req.body;
   if (!volume || !exerciseId) return next(createError(400, 'volume and exerciseId are required'));
-  const recordData = { volume, exerciseId }
   try {
-    const record = await Record.create(recordData);
+    const record = await Record.create({ volume, exerciseId });
 
     return res.json(record);
   } catch (e) {
