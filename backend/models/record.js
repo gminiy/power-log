@@ -23,12 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     Record.addHook('afterDestroy', async record => {
       try {
         const sets = await record.getSets();
-        console.log(sets);
         return sets.map(async set => await set.destroy());
       } catch (e) {
         throw e;
       }
-    })
+    });
   };
   return Record;
 };

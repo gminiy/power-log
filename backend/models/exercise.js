@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
       source: 'id',
       as: 'records',
     });
+    Exercise.addHook('afterDestroy', async exercise => {
+      try {
+        const records = await exercise.getRecords();
+        return records.map(async record => await record.destroy());
+      } catch (e) {
+        throw e;
+      }
+    });
   };
   return Exercise;
 };

@@ -51,7 +51,19 @@ exports.read = async (req, res, next) => {
 };
 
 exports.remove = async (req, res, next) => {
-  return res.send('remove');
+  const { id } = req.params;
+  if (!id) return next(createError(400, 'id is required'));
+  try {
+    const result = await Exercise.destroy({ 
+      where: { id },
+      individualHooks: true,
+    });
+    if (!result) return next(createError(400, 'no exercise'));
+
+    return res.json(result);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.update = async (req, res, next) => {
