@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { User, Exercise } = require('../../models');
+const { Exercise, Record } = require('../../models');
 
 exports.register = async (req, res, next) => {
   const { name } = req.body;
@@ -31,7 +31,23 @@ exports.list = async (req, res, next) => {
 };
 
 exports.read = async (req, res, next) => {
-  return res.send('read');
+  const { id } = req.params;
+  if (!id) return next(createError(400, 'id is required'));
+  try {
+    const exercise = await Exercise.findOne({
+      where: { id },
+      include: [
+        {
+          model: Record,
+          as: 'records',
+          attributes: ['id', 'volume'],
+        },
+      ],
+    });
+    return res.json(exercise);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.remove = async (req, res, next) => {
