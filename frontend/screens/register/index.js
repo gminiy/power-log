@@ -11,7 +11,7 @@ import Button from '../../components/common/Button';
 const RegisterScreen = ({ navigation }) => {
   return (
     <AuthTemplate>
-      <AuthForm type="register"/>
+      <AuthForm type="register" navigation={navigation}/>
       <Button styles={buttonStyles} onPress={onPress(navigation)} text="로그인하기" />
     </AuthTemplate>
   );

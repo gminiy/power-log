@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -8,19 +8,20 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../common/Button';
 import urls from '../../src/lib/urls';
-import useFetch from '../../src/lib/useFetch'
-const AuthForm = ({ type }) => {
+import useFetch from '../../src/lib/useFetch';
+import UserContext from '../../context/user';
+
+const AuthForm = ({ type, navigation }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-
+  const { actions } = useContext(UserContext);
   const onChangeId = value => setId(value);
   const onChangePassword = value => setPassword(value);
   const onChangePasswordConfirm = value => setPasswordConfirm(value);
   const registerOnPress = async () => {
     try {
       if (password !== passwordConfirm) return Alert.alert('비밀번호가 일치하지 않습니다.');
-
       const options = {
         headers: {
           Accept: 'application/json',
@@ -32,12 +33,15 @@ const AuthForm = ({ type }) => {
         }),
         method: 'POST'
       };
+      const response = await useFetch(urls.register, options);
+      const userId = response.id;
+      actions.setUserId(userId);
       
-      return await useFetch(urls.register, options);
+      return navigation.navigate('ExerciseList');
     } catch(e) {
-      return Alert.alert('장애가 발생했습니다. 다시 시도해주세요.');
+      return Alert.alert('이상한 에러');
     }
-  }
+  };
 
   return (
       <View style={styles.formArea}>
@@ -101,4 +105,5 @@ const buttonStyles = StyleSheet.create({
     color: 'black'
   }
 });
+
 export default AuthForm;
