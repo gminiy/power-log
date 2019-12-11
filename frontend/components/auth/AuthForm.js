@@ -4,7 +4,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../common/Button';
 
 const AuthForm = () => {
@@ -16,7 +16,7 @@ const AuthForm = () => {
         <TextInput 
           style={styles.textForm} 
           placeholder={"Password"}/>
-        <Button text='로그인'/>
+        <Button styles={buttonStyles} text='로그인'/>
       </View>
   );
 };
@@ -37,4 +37,21 @@ const styles = StyleSheet.create({
   }
 });
 
+
+const buttonStyles = StyleSheet.create({
+  button: {
+    backgroundColor: "white",
+    paddingLeft: 5,
+    paddingRight: 5,
+    height: hp('5.3%%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1
+  },
+  buttonText: {
+    fontSize: wp('4.5%'),
+    color: 'black'
+  }
+});
 export default AuthForm;
