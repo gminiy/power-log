@@ -8,12 +8,12 @@ import AuthTemplate from '../../components/auth/AuthTemplate';
 import AuthForm from '../../components/auth/AuthForm';
 import Button from '../../components/common/Button';
 
-const LoginScreen = (props) => {
+const LoginScreen = ({ navigation }) => {
   return (
     <AuthTemplate>
-      <AuthForm />
+      <AuthForm type="login" />
       <Text style={styles.text}>회원 가입하고 자신만의 운동 기록을 만들어 보세요.</Text>
-      <Button styles={buttonStyles} onPress={onPress(props)} text="회원가입하기" />
+      <Button styles={buttonStyles} onPress={onPress(navigation)} text="회원가입하기" />
     </AuthTemplate>
   );
 }
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const onPress = (props) => {
+const onPress = (navigation) => {
   return () => {
-    return props.navigation.navigate('Register');
+    return navigation.navigate('Register');
   }
 }
 

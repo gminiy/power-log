@@ -7,16 +7,25 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../common/Button';
 
-const AuthForm = () => {
+const AuthForm = ({ type }) => {
   return (
       <View style={styles.formArea}>
         <TextInput 
           style={styles.textForm} 
-          placeholder={"ID"}/>
+          placeholder={"아이디"}/>
         <TextInput 
           style={styles.textForm} 
-          placeholder={"Password"}/>
-        <Button styles={buttonStyles} text='로그인'/>
+          placeholder={"비밀번호"}/>
+        {type === 'register' && (
+          <TextInput 
+          style={styles.textForm} 
+          placeholder={"비밀번호 확인"}/>
+        )}
+        {type === 'register' ? (
+          <Button styles={buttonStyles} text="가입하기"/>
+        ) : (
+          <Button styles={buttonStyles} text="로그인"/>
+        )}
       </View>
   );
 };
