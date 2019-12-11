@@ -10,11 +10,19 @@ import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './screens/login';
 
 
-const AppNavigator = createStackNavigator({
-  Login: {
-    screen: LoginScreen
+const AppNavigator = createStackNavigator(
+  {
+    Login: {
+      screen: LoginScreen,
+    },
   },
-});
+  {
+    defaultNavigationOptions: {
+      headerShown: false,
+    },
+    initialRouteName: 'Login'
+  },
+);
 
 const AppContainer = createAppContainer(AppNavigator);
 
@@ -23,19 +31,5 @@ const App = () => {
       <AppContainer />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  title: {
-    color: 'gray',
-    fontSize: 36,
-    fontWeight: '500'
-  },
-});
 
 export default App;

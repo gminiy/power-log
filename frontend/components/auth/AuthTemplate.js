@@ -1,30 +1,36 @@
 import React from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
-  TextInput,
   StyleSheet
 } from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const AuthTemplate = () => {
+const AuthTemplate = ({ children }) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.titleArea}>
-        <Text style={styles.title}>
+    <View style={styles.container}>
+      <View style={styles.logoArea}>
+        <Text style={styles.logo}>
           Power Log
         </Text>
       </View>
-    </SafeAreaView>
+      {children}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logoArea: {
+    alignItems: 'center',
+    marginBottom: hp('3%'),
+  },
+  logo: {
+    fontSize: wp('10%')
   },
 });
 
