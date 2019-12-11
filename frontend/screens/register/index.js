@@ -20,7 +20,7 @@ const RegisterScreen = ({ navigation }) => {
 const onPress = (navigation) => {
   return () => {
     return navigation.navigate('Login');
-  }
+  };
 };
 
 const buttonStyles = StyleSheet.create({

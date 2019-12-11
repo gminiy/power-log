@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import ExerciseListScreen from './screens/exerciseList';
-
 
 const AppNavigator = createStackNavigator(
   {
@@ -27,7 +26,7 @@ const AppNavigator = createStackNavigator(
   },
 );
 
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(AppNavigator); 
 
 const App = () => {
   return (
