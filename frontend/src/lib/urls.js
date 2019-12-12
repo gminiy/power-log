@@ -1,7 +1,8 @@
 const baseUrl = 'http://192.168.1.68:3000';
 const urls = {
   register: '/auth/register',
-  login: '/auth/login'
+  login: '/auth/login',
+  checkAuth: '/auth/check',
 };
 for(url in urls) {
   urls[url] = `${baseUrl}${urls[url]}`;

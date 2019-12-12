@@ -5,10 +5,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import ExerciseListScreen from './screens/exerciseList';
+import LoadingScreen from './screens/loading';
 import { UserProvider } from './context/user';
 
 const AppNavigator = createStackNavigator(
   {
+    Loading: {
+      screen: LoadingScreen,
+    },
     Login: {
       screen: LoginScreen,
     },
@@ -23,7 +27,7 @@ const AppNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerShown: false,
     },
-    initialRouteName: 'Login'
+    initialRouteName: 'Loading'
   },
 );
 

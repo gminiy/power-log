@@ -10,7 +10,7 @@ import Button from '../common/Button';
 import urls from '../../src/lib/urls';
 import useFetch from '../../src/lib/useFetch';
 import UserContext from '../../context/user';
-import { storeData, getData } from '../../src/lib/asyncStorage';
+import { storeData } from '../../src/lib/asyncStorage';
 
 const AuthForm = ({ type, navigation }) => {
   const [id, setId] = useState('');
@@ -84,6 +84,7 @@ const AuthForm = ({ type, navigation }) => {
           return Alert.alert('장애.');
       }
       await storeData('powerLogToken', response.headers.map.jwt);
+      console.log(response.headers.map.jwt)
       const body = await response.json();
       const userId = body.id;
       actions.setUserId(userId);
