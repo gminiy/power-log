@@ -11,9 +11,11 @@ import Button from '../../components/common/Button';
 const LoginScreen = ({ navigation }) => {
   return (
     <AuthTemplate>
-      <AuthForm type="login" />
+      <AuthForm type="login" navigation={navigation}/>
       <Text style={styles.text}>회원 가입하고 자신만의 운동 기록을 만들어 보세요.</Text>
-      <Button styles={buttonStyles} onPress={onPress(navigation)} text="회원가입하기" />
+      <Button styles={buttonStyles}
+        onPress={onPress(navigation)} 
+        text="회원가입하기" />
     </AuthTemplate>
   );
 }

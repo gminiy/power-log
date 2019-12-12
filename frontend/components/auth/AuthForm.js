@@ -34,14 +34,63 @@ const AuthForm = ({ type, navigation }) => {
         method: 'POST'
       };
       const response = await useFetch(urls.register, options);
-      const userId = response.id;
+
+      switch(response.status) {
+        case 400:
+          Alert.alert('id는 최소 3글자, 비밀번호는 최소 6글자입니다.');
+          break;
+        case 409:
+          Alert.alert('이미 존재하는 아이디 입니다.');
+          break;
+        case 500:
+          throw response.message;
+      }
+
+      const body = await response.json();
+      const userId = body.id;
       actions.setUserId(userId);
       
       return navigation.navigate('ExerciseList');
     } catch(e) {
+      console.log(e);
       return Alert.alert('장애가 발생하였습니다. 다시 시도해주세요.');
-    }
+    };
   };
+
+  const loginOnPress = async () => {
+    try {
+      const options = {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+          password
+        }),
+        method: 'POST'
+      };
+
+      const response = await useFetch(urls.login, options);
+
+      switch(response.status) {
+        case 400:
+          return Alert.alert('아이디와 비밀번호를 입력해주세요.');
+        case 401:
+          return Alert.alert('아이디와 비밀번호가 일치하지 않습니다.');
+        case 500:
+          return Alert.alert('장애.');
+      }
+      const body = await response.json();
+      const userId = body.id;
+      actions.setUserId(userId);
+      
+      return navigation.navigate('ExerciseList');
+    } catch(e) {
+      console.log(e);
+      return Alert.alert('장애가 발생하였습니다. 다시 시도해주세요.');
+    };
+  }
 
   return (
       <View style={styles.formArea}>
@@ -67,7 +116,7 @@ const AuthForm = ({ type, navigation }) => {
         {type === 'register' ? (
           <Button styles={buttonStyles} onPress={registerOnPress} text="가입하기"/>
         ) : (
-          <Button styles={buttonStyles} text="로그인"/>
+          <Button styles={buttonStyles} onPress={loginOnPress} text="로그인"/>
         )}
       </View>
   );
