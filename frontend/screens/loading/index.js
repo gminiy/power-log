@@ -24,7 +24,8 @@ const LoadingScreen = ({ navigation }) => {
         'Content-Type': 'application/json',
         'jwt': token,
       },
-    }
+    };
+    
     const response = await useFetch(urls.checkAuth, options);
     switch(response.status) {
       case 401:

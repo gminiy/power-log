@@ -21,6 +21,17 @@ const AppNavigator = createStackNavigator(
     },
     ExerciseList: {
       screen: ExerciseListScreen,
+      navigationOptions: ({ navigation}) => ({
+        headerShown: true,
+        headerStyle:{
+          backgroundColor: 'white',
+        },
+        headerLeft: null,
+        title: 'Power Log',
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        }
+      }),
     },
   },
   {
