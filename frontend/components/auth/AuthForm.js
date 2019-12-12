@@ -38,11 +38,9 @@ const AuthForm = ({ type, navigation }) => {
 
       switch(response.status) {
         case 400:
-          Alert.alert('id는 최소 3글자, 비밀번호는 최소 6글자입니다.');
-          break;
+          return Alert.alert('id는 최소 3글자, 비밀번호는 최소 6글자입니다.');
         case 409:
-          Alert.alert('이미 존재하는 아이디 입니다.');
-          break;
+          return Alert.alert('이미 존재하는 아이디 입니다.');
         case 500:
           throw response.message;
       }
