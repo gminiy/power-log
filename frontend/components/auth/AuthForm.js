@@ -39,7 +39,7 @@ const AuthForm = ({ type, navigation }) => {
       
       return navigation.navigate('ExerciseList');
     } catch(e) {
-      return Alert.alert('이상한 에러');
+      return Alert.alert('장애가 발생하였습니다. 다시 시도해주세요.');
     }
   };
 

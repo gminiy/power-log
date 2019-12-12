@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -6,10 +6,12 @@ import {
   Text
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import UserContext from '../../context/user';
 
 const ExerciseListScreen = () => {
+  const { state } = useContext(UserContext);
   return (
-    <Text>exercise list screeen</Text>
+    <Text>{state.userId} 님 웰컴</Text>
   );
 }
 

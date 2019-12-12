@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('3%'),
   },
   logo: {
-    fontSize: wp('10%')
+    fontSize: wp('10%'),
   },
 });
 
