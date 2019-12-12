@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 //require('dotenv').config();
 
 exports.register = async (req, res, next) => {
+	console.log(req.body)
   // validation
   const schema = Joi.object().keys({
     id: Joi.string()
@@ -62,6 +63,12 @@ exports.login = async (req, res, next) => {
   } catch (e) {
     return next(e);
   }
+};
+
+exports.check = async (req, res, next) => {
+  if (!req.user) return res.status(401).send();
+  
+  return res.json({ id: req.user.id });
 };
 
 const generateToken = dataObj => {
