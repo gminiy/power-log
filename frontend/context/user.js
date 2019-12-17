@@ -9,10 +9,11 @@ const UserContext = createContext({
 
 const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
 
   const value = {
-    state: { userId },
-    actions: { setUserId }
+    state: { userId, token },
+    actions: { setUserId, setToken }
   };
   return (
     <UserContext.Provider value={value}>{children}</UserContext.Provider>

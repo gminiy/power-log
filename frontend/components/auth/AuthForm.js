@@ -44,13 +44,14 @@ const AuthForm = ({ type, navigation }) => {
         case 500:
           throw response.message;
       }
-      
+      const token = response.headers.map.jwt;
+      await storeData('powerLogToken', token);
       const body = await response.json();
       const userId = body.id;
-      await storeData('powerLogToken', response.headers.map.jwt);
       actions.setUserId(userId);
-      
-      return navigation.navigate('ExerciseList');
+      actions.setToken(token);
+
+      return navigation.navigate('Exercises');
     } catch(e) {
       console.log(e);
       return Alert.alert('장애가 발생하였습니다. 다시 시도해주세요.');
@@ -81,12 +82,13 @@ const AuthForm = ({ type, navigation }) => {
         case 500:
           return Alert.alert('장애.');
       }
-      await storeData('powerLogToken', response.headers.map.jwt);
-      console.log(response.headers.map.jwt)
+      const token = response.headers.map.jwt;
+      await storeData('powerLogToken', token);
       const body = await response.json();
       const userId = body.id;
       actions.setUserId(userId);
-      return navigation.navigate('ExerciseList');
+      actions.setToken(token);
+      return navigation.navigate('Exercises');
     } catch(e) {
       console.log(e);
       return Alert.alert('장애가 발생하였습니다. 다시 시도해주세요.');

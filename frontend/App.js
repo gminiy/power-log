@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
-import ExerciseListScreen from './screens/exerciseList';
+import ExercisesScreen from './screens/exercises';
 import LoadingScreen from './screens/loading';
 import { UserProvider } from './context/user';
 
@@ -19,8 +19,8 @@ const AppNavigator = createStackNavigator(
     Register: {
       screen: RegisterScreen,
     },
-    ExerciseList: {
-      screen: ExerciseListScreen,
+    Exercises: {
+      screen: ExercisesScreen,
       navigationOptions: ({ navigation}) => ({
         headerShown: true,
         headerStyle:{

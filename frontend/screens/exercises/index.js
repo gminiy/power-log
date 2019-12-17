@@ -6,13 +6,12 @@ import {
   Text
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import UserContext from '../../context/user';
+import Exercises from '../../components/exercises/Exercises';
 
-const ExerciseListScreen = () => {
-  const { state } = useContext(UserContext);
+const ExercisesScreen = () => {
   return (
-    <Text>{state.userId} 님 웰컴</Text>
+    <Exercises />
   );
 }
 
-export default ExerciseListScreen;
+export default ExercisesScreen;

@@ -3,6 +3,7 @@ const urls = {
   register: '/auth/register',
   login: '/auth/login',
   checkAuth: '/auth/check',
+  getExercises: '/exercise',
 };
 for(url in urls) {
   urls[url] = `${baseUrl}${urls[url]}`;

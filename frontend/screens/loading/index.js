@@ -11,7 +11,7 @@ import urls from '../../src/lib/urls';
 
 const LoadingScreen = ({ navigation }) => {
   const { actions } = useContext(UserContext);
-  useEffect(async () => await checkAuth(), []);
+  useEffect(() => {checkAuth()}, []);
   
   const checkAuth = async () => {
     const token = await getData('powerLogToken');
@@ -35,9 +35,10 @@ const LoadingScreen = ({ navigation }) => {
     }
     const body = await response.json();
     const userId = body.id;
-    await actions.setUserId(userId);
+    actions.setUserId(userId);
+    actions.setToken(token);
     
-    navigation.navigate('ExerciseList');
+    navigation.navigate('Exercises');
   }
 
   return (
