@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.1.68:3000';
+const baseUrl = 'http://e9df29ad.ngrok.io';
 const urls = {
   register: '/auth/register',
   login: '/auth/login',

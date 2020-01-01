@@ -20,7 +20,7 @@ const LoadingScreen = ({ navigation }) => {
 
     const options = {
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
         'jwt': token,
       },

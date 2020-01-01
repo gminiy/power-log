@@ -146,7 +146,7 @@ const buttonStyles = StyleSheet.create({
     backgroundColor: "white",
     paddingLeft: 5,
     paddingRight: 5,
-    height: hp('5.3%%'),
+    height: hp('5.3%'),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
