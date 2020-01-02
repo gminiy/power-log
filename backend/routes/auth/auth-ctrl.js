@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 //require('dotenv').config();
 
 exports.register = async (req, res, next) => {
-	console.log(req.body)
   // validation
   const schema = Joi.object().keys({
     id: Joi.string()
@@ -31,11 +30,8 @@ exports.register = async (req, res, next) => {
 
     // 자동 로그인, 토큰 발급. 30일 유효.
     const token = generateToken({ id: user.id });
-    res.set({
-      'jwt': token
-    });
 
-    return res.json({ id: user.id })
+    return res.json({ token })
   } catch (e) {
     return next(e);
   }
@@ -55,11 +51,8 @@ exports.login = async (req, res, next) => {
 
     // 로그인 성공, 토큰 발급, 30일 유효
     const token = generateToken({ id: user.id });
-    res.set({
-      'jwt': token,
-    });
-
-    return res.json({ id: user.id });
+  
+    return res.json({ token });
   } catch (e) {
     return next(e);
   }
@@ -67,7 +60,7 @@ exports.login = async (req, res, next) => {
 
 exports.check = async (req, res, next) => {
   if (!req.user) return res.status(401).send();
-  
+
   return res.json({ id: req.user.id });
 };
 
