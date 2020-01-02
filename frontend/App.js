@@ -1,55 +1,31 @@
 import React from 'react';
-
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import LoginScreen from './screens/login';
-import RegisterScreen from './screens/register';
-import ExercisesScreen from './screens/exercises';
-import LoadingScreen from './screens/loading';
-import { UserProvider } from './context/user';
+import { setNavigator } from './src/common/navigationRef';
 
-const AppNavigator = createStackNavigator(
-  {
-    Loading: {
-      screen: LoadingScreen,
-    },
-    Login: {
-      screen: LoginScreen,
-    },
-    Register: {
-      screen: RegisterScreen,
-    },
-    Exercises: {
-      screen: ExercisesScreen,
-      navigationOptions: ({ navigation}) => ({
-        headerShown: true,
-        headerStyle:{
-          backgroundColor: 'white',
-        },
-        headerLeft: null,
-        title: 'Power Log',
-        headerTitleStyle: {
-          fontWeight: 'bold'
-        }
-      }),
-    },
-  },
-  {
-    defaultNavigationOptions: {
-      headerShown: false,
-    },
-    initialRouteName: 'Loading'
-  },
-);
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
+import ExerciseListScreen from './src/screens/ExerciseListScreen';
+import { Provider as AuthProvider } from './src/context/AuthContext';
 
-const AppContainer = createAppContainer(AppNavigator); 
+const switchNavigator = createSwitchNavigator({
+  ResolveAuth: ResolveAuthScreen,
+  loginFlow: createStackNavigator({
+    Login: LoginScreen,
+    Register: RegisterScreen,
+  }),
+  mainFlow: createStackNavigator({
+    ExerciseList: ExerciseListScreen,
+  }),
+});
 
-const App = () => {
+const App = createAppContainer(switchNavigator); 
+
+export default () => {
   return (
-      <UserProvider>
-        <AppContainer />
-      </UserProvider>
+    <AuthProvider>
+      <App ref={(navigator) => { setNavigator(navigator) }}/>
+    </AuthProvider>
   );
 };
-
-export default App;

@@ -1,25 +1,12 @@
 import React, { useContext } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Alert,
-  TouchableOpacity
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Exercises from '../../components/exercises/Exercises';
 
-const ExercisesScreen = () => {
-  const onPress = () => {
-    Alert.alert('pressed')
-  };
-
+const ExerciseListScreen = () => {
   return (
-    <View style={styles.container}>
-      <Exercises />
-      <TouchableOpacity onPress={onPress} style={styles.icon}>
+    <View>
+      <TouchableOpacity onPress={() => {}} style={styles.icon}>
         <Icon name="md-add-circle-outline" size={wp('16%')} color='#26306c' />
       </TouchableOpacity>
     </View>
@@ -36,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExercisesScreen;
+export default ExerciseListScreen;

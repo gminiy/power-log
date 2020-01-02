@@ -6,7 +6,7 @@ import {
 import useFetch from '../../src/lib/useFetch';
 import urls from '../../src/lib/urls';
 import Exercise from './Exercise';
-import UserContext from '../../context/user';
+import { Context as UserContext } from '../../context/UserContext';
 
 const Exercises = () => {
   const { state } = useContext(UserContext);
