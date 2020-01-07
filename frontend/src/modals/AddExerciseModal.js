@@ -6,15 +6,16 @@ import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
 
-const AddExerciseModal = ({ isVisible, setIsVisible }) => {
+const AddExerciseModal = ({ isVisible, setIsVisible, initExerciseList }) => {
   const [exerciseName, setExerciseName] = useState('');
 
   const requestAddExercise = async () => {
     try {
-      return await client.post(
+      const response = await client.post(
         urls.addExercise,
         { name: exerciseName },
       );
+      if (response.status === 200) initExerciseList();
     } catch (error) {
       console.log(error);
     }
@@ -22,8 +23,8 @@ const AddExerciseModal = ({ isVisible, setIsVisible }) => {
 
   return (
     <Modal
-    isVisible={isVisible}
-    onBackButtonPress={() => setIsVisible(false)}
+      isVisible={isVisible}
+      onBackButtonPress={() => setIsVisible(false)}
     >
       <View style={styles.container}>
         <Text>추가할 운동의 이름을 입력해주세요.</Text>
