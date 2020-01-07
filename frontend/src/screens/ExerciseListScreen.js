@@ -16,7 +16,9 @@ const ExerciseListScreen = ({ navigation }) => {
     setExerciseList(data);
   };
 
-  useEffect(() => initExerciseList(), []);
+  useEffect(() => {
+    initExerciseList()
+  }, []);
 
   return (
     <View>
@@ -38,7 +40,14 @@ const ExerciseListScreen = ({ navigation }) => {
       />
     </View>
   );
+};
+
+ExerciseListScreen.navigationOptions = ({ navigation }) => {
+  return {
+    title: 'Power Log'
+  }
 }
+
 
 const styles = StyleSheet.create({
   icon: {
