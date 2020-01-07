@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { AntDesign } from '@expo/vector-icons';
 
 const ExerciseListScreen = () => {
   return (
     <View>
       <TouchableOpacity onPress={() => {}} style={styles.icon}>
-        <Icon name="md-add-circle-outline" size={wp('16%')} color='#26306c' />
+        <AntDesign name="pluscircleo" size={wp('16%')} color='#26306c' />
       </TouchableOpacity>
     </View>
   );

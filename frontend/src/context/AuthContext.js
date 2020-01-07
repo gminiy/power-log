@@ -4,7 +4,7 @@ import client from '../api/client';
 import { navigate } from '../common/navigationRef';
 import urls from '../common/urls';
 
-const userReducer = (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case 'login':
       return { error: null, token: action.payload };
@@ -65,7 +65,7 @@ const tryLocalLogin = dispatch => async () => {
 };
 
 export const { Context, Provider } = createDataContext(
-  userReducer,
+  authReducer,
   { register, login, tryLocalLogin },
   { token: null, error: null }
 );
