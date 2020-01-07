@@ -13,10 +13,11 @@ const ExerciseListScreen = () => {
         isVisible={addExerciseModalVisible}
         setIsVisible={setAddExerciseModalVisable}  
       />
-      <TouchableOpacity onPress={() => {
-        setAddExerciseModalVisable(true);
-      }} style={styles.icon}>
-        <AntDesign name="pluscircleo" size={wp('16%')} color='#26306c' />
+      <TouchableOpacity 
+        onPress={() => setAddExerciseModalVisable(true)}
+        style={styles.icon}
+      >
+        <AntDesign name="pluscircleo" size={wp('15%')} color='#26306c' />
       </TouchableOpacity>
     </View>
   );
@@ -25,8 +26,8 @@ const ExerciseListScreen = () => {
 const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
-    top: hp('75%'),
-    left: wp('75%'),
+    top: hp('77%'),
+    left: wp('77%'),
     width: wp('16%'),
     height: hp('10%')
   },
