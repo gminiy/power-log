@@ -8,6 +8,10 @@ const TrackScreen = ({ navigation }) => {
   );
 };
 
-
+// TrackScreen.navigationOptions = ({ navigation }) => {
+//   return {
+//     headerTitle: 'test',
+//   }
+// }
 
 export default TrackScreen;

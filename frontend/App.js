@@ -14,17 +14,26 @@ import HistoryScreen from './src/screens/HistoryScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
-  loginFlow: createStackNavigator({
+  LoginStacks: createStackNavigator({
     Login: LoginScreen,
     Register: RegisterScreen,
   }),
-  mainFlow: createStackNavigator({
-    ExerciseList: ExerciseListScreen,
-    exerciseFlow: createBottomTabNavigator({
-      Track: TrackScreen,
-      History: HistoryScreen
-    })
-  }),
+  MainStacks: createStackNavigator(
+    {
+      ExerciseList: ExerciseListScreen,
+      ExerciseTabs: createBottomTabNavigator({
+        Track: TrackScreen,
+        History: HistoryScreen
+      })
+    },
+    {
+      defaultNavigationOptions: ({ navigation }) => {
+        return {
+          title: navigation.getParam('name')
+        };
+      }
+    }
+  ),
 });
 
 const App = createAppContainer(switchNavigator); 
