@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AntDesign } from '@expo/vector-icons';
+import AddExerciseModal from '../modals/AddExerciseModal';
 
 const ExerciseListScreen = () => {
+  const [addExerciseModalVisible, setAddExerciseModalVisable] = useState(false);
+
   return (
     <View>
-      <TouchableOpacity onPress={() => {}} style={styles.icon}>
+      <AddExerciseModal
+        isVisible={addExerciseModalVisible}
+        setIsVisible={setAddExerciseModalVisable}  
+      />
+      <TouchableOpacity onPress={() => {
+        setAddExerciseModalVisable(true);
+      }} style={styles.icon}>
         <AntDesign name="pluscircleo" size={wp('16%')} color='#26306c' />
       </TouchableOpacity>
     </View>
