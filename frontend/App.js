@@ -8,6 +8,7 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExerciseListScreen from './src/screens/ExerciseListScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
+import SetListScreen from './src/screens/SetListScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -17,6 +18,7 @@ const switchNavigator = createSwitchNavigator({
   }),
   mainFlow: createStackNavigator({
     ExerciseList: ExerciseListScreen,
+    SetList: SetListScreen,
   }),
 });
 
