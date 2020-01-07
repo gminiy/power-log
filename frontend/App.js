@@ -1,6 +1,7 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { setNavigator } from './src/common/navigationRef';
 
 import LoginScreen from './src/screens/LoginScreen';
@@ -8,7 +9,8 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExerciseListScreen from './src/screens/ExerciseListScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
-import SetListScreen from './src/screens/SetListScreen';
+import TrackScreen from './src/screens/TrackScreen';
+import HistoryScreen from './src/screens/HistoryScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -18,7 +20,10 @@ const switchNavigator = createSwitchNavigator({
   }),
   mainFlow: createStackNavigator({
     ExerciseList: ExerciseListScreen,
-    SetList: SetListScreen,
+    exerciseFlow: createBottomTabNavigator({
+      Track: TrackScreen,
+      History: HistoryScreen
+    })
   }),
 });
 

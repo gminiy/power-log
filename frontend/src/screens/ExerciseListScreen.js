@@ -36,7 +36,10 @@ const ExerciseListScreen = ({ navigation }) => {
             <Button 
               title={item.name}
               styles={buttonStyles}
-              onPress={() => navigation.navigate('SetList', { id: item.id, name: item.name })}
+              onPress={() => navigation.navigate(
+                'exerciseFlow',
+                { id: item.id, name: item.name }
+              )}
             />
           );
         }}
@@ -53,7 +56,7 @@ const ExerciseListScreen = ({ navigation }) => {
 
 ExerciseListScreen.navigationOptions = ({ navigation }) => {
   return {
-    title: 'Power Log',
+    title: '파워로그',
     headerStyle: { marginBottom: hp('2%')}
   }
 }
