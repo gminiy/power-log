@@ -3,4 +3,5 @@ module.exports = {
   login: '/auth/login',
   checkAuth: '/auth/check',
   getExercises: '/exercise',
+  addExercise: '/exercise',
 };

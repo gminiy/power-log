@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
+import client from '../api/client';
+import urls from '../common/urls';
+import { Context as AuthContext } from '../context/AuthContext';
+
+const requestAddExercise = async (token, exerciseName) => {
+  try {
+    return await client.post(
+      urls.addExercise,
+      { name: exerciseName },
+      { headers: { token } }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const AddExerciseModal = ({ isVisible, setIsVisible }) => {
+  const { state: { token } } = useContext(AuthContext);
   const [exerciseName, setExerciseName] = useState('');
 
   return (
@@ -26,8 +42,9 @@ const AddExerciseModal = ({ isVisible, setIsVisible }) => {
           title="추가"
           styles={buttonStyles}
           onPress={() => {
-            console.log(exerciseName);
-            setIsVisible(false)
+            console.log(token)
+            requestAddExercise(token, exerciseName);
+            setIsVisible(false);
             setExerciseName('');
           }}
         />
