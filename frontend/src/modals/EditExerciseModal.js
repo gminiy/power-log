@@ -32,6 +32,14 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
             setIsVisible(false);
           }}
         />
+        <Button
+          title="취소"
+          styles={buttonStyles}
+          onPress={() => {
+            setExerciseName('');
+            setIsVisible(false);
+          }}
+        />
       </View>
     </Modal>
   );
