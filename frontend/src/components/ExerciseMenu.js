@@ -4,9 +4,11 @@ import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import { Entypo } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import EditExerciseModal from '../modals/EditExerciseModal';
+import DeleteExerciseModal from '../modals/DeleteExerciseModal';
 
 const MaterialMenu = ({ exerciseId, exerciseName }) => {
   const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
+  const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
 
   let menu = null;
 
@@ -18,8 +20,13 @@ const MaterialMenu = ({ exerciseId, exerciseName }) => {
     menu.show();
   };
 
-  const edit = () => {
+  const editExercise = () => {
     setEditExerciseModalVisable(true);
+    return menu.hide();
+  };
+
+  const deleteExercise = () => {
+    setDeleteExerciseModalVisable(true);
     return menu.hide();
   };
 
@@ -31,12 +38,18 @@ const MaterialMenu = ({ exerciseId, exerciseName }) => {
         id={exerciseId}
         name={exerciseName}
       />
+      <DeleteExerciseModal
+        isVisible={deleteExerciseModalVisible}
+        setIsVisible={setDeleteExerciseModalVisable}
+        id={exerciseId}
+        name={exerciseName}
+      />
       <Menu
         ref={setMenuRef}
         button={<Entypo size={wp('5%')} name="menu" onPress={showMenu} />}
       >
-        <MenuItem onPress={edit}>수정</MenuItem>
-        <MenuItem onPress={() => {}}>삭제</MenuItem>
+        <MenuItem onPress={editExercise}>수정</MenuItem>
+        <MenuItem onPress={deleteExercise}>삭제</MenuItem>
       </Menu>
     </View>
   );
