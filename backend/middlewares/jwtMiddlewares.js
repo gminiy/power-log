@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 exports.decodeJwt = (req, res, next) => {
-  const token = req.get('jwt');
+  const token = req.get('token');
   if (!token) return next();
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

@@ -8,9 +8,15 @@ exports.register = async (req, res, next) => {
   try {
     let exercise = await Exercise.findOne({ where: exerciseData });
     if (exercise) return next(createError(409, 'Exist exercise'));
-    exercise = await Exercise.create(exerciseData);
 
-    return res.json(exercise);
+    exercise = await Exercise.create(exerciseData);
+    
+    const sendingData = {
+      id: exercise.id,
+      name: exercise.name,
+    }
+
+    return res.json(sendingData);
   } catch (e) {
     return next(e);
   }
