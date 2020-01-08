@@ -9,6 +9,7 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExerciseListScreen from './src/screens/ExerciseListScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
+import { Provider as ExerciseProvider } from './src/context/ExerciseContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 
@@ -34,14 +35,17 @@ const switchNavigator = createSwitchNavigator({
       }
     }
   ),
-});
+}
+);
 
 const App = createAppContainer(switchNavigator); 
 
 export default () => {
   return (
     <AuthProvider>
-      <App ref={(navigator) => { setNavigator(navigator) }}/>
+      <ExerciseProvider>
+        <App ref={(navigator) => { setNavigator(navigator) }}/>
+      </ExerciseProvider>
     </AuthProvider>
   );
 };

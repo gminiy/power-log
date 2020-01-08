@@ -8,12 +8,4 @@ const HistoryScreen = ({ navigation }) => {
   );
 };
 
-// HistoryScreen.navigationOptions = ({ navigation }) => {
-//   return {
-//     title: navigation.getParam('name'),
-//     headerStyle: { marginBottom: hp('2%')}
-//   }
-// }
-
-
 export default HistoryScreen;

@@ -5,9 +5,9 @@ import Modal from 'react-native-modal';
 import Button from '../components/Button';
 import { Context as ExerciseContext } from '../context/ExerciseContext';
 
-const AddExerciseModal = ({ isVisible, setIsVisible }) => {
-  const { addExercise } = useContext(ExerciseContext);
-  const [exerciseName, setExerciseName] = useState('');
+const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
+  const { editExercise } = useContext(ExerciseContext);
+  const [exerciseName, setExerciseName] = useState(name);
 
   return (
     <Modal
@@ -15,20 +15,19 @@ const AddExerciseModal = ({ isVisible, setIsVisible }) => {
       onBackButtonPress={() => setIsVisible(false)}
     >
       <View style={styles.container}>
-        <Text>추가할 운동의 이름을 입력해주세요.</Text>
+        <Text>수정할 운동의 이름을 입력해주세요.</Text>
         <TextInput
           style={styles.input} 
-          placeholder={"운동 이름"}
           value={exerciseName}
           onChangeText={setExerciseName}
           autoCapitalize="none"
           autoCorrect={false}
         />
         <Button
-          title="추가"
+          title="수정"
           styles={buttonStyles}
           onPress={() => {
-            addExercise(exerciseName);
+            editExercise({ id, newName: exerciseName });
             setExerciseName('');
             setIsVisible(false);
           }}
@@ -72,4 +71,4 @@ const buttonStyles = StyleSheet.create({
   }
 });
 
-export default AddExerciseModal;
+export default EditExerciseModal;

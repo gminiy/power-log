@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AntDesign } from '@expo/vector-icons';
 import AddExerciseModal from '../modals/AddExerciseModal';
-import client from '../api/client';
-import urls from '../common/urls';
 import Button from '../components/Button';
+import ExerciseMenu from '../components/ExerciseMenu';
+import { Context as ExerciseContext } from '../context/ExerciseContext';
 
 const ExerciseListScreen = ({ navigation }) => {
   const [addExerciseModalVisible, setAddExerciseModalVisable] = useState(false);
-  const [exerciseList, setExerciseList] = useState([]);
-
-  const initExerciseList = async () => {
-    const response = await client.get(urls.getExercises);
-    const { data } = response;
-    setExerciseList(data);
-  };
+  const { state: { exerciseList }, initExerciseList } = useContext(ExerciseContext);
 
   useEffect(() => {
     initExerciseList()
@@ -26,7 +20,6 @@ const ExerciseListScreen = ({ navigation }) => {
       <AddExerciseModal
         isVisible={addExerciseModalVisible}
         setIsVisible={setAddExerciseModalVisable}
-        initExerciseList={initExerciseList}  
       />
       <FlatList
         data={exerciseList}
@@ -40,7 +33,12 @@ const ExerciseListScreen = ({ navigation }) => {
                 'ExerciseTabs',
                 { id: item.id, name: item.name }
               )}
-            />
+            >
+              <ExerciseMenu
+                exerciseId={item.id}
+                exerciseName={item.name}
+              />
+            </Button>
           );
         }}
       />
@@ -76,12 +74,14 @@ const buttonStyles = StyleSheet.create({
   button: {
     width: wp('96%'),
     height: hp('7%'),
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#EFF0F1',
     marginBottom: hp('0.5%'),
     borderRadius: 5,
     paddingLeft: wp('5%'),
+    paddingRight: wp('5%'),
     alignSelf: 'center'
   },
   title: {
