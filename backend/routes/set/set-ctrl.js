@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { Set } = require('../../models');
+const { Set, Sequelize: { Op } } = require('../../models');
 
 exports.list = async (req, res, next) => {
   if (!req.query.id || !req.query.date) {
@@ -8,16 +8,19 @@ exports.list = async (req, res, next) => {
 
   const exerciseId = req.query.id;
   const date = new Date(req.query.date);
-
+  let tomorrow = new Date(req.query.date);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
   try {
     const set = await Set.findAll({
       where: {
         exerciseId,
-        createAt: {
-          $lt: date,
-          $gt: new Date(date + 24 * 60 * 60 * 1000)
+        createdAt: {
+          [Op.gte]: date,
+          [Op.lte]: tomorrow
         }
-      }
+      },
+      attributes: ['weight', 'reps']
     });
 
     return res.json(set);
@@ -27,10 +30,10 @@ exports.list = async (req, res, next) => {
 }
 
 exports.register = async (req, res, next) => {
-  const { weight, reps, recordId } = req.body;
-  if (!weight || !reps || !recordId) return next(createError(400, 'weight, reps, recordId are required'));
+  const { weight, reps, exerciseId } = req.body;
+  if (!weight || !reps || !exerciseId) return next(createError(400, 'weight, reps, recordId are required'));
   try {
-    const set = await Set.create({ weight, reps, recordId });
+    const set = await Set.create({ weight, reps, exerciseId });
 
     return res.json(set);
   } catch (e) {

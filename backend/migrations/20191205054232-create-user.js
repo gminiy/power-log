@@ -3,13 +3,13 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Users', {
       id: {
-        type: DataTypes.STRING(64),
+        type: Sequelize.STRING(64),
         primaryKey: true,
         allowNull: false,
         unique: true,
       },
       hashedPassword: {
-        type: DataTypes.STRING(128),
+        type: Sequelize.STRING(128),
         allowNull: false,
       },
       createdAt: {

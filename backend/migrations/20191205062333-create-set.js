@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
       },
       reps: {
-        type: Sequelize.NUMBER(32),
+        type: Sequelize.DECIMAL(32),
         allowNull: false,
       },
       createdAt: {
