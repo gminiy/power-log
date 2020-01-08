@@ -5,4 +5,5 @@ module.exports = {
   getExercises: '/exercise',
   addExercise: '/exercise',
   updateExercise: '/exercise',
+  deleteExercise: '/exercise',
 };

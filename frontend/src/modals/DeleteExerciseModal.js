@@ -6,8 +6,7 @@ import Button from '../components/Button';
 import { Context as ExerciseContext } from '../context/ExerciseContext';
 
 const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
-  const { editExercise } = useContext(ExerciseContext);
-  const [exerciseName, setExerciseName] = useState(name);
+  const { deleteExercise } = useContext(ExerciseContext);
 
   return (
     <Modal
@@ -20,8 +19,7 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
           title="삭제"
           styles={buttonStyles}
           onPress={() => {
-            editExercise({ id, newName: exerciseName });
-            setExerciseName('');
+            deleteExercise(id);
             setIsVisible(false);
           }}
         />
@@ -29,7 +27,6 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
           title="취소"
           styles={buttonStyles}
           onPress={() => {
-            setExerciseName('');
             setIsVisible(false);
           }}
         />

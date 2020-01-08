@@ -4,6 +4,14 @@ import urls from '../common/urls';
 
 const exerciseReducer = (state, action) => {
   switch (action.type) {
+    case 'delete_exercise':
+      return {
+        ...state,
+        exerciseList:
+          state.exerciseList.filter(
+            (exercise) => exercise.id !== action.payload.id
+          )
+      }
     case 'edit_exercise':
       const { id, newName } = action.payload;
       return { 
@@ -62,7 +70,7 @@ const editExercise = dispatch => async ({ id, newName }) => {
       `${urls.updateExercise}/${id}`,
       { name: newName },
     );
-    console.log(response);
+
     if (response.status === 200) dispatch({
       type: 'edit_exercise',
       payload: { id, newName }
@@ -74,8 +82,25 @@ const editExercise = dispatch => async ({ id, newName }) => {
   }
 }
 
+const deleteExercise = dispatch => async (id) => {
+  try {
+    const response = await client.delete(
+      `${urls.deleteExercise}/${id}`,
+    );
+
+    if (response.status === 200) dispatch({
+      type: 'delete_exercise',
+      payload: { id }
+    });
+
+  } catch (error) {
+    console.log(error);
+    return dispatch({ type: 'set_error', payload: error });
+  }
+}
+
 export const { Context, Provider } = createDataContext(
   exerciseReducer,
-  { initExerciseList, addExercise, editExercise },
+  { initExerciseList, addExercise, editExercise, deleteExercise },
   { exerciseList: [], error: null }
 );
