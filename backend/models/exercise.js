@@ -15,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       target: 'id',
       as: 'user',
     });
-    Exercise.hasMany(models.Record, {
+    Exercise.hasMany(models.Set, {
       foreignKey: 'exerciseId',
       source: 'id',
-      as: 'records',
+      as: 'set',
     });
     Exercise.addHook('afterDestroy', async exercise => {
       try {
-        const records = await exercise.getRecords();
-        return records.map(async record => await record.destroy());
+        const sets = await exercise.getSets();
+        return sets.map(async set => await set.destroy());
       } catch (e) {
         throw e;
       }
