@@ -6,4 +6,7 @@ module.exports = {
   addExercise: '/exercise',
   updateExercise: '/exercise',
   deleteExercise: '/exercise',
+  getSets: '/set',
+  addSet: '/set',
+  deleteSet: '/set',
 };

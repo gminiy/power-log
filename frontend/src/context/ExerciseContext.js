@@ -18,9 +18,9 @@ const exerciseReducer = (state, action) => {
         ...state,
         exerciseList:
           state.exerciseList.map((exercise) => {
-            if (exercise.id === id) return {...exercise, name: newName}
-
-            return exercise
+            return exercise.id === id
+              ? {...exercise, name: newName}
+              : exercise
           })
       };
     case 'add_exercise':
@@ -102,5 +102,5 @@ const deleteExercise = dispatch => async (id) => {
 export const { Context, Provider } = createDataContext(
   exerciseReducer,
   { initExerciseList, addExercise, editExercise, deleteExercise },
-  { exerciseList: [], error: null }
+  { exerciseList: null, error: null }
 );

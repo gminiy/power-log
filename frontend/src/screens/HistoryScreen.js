@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 const HistoryScreen = ({ navigation }) => {
   return (
-    <Text>HistoryScreen</Text>
+    <Text>{navigation.getParam('id')}</Text>
   );
 };
 

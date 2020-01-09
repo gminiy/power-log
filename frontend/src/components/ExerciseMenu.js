@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Modal } from 'react-native';
-import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+import Menu, { MenuItem } from 'react-native-material-menu';
 import { Entypo } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import EditExerciseModal from '../modals/EditExerciseModal';
 import DeleteExerciseModal from '../modals/DeleteExerciseModal';
 
-const MaterialMenu = ({ exerciseId, exerciseName }) => {
+const ExerciseMenu = ({ exerciseId, exerciseName }) => {
   const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
   const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
 
@@ -31,7 +30,7 @@ const MaterialMenu = ({ exerciseId, exerciseName }) => {
   };
 
   return (
-    <View>
+    <>
       <EditExerciseModal
         isVisible={editExerciseModalVisible}
         setIsVisible={setEditExerciseModalVisable}
@@ -51,8 +50,8 @@ const MaterialMenu = ({ exerciseId, exerciseName }) => {
         <MenuItem onPress={editExercise}>수정</MenuItem>
         <MenuItem onPress={deleteExercise}>삭제</MenuItem>
       </Menu>
-    </View>
+    </>
   );
 }
 
-export default MaterialMenu;
+export default ExerciseMenu;
