@@ -10,7 +10,7 @@ exports.list = async (req, res, next) => {
   const date = new Date(req.query.date);
   let tomorrow = new Date(req.query.date);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  
+
   try {
     const set = await Set.findAll({
       where: {
@@ -20,7 +20,7 @@ exports.list = async (req, res, next) => {
           [Op.lte]: tomorrow
         }
       },
-      attributes: ['weight', 'reps']
+      attributes: ['id', 'weight', 'reps']
     });
 
     return res.json(set);
@@ -30,12 +30,17 @@ exports.list = async (req, res, next) => {
 }
 
 exports.register = async (req, res, next) => {
-  const { weight, reps, exerciseId } = req.body;
+  const { weight, reps, exerciseId, dayId } = req.body;
   if (!weight || !reps || !exerciseId) return next(createError(400, 'weight, reps, recordId are required'));
   try {
-    const set = await Set.create({ weight, reps, exerciseId });
+    const set = await Set.create({ weight, reps, exerciseId, dayId });
+    const sendingData = {
+      id: set.id,
+      weight: set.weight,
+      reps: set.reps
+    };
 
-    return res.json(set);
+    return res.json(sendingData);
   } catch (e) {
     return next(e);
   }
@@ -45,7 +50,7 @@ exports.remove = async (req, res, next) => {
   const { id } = req.params;
   if (!id) return next(createError(400, 'id is required'));
   try {
-    const result = await Set.remove({ where: { id }});
+    const result = await Set.destroy({ where: { id }});
 
     return res.json(result);
   } catch (e) {
