@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     paranoid: true,
   });
+
   Set.associate = function(models) {
     Set.belongsTo(models.Exercise, {
       foreignKey: 'exerciseId',
@@ -20,5 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'exercise',
     });
   };
+  
   return Set;
 };

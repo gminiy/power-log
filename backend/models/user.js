@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     paranoid: true,
   });
+
   User.associate = function(models) {
     User.hasMany(models.Exercise, {
       foreignKey: 'userId',
@@ -22,5 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'exercises',
     });
   };
+  
   return User;
 };

@@ -15,11 +15,19 @@ module.exports = (sequelize, DataTypes) => {
       target: 'id',
       as: 'user',
     });
+
     Exercise.hasMany(models.Set, {
       foreignKey: 'exerciseId',
       source: 'id',
-      as: 'set',
+      as: 'sets',
     });
+
+    Exercise.hasMany(models.Day, {
+      foreignKey: 'exerciseId',
+      source: 'id',
+      as: 'days'
+    });
+
     Exercise.addHook('afterDestroy', async exercise => {
       try {
         const sets = await exercise.getSets();
@@ -29,5 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   };
+  
   return Exercise;
 };
