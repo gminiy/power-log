@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
+import DateInput from '../components/DateInput';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,10 +34,14 @@ const reducer = (state, action) => {
 };
 
 const TrackScreen = ({ navigation }) => {
-  const [state, dispatch] = useReducer(reducer, { setList: [], error: null });
+  const [state, dispatch] = useReducer(reducer, { 
+    setList: [],
+    error: null
+  });
   const [updateMode, setUpdateMode] = useState({ on: false, set: null });
   const [weight, setWeight] = useState();
   const [reps, setReps] = useState();
+  const [date, setDate] = useState();
   const exerciseId = navigation.getParam('id');
   
   useEffect(() => {initSetList(exerciseId)}, []);
@@ -104,6 +109,10 @@ const TrackScreen = ({ navigation }) => {
 
   return (
     <>
+      <DateInput
+        onChange={setDate}
+      />
+      <Text>{date}</Text>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>무게</Text>
         <View style={styles.spacer}/>
