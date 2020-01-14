@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
 import DateInput from '../components/DateInput';
+
+const now = new Date;
+const today = now.toISOString().slice(0,10)
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,9 +47,7 @@ const reducer = (state, action) => {
 };
 
 const TrackScreen = ({ navigation }) => {
-  const now = new Date;
-  const today = now.toISOString().slice(0,10)
-  const [state, dispatch] = useReducer(reducer, { 
+  const [{ setList, weight, reps, date, updateMode, dayId }, dispatch] = useReducer(reducer, { 
     setList: [],
     weight: '',
     reps: '',
@@ -55,7 +56,7 @@ const TrackScreen = ({ navigation }) => {
     dayId: null,
     error: null
   });
-  const { weight, reps, date, updateMode, dayId } = state
+  //const { weight, reps, date, updateMode, dayId } = state
   const exerciseId = navigation.getParam('id');
 
   useEffect(() => { initSetList(date) }, []);
@@ -108,7 +109,6 @@ const TrackScreen = ({ navigation }) => {
   
   const updateSet = async ({ id, weight, reps }) => {
     try {
-      console.log(id, weight, reps)
       await client.put(
         `${urls.addSet}/${id}`,
         { weight, reps },
@@ -141,7 +141,6 @@ const TrackScreen = ({ navigation }) => {
           await initSetList(date);
         }}
       />
-      <Text>{date}</Text>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>무게</Text>
         <View style={styles.spacer}/>
@@ -212,7 +211,7 @@ const TrackScreen = ({ navigation }) => {
         <View style={styles.spacer}/>
       </View>
       <FlatList
-        data={state.setList}
+        data={setList}
         keyExtractor={(set) => `${set.id}`}
         renderItem={({ item }) => {
           return (
