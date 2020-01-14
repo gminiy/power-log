@@ -27,7 +27,7 @@ exports.read = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
   const { weight, reps, exerciseId, dayId } = req.body;
-  if (!weight || !reps || !exerciseId) return next(createError(400, 'weight, reps, recordId are required'));
+  if (!weight || !reps || !exerciseId || !dayId) return next(createError(400, 'weight, reps, recordId are required'));
   try {
     const set = await Set.create({ weight, reps, exerciseId, dayId });
     const sendingData = {
