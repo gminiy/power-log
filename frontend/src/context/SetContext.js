@@ -37,8 +37,10 @@ const initSetList = dispatch => async (exerciseId) => {
     const response = await client.get(
       `${urls.getSets}?exerciseId=${exerciseId}&date=${date}`
     );
-
-    return dispatch({ type: 'init_sets', payload: response.data });
+      console.log(response.data)
+    dispatch({ type: 'set_day', payload: response.data.id });
+    dispatch({ type: 'init_sets', payload: response.data.sets });
+    console.log(dayId)
   } catch (error) {
     console.log(error);
     return dispatch({ type: 'set_error', payload: error });

@@ -8,5 +8,6 @@ module.exports = {
   deleteExercise: '/exercise',
   getSets: '/set',
   addSet: '/set',
+  addSetWithDate: '/set/withDate',
   deleteSet: '/set',
 };

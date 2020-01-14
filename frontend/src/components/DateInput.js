@@ -1,15 +1,15 @@
 import React from 'react'
 import DatePicker from 'react-native-datepicker'
 
-const DateInput = ({ onChange }) => {
+const DateInput = ({ onChange, today }) => {
   return (
     <DatePicker
     style={{width: 200}}
-    date='2020-01-20'
+    date={today}
     mode="date"
     placeholder="select date"
     format="YYYY-MM-DD"
-    minDate="2016-05-01"
+    minDate="2018-05-01"
     maxDate="2100-06-01"
     confirmBtnText="Confirm"
     cancelBtnText="Cancel"
