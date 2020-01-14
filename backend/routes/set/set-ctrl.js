@@ -69,28 +69,28 @@ exports.update = async (req, res, next) => {
 };
 
 exports.list = async (req, res, next) => {
-  if (!req.query.id || !req.query.date) {
-    return next(createError(400, 'exerciseId, date are required'));
+  const { page, size, exerciseId } = req.query;
+  if (!page || !size || !exerciseId) {
+    return next(createError(400, 'page, size, exerciseId are required'));
   }
 
-  const exerciseId = req.query.id;
-  const date = new Date(req.query.date);
-  let tomorrow = new Date(req.query.date);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
   try {
-    const set = await Set.findAll({
-      where: {
-        exerciseId,
-        createdAt: {
-          [Op.gte]: date,
-          [Op.lte]: tomorrow
-        }
+    const data = await Day.findAll(
+      {
+        offset: (page - 1) * size,
+        limit: parseInt(size),
+        where: { exerciseId },
+        attributes: ['id', 'date'],
+        include: [{
+          model: Set,
+          as: 'sets',
+          attributes: ['id', 'weight', 'reps']
+        }],
+        order: [['date', 'DESC']]
       },
-      attributes: ['id', 'weight', 'reps']
-    });
+    )
 
-    return res.json(set);
+    return res.json(data);
   } catch (e) {
     return next(e);
   }
