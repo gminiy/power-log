@@ -15,6 +15,7 @@ const authReducer = (state, action) => {
   }
 };
 
+
 const register = dispatch => async ({ id, password }) => {
   try {
     const response = await client.post(urls.register, { id, password });

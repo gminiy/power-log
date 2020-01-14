@@ -8,13 +8,13 @@ import urls from '../common/urls';
 const reducer = (state, action) => {
   switch (action.type) {
     case 'delete_set':
-    return {
-      ...state,
-      setList:
-        state.setList.filter(
-          (set) => set.id !== action.payload.id
-        )
-    }
+      return {
+        ...state,
+        setList:
+          state.setList.filter(
+            (set) => set.id !== action.payload.id
+          )
+      };
     case 'update_set':
       return { ...state, setList: state.setList.map((set) => {
         return set.id === action.payload.id
@@ -46,7 +46,7 @@ const TrackScreen = ({ navigation }) => {
     setWeight(set.weight.toString()) ;
     setReps(set.reps.toString());
   }
-
+  
   const initSetList = async (exerciseId) => {
     try {
       const rightNow = new Date();

@@ -32,10 +32,10 @@ const setReducer = (state, action) => {
 const initSetList = dispatch => async (exerciseId) => {
   try {
     const rightNow = new Date();
-    const date = rightNow.toISOString().slice(0,10);
-    
+    const date = rightNow.toISOString().slice(0,10).replace(/-/g, '');
+
     const response = await client.get(
-      `${urls.getSets}?id=${exerciseId}&date=${date}`
+      `${urls.getSets}?exerciseId=${exerciseId}&date=${date}`
     );
 
     return dispatch({ type: 'init_sets', payload: response.data });
