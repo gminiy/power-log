@@ -1,5 +1,5 @@
-import React from 'react'
-import DatePicker from 'react-native-datepicker'
+import React from 'react';
+import DatePicker from 'react-native-datepicker';
 
 const DateInput = ({ onChange, today }) => {
   return (

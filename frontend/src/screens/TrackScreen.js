@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../components/Button';
@@ -6,118 +6,81 @@ import client from '../api/client';
 import urls from '../common/urls';
 import DateInput from '../components/DateInput';
 
-const now = new Date;
-const today = now.toISOString().slice(0,10)
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'delete_set':
-      return {
-        ...state,
-        setList:
-          state.setList.filter(
-            (set) => set.id !== action.payload.id
-          )
-      };
-    case 'update_set':
-      return { ...state, setList: state.setList.map((set) => {
-        return set.id === action.payload.id
-          ? set = action.payload
-          : set
-      })};
-    case 'init_sets':
-      return { ...state, setList: action.payload };
-    case 'add_set':
-      return { ...state, setList: state.setList.concat(action.payload)};
-    case 'set_error':
-      return { ...state, error: action.payload };
-    case 'set_weight':
-      return { ...state, weight: action.payload };
-    case 'set_reps':
-      return { ...state, reps: action.payload };
-    case 'set_date':
-      return { ...state, date: action.payload };
-    case 'set_day_id':
-      return { ...state, dayId: action.payload };
-    case 'set_update_mode':
-      return { ...state, updateMode: action.payload }
-    default:
-      return state;
-  }
-};
-
 const TrackScreen = ({ navigation }) => {
-  const [{ setList, weight, reps, date, updateMode, dayId }, dispatch] = useReducer(reducer, { 
-    setList: [],
-    weight: '',
-    reps: '',
-    date: today,
-    updateMode: { on: false, currentSet: null},
-    dayId: null,
-    error: null
-  });
-  //const { weight, reps, date, updateMode, dayId } = state
   const exerciseId = navigation.getParam('id');
+  const now = new Date;
+  const today = now.toISOString().slice(0,10);
 
-  useEffect(() => { initSetList(date) }, []);
+  const [setList, setSetList] = useState([]);
+  const [dayId, setDayId] = useState(null);
+  const [weight, setWeight] = useState('');
+  const [reps, setReps] = useState('');
+  const [date, setDate] = useState(today);
+  const [updateMode, setUpdateMode] = useState({ on: false, id: null });
+  const [error, setError] = useState(null);
 
-  const onUpdateMode = (currentSet) => {
-    dispatch({ type: 'set_update_mode', payload: { on: true, currentSet } });
-    dispatch({ type: 'set_weight', payload: currentSet.weight.toString() });
-    dispatch({ type: 'set_reps', payload: currentSet.reps.toString() }) ;
-  }
-  
+  useEffect(() => { initSetList(today) }, []);
+
   const initSetList = async (date) => {
     try {
       const response = await client.get(
         `${urls.getSets}?exerciseId=${exerciseId}&date=${date}`
       );
-        if(response.data[0]) {
-          await dispatch({ type: 'init_sets', payload: response.data[0].sets });
-          await dispatch({ type: 'set_day_id', payload: response.data[0].id });
-        } else {
-          await dispatch({ type: 'init_sets', payload: [] });
-          await dispatch({ type: 'set_day_id', payload: null });
-        }
+      
+      if(response.data[0] !== undefined) {
+        setSetList(response.data[0].sets);
+        setDayId(response.data[0].id);
+      
+        return;
+      }
+
+      setSetList([]);
+      setDayId(null);
     } catch (error) {
       console.log(error);
-      return dispatch({ type: 'set_error', payload: error });
+      return setError(error);
     }
   };
-  
-  const addSet = async ({ weight, reps, exerciseId }) => {
+
+  const addSet = async () => {
     try {
       if (dayId === null) {
         const response = await client.post(
           urls.addSetWithDate,
           { weight, reps, exerciseId, date },
         );
-        await dispatch({ type: 'add_set', payload: response.data.set });
-        await dispatch({ type: 'set_day_id', payload: response.data.id });
-      } else {
-        const response = await client.post(
-          urls.addSet,
-          { weight, reps, exerciseId, dayId },
-        );
-        dispatch({ type: 'add_set', payload: response.data });
+        setSetList(setList.concat(response.data.set));
+        setDayId(response.data.id);
+        return;
       }
+
+      const response = await client.post(
+        urls.addSet,
+        { weight, reps, exerciseId, dayId },
+      );
+
+      setSetList(setList.concat(response.data));
     } catch (error) {
       console.log(error);
-      return dispatch({ type: 'set_error', payload: error });
+      return setError(error);
     }
   };
   
-  const updateSet = async ({ id, weight, reps }) => {
+  const updateSet = async (id) => {
     try {
       await client.put(
         `${urls.addSet}/${id}`,
         { weight, reps },
       );
       
-      return dispatch({ type: 'update_set', payload: { id, weight, reps } });
+      return setSetList(setList.map((set) => {
+        return set.id === id 
+        ? { ...set, weight, reps }
+        : set
+      }));
     } catch (error) {
       console.log(error);
-      return dispatch({ type: 'set_error', payload: error });
+      return setError(error);
     }
   };
   
@@ -125,20 +88,26 @@ const TrackScreen = ({ navigation }) => {
     try {
       await client.delete(`${urls.deleteSet}/${id}`);
   
-      return dispatch({ type: 'delete_set', payload: { id } });
+      return setSetList(setList.filter((set) => set.id !== id));
     } catch (error) {
       console.log(error);
-      return dispatch({ type: 'set_error', payload: error });
+      return setError(error);
     }
   };
+
+  const initInputState = () => {
+    setWeight('');
+    setReps('');
+    setUpdateMode({ on: false, id: null });
+  }
 
   return (
     <>
       <DateInput
         today={date}
         onChange={async (date) => {
-          await dispatch({ type: 'set_date', payload: date});
-          await initSetList(date);
+          setDate(date);
+          initSetList(date);
         }}
       />
       <View style={styles.titleContainer}>
@@ -151,7 +120,7 @@ const TrackScreen = ({ navigation }) => {
           placeholderTextColor="black"
           style={styles.input}
           value={weight}
-          onChangeText={(value) => dispatch({ type: 'set_weight', payload: value })}
+          onChangeText={setWeight}
           keyboardType={'numeric'}
         />
         <Text style={styles.unit}>KG</Text>
@@ -166,7 +135,7 @@ const TrackScreen = ({ navigation }) => {
           placeholderTextColor="black"
           style={styles.input}
           value={reps}
-          onChangeText={(value) => dispatch({ type: 'set_reps', payload: value })}
+          onChangeText={setReps}
           keyboardType={'numeric'}
         />
         <Text style={styles.unit}>개</Text>
@@ -177,14 +146,8 @@ const TrackScreen = ({ navigation }) => {
             title="수정"
             styles={buttonStyles}
             onPress={async () => {
-              await updateSet({
-                id: updateMode.currentSet.id,
-                weight,
-                reps
-              })
-              dispatch({ type: 'set_weight', payload: '' });
-              dispatch({ type: 'set_reps', payload: '' });
-              dispatch({ type: 'set_update_mode', payload: { on: false, set: null } });
+              await updateSet(updateMode.id);
+              initInputState();
             }}
           />
         :
@@ -192,9 +155,8 @@ const TrackScreen = ({ navigation }) => {
             title="기록"
             styles={buttonStyles}
             onPress={async () => {
-              await addSet({ weight, reps, exerciseId });
-              dispatch({ type: 'set_weight', payload: '' });
-              dispatch({ type: 'set_reps', payload: '' });
+              await addSet();
+              initInputState();
             }}
           />
         }
@@ -202,8 +164,7 @@ const TrackScreen = ({ navigation }) => {
           title="초기화"
           styles={buttonStyles}
           onPress={()=>{
-            dispatch({ type: 'set_weight', payload: '' });
-            dispatch({ type: 'set_reps', payload: '' });
+            initInputState();
           }}
         />
       </View>
@@ -217,21 +178,20 @@ const TrackScreen = ({ navigation }) => {
           return (
             <View style={styles.setContainer}>
               <Text style={styles.set}>무게 : {item.weight} 횟수: {item.reps}</Text>
-              {updateMode.on ?
-                <Button
+              {updateMode.on 
+              ? <Button
                   title="취소"
                   styles={buttonStyles}
-                  onPress={() => {
-                    dispatch({ type: 'set_weight', payload: '' });
-                    dispatch({ type: 'set_reps', payload: '' });
-                    dispatch({ type: 'set_update_mode', payload: { on: false, set: null } });
-                  }}
+                  onPress={() => initInputState()}
                 />
-              :
-                <Button
+              : <Button
                   title="수정"
                   styles={buttonStyles}
-                  onPress={() => onUpdateMode(item)}
+                  onPress={() => {
+                    setWeight(item.weight.toString());
+                    setReps(item.reps.toString());
+                    setUpdateMode({ on: true, id: item.id });
+                  }}
                 />
               }
               {!updateMode.on &&
