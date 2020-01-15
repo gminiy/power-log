@@ -12,6 +12,7 @@ import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ExerciseProvider } from './src/context/ExerciseContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
+import ChartScreen from './src/screens/ChartScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -24,7 +25,8 @@ const switchNavigator = createSwitchNavigator({
       ExerciseList: ExerciseListScreen,
       ExerciseTabs: createBottomTabNavigator({
         Track: TrackScreen,
-        History: HistoryScreen
+        History: HistoryScreen,
+        Chart: ChartScreen,
       })
     },
     {
