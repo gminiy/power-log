@@ -50,12 +50,12 @@ exports.registerWithDate = async (req, res, next) => {
   if (!weight || !reps || !exerciseId || !date) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
-    const day = await Day.create({ exerciseId, date });
+    const day = await Day.create({ exerciseId, date: new Date(date) });
     const set = await Set.create({ weight, reps, exerciseId, dayId: day.id });
     const sendingData = {
+      dayId: set.dayId,
       set: {
         id: set.id,
-        dayId: set.dayId,
         weight: set.weight,
         reps: set.reps
       }
@@ -72,6 +72,21 @@ exports.delete = async (req, res, next) => {
   if (!id) return next(createError(400, 'id is required'));
   try {
     const result = await Set.destroy({ where: { id }});
+
+    return res.json(result);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+exports.deleteDay = async (req, res, next) => {
+  const { id } = req.params;
+  if (!id) return next(createError(400, 'id is required'));
+  try {
+    const day = await Day.findOne({ where: { id } });
+    const sets = day.getSets();
+    sets.map(async set => await set.destroy());
+    const result = await day.destroy();
 
     return res.json(result);
   } catch (e) {
@@ -113,7 +128,7 @@ exports.list = async (req, res, next) => {
         }],
         order: [['date', 'DESC']]
       },
-    )
+    );
 
     return res.json(data);
   } catch (e) {

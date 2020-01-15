@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Day = sequelize.define('Day', {
-    date: DataTypes.STRING
+    date: DataTypes.DATEONLY
   }, {
     timestamps: true,
     paranoid: true,
