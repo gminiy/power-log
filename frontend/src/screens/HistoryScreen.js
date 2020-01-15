@@ -1,42 +1,23 @@
-import React, { useReducer, useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../components/Button';
-import client from '../api/client';
-import urls from '../common/urls';
-import { onDidFailWithError } from 'expo/build/AR';
+import { Context as SetHistoryContext } from '../context/SetHistoryContext';
 
 const HistoryScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
   const size = 5;
-  const [setsByDate, setSetsByDate] = useState([]);
+  const {
+    state: { setListByDate },
+    setSetListByDate
+  } = useContext(SetHistoryContext);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {getSetList()}, []);
-
-  const getSetList = async () => {
-    const response = await client.get(
-      `${urls.getSetList}?size=${size}&&page=${page}&&exerciseId=${exerciseId}`
-    );
-    
-    setSetsByDate(setsByDate.concat(response.data));
-    // response.data
-    // [{
-    //   date: "YYYY-MM-DD",
-    //   id: Number,
-    //   sets: [
-    //     {
-    //       id: Number,
-    //       reps: Number,
-    //       weight: number
-    //     }
-    //   ]
-    // }...3일]
-  }
+  useEffect(() => {setSetListByDate({ page, size, exerciseId });}, []);
 
   return (
     <FlatList
-      data={setsByDate}
+      data={setListByDate}
       keyExtractor={(setByDate) => `date${setByDate.id}`}
       renderItem={({ item }) => {
         return (

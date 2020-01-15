@@ -7,6 +7,9 @@ import client from '../api/client';
 import urls from '../common/urls';
 
 const ChartScreen = ({ navigation }) => {
+  
+
+
   const option = {
     xAxis: {
       type: "category",
