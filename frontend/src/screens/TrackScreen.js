@@ -86,9 +86,14 @@ const TrackScreen = ({ navigation }) => {
   
   const deleteSet = async (id) => {
     try {
+      if (setList.length === 1) {
+        await client.delete(`${url.deleteDay}/${dayId}`);
+        
+        return initSetList(date);
+      }
       await client.delete(`${urls.deleteSet}/${id}`);
   
-      return setSetList(setList.filter((set) => set.id !== id));
+      setSetList(setList.filter((set) => set.id !== id));
     } catch (error) {
       console.log(error);
       return setError(error);

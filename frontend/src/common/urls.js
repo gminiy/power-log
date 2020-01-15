@@ -10,4 +10,6 @@ module.exports = {
   addSet: '/set',
   addSetWithDate: '/set/withDate',
   deleteSet: '/set',
+  getSetList: '/set/list',
+  deleteDay: '/set/day',
 };
