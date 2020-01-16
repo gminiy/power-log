@@ -10,7 +10,6 @@ import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExerciseListScreen from './src/screens/ExerciseListScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ExerciseProvider } from './src/context/ExerciseContext';
-import { Provider as SetHistoryProvider } from './src/context/SetHistoryContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
@@ -47,9 +46,7 @@ export default () => {
   return (
     <AuthProvider>
       <ExerciseProvider>
-        <SetHistoryProvider>
-          <App ref={(navigator) => { setNavigator(navigator) }}/>
-        </SetHistoryProvider>
+        <App ref={(navigator) => { setNavigator(navigator) }}/>
       </ExerciseProvider>
     </AuthProvider>
   );

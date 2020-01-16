@@ -6,6 +6,7 @@ import AddExerciseModal from '../modals/AddExerciseModal';
 import Button from '../components/Button';
 import ExerciseMenu from '../components/ExerciseMenu';
 import { Context as ExerciseContext } from '../context/ExerciseContext';
+import LogoutButton from '../components/LogoutButton';
 
 const ExerciseListScreen = ({ navigation }) => {
   const [addExerciseModalVisible, setAddExerciseModalVisable] = useState(false);
@@ -55,7 +56,10 @@ const ExerciseListScreen = ({ navigation }) => {
 ExerciseListScreen.navigationOptions = ({ navigation }) => {
   return {
     title: '파워로그',
-    headerStyle: { marginBottom: hp('2%')}
+    headerStyle: { marginBottom: hp('2%')},
+    headerRight: () => (
+      <LogoutButton navigation={navigation}/>
+    )
   }
 }
 
