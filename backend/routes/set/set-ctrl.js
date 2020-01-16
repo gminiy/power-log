@@ -8,7 +8,7 @@ exports.read = async (req, res, next) => {
 
   try {
     const data = await Day.findAll({
-      where: { date },
+      where: { date, exerciseId },
       attributes: ['id'],
       include: [
         {
@@ -131,6 +131,39 @@ exports.list = async (req, res, next) => {
     );
 
     return res.json(data);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+exports.listWithPeriod = async (req, res, next) => {
+  const { exerciseId, from, until} = req.query;
+
+  if (!exerciseId || !from || !until) {
+    return next(createError(400, 'exerciseId, from, until are required'));
+  }
+
+  try {
+    const sets = await Day.findAll(
+      {
+        where: { 
+          exerciseId,
+          date: {
+            [Op.gte]: from,
+            [Op.lte]: until
+          }
+        },
+        attributes: ['id', 'date'],
+        include: [{
+          model: Set,
+          as: 'sets',
+          attributes: ['id', 'weight', 'reps']
+        }],
+        order: [['date', 'DESC']]
+      },
+    );
+    
+    return res.json(sets);
   } catch (e) {
     return next(e);
   }
