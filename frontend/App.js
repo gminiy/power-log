@@ -7,7 +7,7 @@ import { setNavigator } from './src/common/navigationRef';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
-import ExerciseListScreen from './src/screens/ExerciseListScreen';
+import ExercisesScreen from './src/screens/ExercisesScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ExerciseProvider } from './src/context/ExerciseContext';
 import TrackScreen from './src/screens/TrackScreen';
@@ -23,7 +23,7 @@ const switchNavigator = createSwitchNavigator({
   }),
   MainStacks: createStackNavigator(
     {
-      ExerciseList: ExerciseListScreen,
+      ExerciseList: ExercisesScreen,
       ExerciseTabs: createBottomTabNavigator({
         Track: TrackScreen,
         History: HistoryScreen,
