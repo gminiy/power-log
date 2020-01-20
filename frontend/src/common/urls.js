@@ -1,4 +1,6 @@
-module.exports = {
+const base = 'http://c1197a31.ngrok.io';
+
+const urls = {
   register: '/auth/register',
   login: '/auth/login',
   checkAuth: '/auth/check',
@@ -14,3 +16,9 @@ module.exports = {
   getSetListWithPeriod: '/set/list/period',
   deleteDay: '/set/day',
 };
+
+for (const url of Object.keys(urls) ) {
+  urls[url] = base + urls[url];
+}
+
+module.exports = urls;

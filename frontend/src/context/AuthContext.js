@@ -49,11 +49,14 @@ const tryLocalLogin = dispatch => async () => {
   try {
     const token = await AsyncStorage.getItem('token');
     if (token) {
-      await client.get(urls.checkAuth, {
+      const response = await fetch(urls.checkAuth,{
         headers: { token }
       });
+
+      await response.json();
+
       dispatch({ type: 'login', payload: token });
-      
+
       return navigate('ExerciseList');
     } else {
       return navigate('Login');

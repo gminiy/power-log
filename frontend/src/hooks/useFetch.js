@@ -12,12 +12,12 @@ const useFetch = (url, options, callback) => {
         setLoading(true);
         options.headers.token = state.token || null;
 
-        const res = await fetch(url, options);
+        const response = await fetch(url, options);
 
-        if (!res.ok) throw Error(res.status);
+        if (!response.ok) throw Error(response.status);
 
-        const json = await res.json();
-        
+        const json = await response.json();
+
         callback(json);
       } catch (error) {
         setError(error);
