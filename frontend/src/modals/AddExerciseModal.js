@@ -3,10 +3,8 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
-import { Context as ExerciseContext } from '../context/ExerciseContext';
 
-const AddExerciseModal = ({ isVisible, setIsVisible }) => {
-  const { addExercise } = useContext(ExerciseContext);
+const AddExerciseModal = ({ isVisible, setIsVisible, addExercise }) => {
   const [exerciseName, setExerciseName] = useState('');
 
   return (

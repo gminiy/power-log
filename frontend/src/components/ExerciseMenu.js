@@ -5,7 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import EditExerciseModal from '../modals/EditExerciseModal';
 import DeleteExerciseModal from '../modals/DeleteExerciseModal';
 
-const ExerciseMenu = ({ exerciseId, exerciseName }) => {
+const ExerciseMenu = ({ exerciseId, exerciseName, editExercise, deleteExercise }) => {
   const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
   const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
 
@@ -19,12 +19,12 @@ const ExerciseMenu = ({ exerciseId, exerciseName }) => {
     menu.show();
   };
 
-  const editExercise = () => {
+  const showEditExerciseModal = () => {
     setEditExerciseModalVisable(true);
     return menu.hide();
   };
 
-  const deleteExercise = () => {
+  const showDeleteExerciseModal = () => {
     setDeleteExerciseModalVisable(true);
     return menu.hide();
   };
@@ -36,19 +36,21 @@ const ExerciseMenu = ({ exerciseId, exerciseName }) => {
         setIsVisible={setEditExerciseModalVisable}
         id={exerciseId}
         name={exerciseName}
+        editExercise={editExercise}
       />
       <DeleteExerciseModal
         isVisible={deleteExerciseModalVisible}
         setIsVisible={setDeleteExerciseModalVisable}
         id={exerciseId}
         name={exerciseName}
+        deleteExercise={deleteExercise}
       />
       <Menu
         ref={setMenuRef}
         button={<Entypo size={wp('5%')} name="menu" onPress={showMenu} />}
       >
-        <MenuItem onPress={editExercise}>수정</MenuItem>
-        <MenuItem onPress={deleteExercise}>삭제</MenuItem>
+        <MenuItem onPress={showEditExerciseModal}>수정</MenuItem>
+        <MenuItem onPress={showDeleteExerciseModal}>삭제</MenuItem>
       </Menu>
     </>
   );

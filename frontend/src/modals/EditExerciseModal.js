@@ -1,12 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
-import { Context as ExerciseContext } from '../context/ExerciseContext';
 
-const EditExerciseModal = ({ isVisible, setIsVisible, id, name }) => {
-  const { editExercise } = useContext(ExerciseContext);
+const EditExerciseModal = ({ isVisible, setIsVisible, id, name, editExercise }) => {
   const [exerciseName, setExerciseName] = useState(name);
 
   return (
