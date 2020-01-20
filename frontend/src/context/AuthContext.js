@@ -25,22 +25,28 @@ const register = dispatch => async ({ id, password }) => {
 
     return navigate('ExerciseList');
   } catch (error) {
-    console.log(error);
     return dispatch({ type: 'set_error', payload: error });
   }
 };
 
 const login = dispatch => async ({ id, password }) => {
   try {
-    const response = await client.post(urls.login, { id, password });
-    const token = response.data.token;
-    await AsyncStorage.setItem('token', token);
+    //const response = await client.post(urls.login, { id, password });
+    const response = await fetch(urls.login, {
+      method: 'POST',
+      body: { id, password }
+    });
+
+    if(!response.ok) throw Error(response.status);
+
+    const token = await response.json();
+
+    //await AsyncStorage.setItem('token', token);
 
     dispatch({ type: 'login', payload: token });
 
     return navigate('ExerciseList');
   } catch (error) {
-    console.log(error);
     return dispatch({ type: 'set_error', payload: error });
   }
 };
@@ -62,7 +68,6 @@ const tryLocalLogin = dispatch => async () => {
       return navigate('Login');
     }
   } catch (error) {
-    console.log(error);
     return dispatch({ type: 'set_error', payload: error });
   }
 };

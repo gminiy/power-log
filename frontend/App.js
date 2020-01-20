@@ -13,6 +13,7 @@ import { Provider as ExerciseProvider } from './src/context/ExerciseContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
+import ErrorScreen from './src/screens/ErrorScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -37,6 +38,7 @@ const switchNavigator = createSwitchNavigator({
       }
     }
   ),
+  Error: ErrorScreen,
 }
 );
 

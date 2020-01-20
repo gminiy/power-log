@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Button from '../components/Button';
 import AuthForm from '../components/AuthForm';
+import { Context as AuthContext } from '../context/AuthContext';
 
-const LoginScreen = ({ navigation }) => (
-  <View style={styles.container}>
-    <AuthForm type="login"/>
-    <Text>아직 회원이 아니신가요? </Text>
-    <Text>간편하게 가입하고 운동을 기록해보세요.</Text>
-    <Button
-      title="회원가입"
-      styles={buttonStyles}
-      onPress={() => navigation.navigate('Register')}
-    />
-  </View>
-);
+const LoginScreen = ({ navigation }) => {
+  const { state: { error } } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (error) navigation.navigate('Error', { error });
+  }, [error]);
+
+  return (
+    <View style={styles.container}>
+      <AuthForm type="login"/>
+      <Text>아직 회원이 아니신가요? </Text>
+      <Text>간편하게 가입하고 운동을 기록해보세요.</Text>
+      <Button
+        title="회원가입"
+        styles={buttonStyles}
+        onPress={() => navigation.navigate('Register')}
+      />
+    </View>
+  );
+};
 
 LoginScreen.navigationOptions = () => {
   return {
