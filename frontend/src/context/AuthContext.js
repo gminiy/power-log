@@ -17,7 +17,7 @@ const authReducer = (state, action) => {
 
 const register = dispatch => async ({ id, password }) => {
   try {
-    const response = await client.post(urls.register, { id, password });
+    const response = await client.post(urls.register, { body: { id, password } });
     const token = response.data.token;
     await AsyncStorage.setItem('token', token);
 
@@ -31,22 +31,25 @@ const register = dispatch => async ({ id, password }) => {
 
 const login = dispatch => async ({ id, password }) => {
   try {
-    //const response = await client.post(urls.login, { id, password });
     const response = await fetch(urls.login, {
       method: 'POST',
-      body: { id, password }
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id, password })
     });
 
     if(!response.ok) throw Error(response.status);
 
-    const token = await response.json();
+    const { token } = await response.json();
 
-    //await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('token', token);
 
     dispatch({ type: 'login', payload: token });
 
     return navigate('ExerciseList');
   } catch (error) {
+    console.log(error)
     return dispatch({ type: 'set_error', payload: error });
   }
 };
