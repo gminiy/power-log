@@ -10,9 +10,15 @@ const useFetch = (url, options, callback) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        options.headers.token = state.token || null;
 
-        const response = await fetch(url, options);
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Content-Type': 'application/json',
+            token: state.token
+          }
+        });
 
         if (!response.ok) throw Error(response.status);
 

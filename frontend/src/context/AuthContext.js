@@ -63,7 +63,7 @@ const tryLocalLogin = dispatch => async () => {
       });
 
       await response.json();
-
+      
       dispatch({ type: 'login', payload: token });
 
       return navigate('ExerciseList');

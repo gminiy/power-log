@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Menu, { MenuItem } from 'react-native-material-menu';
 import { Entypo } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import EditExerciseModal from '../modals/EditExerciseModal';
-import DeleteExerciseModal from '../modals/DeleteExerciseModal';
 
 const ExerciseMenu = ({ exerciseId, exerciseName, editExercise, deleteExercise }) => {
-  const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
-  const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
+  // const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
+  // const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
 
   let menu = null;
 
@@ -20,31 +18,17 @@ const ExerciseMenu = ({ exerciseId, exerciseName, editExercise, deleteExercise }
   };
 
   const showEditExerciseModal = () => {
-    setEditExerciseModalVisable(true);
+    //setEditExerciseModalVisable(true);
     return menu.hide();
   };
 
   const showDeleteExerciseModal = () => {
-    setDeleteExerciseModalVisable(true);
+    //setDeleteExerciseModalVisable(true);
     return menu.hide();
   };
 
   return (
     <>
-      <EditExerciseModal
-        isVisible={editExerciseModalVisible}
-        setIsVisible={setEditExerciseModalVisable}
-        id={exerciseId}
-        name={exerciseName}
-        editExercise={editExercise}
-      />
-      <DeleteExerciseModal
-        isVisible={deleteExerciseModalVisible}
-        setIsVisible={setDeleteExerciseModalVisable}
-        id={exerciseId}
-        name={exerciseName}
-        deleteExercise={deleteExercise}
-      />
       <Menu
         ref={setMenuRef}
         button={<Entypo size={wp('5%')} name="menu" onPress={showMenu} />}
