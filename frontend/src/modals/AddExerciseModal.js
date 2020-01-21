@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableWithoutFeedback } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
@@ -38,42 +38,41 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
     } finally {
       setLoading(false);
     }
-};
+  };
+
+  const cancel = () => {
+    setName('');
+    setIsVisible(false);
+  }
 
   return (
-    <Modal
-      isVisible={isVisible}
-      onBackButtonPress={() => setIsVisible(false)}
-    >
-      <View style={styles.container}>
-        <Text>추가할 운동의 이름을 입력해주세요.</Text>
-        <TextInput
-          style={styles.input} 
-          placeholder={"운동 이름"}
-          value={name}
-          onChangeText={setName}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <Button
-          title="추가"
-          styles={buttonStyles}
-          onPress={() => {
-            addExercise(name);
-            setName('');
-            setIsVisible(false);
-          }}
-        />
-        <Button
-          title="취소"
-          styles={buttonStyles}
-          onPress={() => {
-            setName('');
-            setIsVisible(false);
-          }}
-        />
-      </View>
-    </Modal>
+      <Modal
+        isVisible={isVisible}
+        onRequestClose={cancel}
+        onBackdropPress={cancel}
+        swipeDirection="left"
+      >
+        <View style={styles.container}>
+          <Text style={styles.text}>추가할 운동의 이름을 입력해주세요.</Text>
+          <TextInput
+            style={styles.input} 
+            placeholder={"운동 이름"}
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoFocus
+          />
+          <Button
+            title="추가"
+            styles={buttonStyles}
+            onPress={() => {
+              addExercise(name);
+              cancel();
+            }}
+          />
+        </View>
+      </Modal>
   );
 };
 
@@ -82,32 +81,38 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'center',
     width: wp('80%'),
-    height: hp('40%'),
+    height: hp('23%'),
     borderRadius: 5,
+    padding: wp('4%')
+  },
+  text: {
+    fontSize: wp('4.3%')
   },
   input: {
-    borderBottomWidth : 0.5,
+    marginTop: hp('2%'),
     borderColor: '#888',
     width: wp('70%'),
-    height: hp('8%'),
+    height: hp('6%'),
     paddingLeft: wp('3%'),
-    fontSize: wp('3.5%')
-  },
+    fontSize: wp('3.5%'),
+    backgroundColor: '#f5f5f5'
+  }
 });
 
 const buttonStyles = StyleSheet.create({
   button: {
-    width: wp('70%'),
-    height: hp('5.3%'),
+    marginTop: hp('2%'),
+    width: wp('21%'),
+    height: hp('4.3%'),
+    alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    borderWidth: 1,
-    marginTop: 20,
-    marginBottom: 20,
+    backgroundColor: '#7B6E66'
   },
   title: {
     fontSize: wp('4.5%'),
+    color: '#fffaf0'
   }
 });
 
