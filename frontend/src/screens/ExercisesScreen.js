@@ -135,17 +135,6 @@ const ExercisesScreen = ({ navigation }) => {
   );
 };
 
-ExercisesScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: '파워로그',
-    headerStyle: { marginBottom: hp('2%')},
-    headerRight: () => (
-      <LogoutButton navigation={navigation}/>
-    )
-  }
-}
-
-
 const styles = StyleSheet.create({
   icon: {
     position: 'absolute',

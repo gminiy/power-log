@@ -3,12 +3,15 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { setNavigator } from './src/common/navigationRef';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExercisesScreen from './src/screens/ExercisesScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
+import LogoutButton from './src/components/LogoutButton';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
@@ -31,15 +34,38 @@ const switchNavigator = createSwitchNavigator({
     },
     {
       defaultNavigationOptions: ({ navigation }) => {
+        const title = navigation.getParam('name') || '파워로그';
+        
         return {
-          title: navigation.getParam('name')
+          title,
+          headerLeft: () => {
+            return (
+              <MaterialCommunityIcons
+                name="dumbbell"
+                color='#fffaf0'
+                size={wp('6.5%')}
+                style={{ marginLeft: wp('4%')}}
+              />
+            )
+          },
+          headerStyle: {
+            backgroundColor: "#1a1a1a",
+            marginBottom: hp('3%')
+          },
+          headerRight: () => (
+            <LogoutButton navigation={navigation}/>
+          ),
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fffaf0',
+            fontSize: wp('5.5%')
+          }
         };
       }
     }
   ),
   Error: ErrorScreen,
-}
-);
+});
 
 const App = createAppContainer(switchNavigator); 
 

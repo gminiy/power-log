@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { Text, StyleSheet, TextInput } from 'react-native';
+import { View } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Button from './Button';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LogoutButton = ({ navigation }) => {
   const logout = async () => {
@@ -10,22 +10,15 @@ const LogoutButton = ({ navigation }) => {
     navigation.navigate('ResolveAuth');
   }
   return (
-    <Button
-      title='로그아웃'
-      onPress={logout}
-      styles={buttonStyles}
-    />
-  )
+    <View style={{ marginRight: wp('3%')}}>
+      <MaterialCommunityIcons
+        name="logout-variant"
+        color="#fffaf0"
+        size={wp('7%')}
+        onPress={logout}
+      />
+    </View>
+  );
 };
-
-const buttonStyles = StyleSheet.create({
-  title: {
-    fontSize: wp('3%'),
-  },
-  button: {
-    
-  }
-})
-
 
 export default LogoutButton;
