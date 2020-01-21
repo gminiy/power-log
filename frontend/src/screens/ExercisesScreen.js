@@ -7,6 +7,8 @@ import AddExerciseModal from '../modals/AddExerciseModal';
 import LogoutButton from '../components/LogoutButton';
 import useFetch from '../hooks/useFetch';
 import Exercise from '../components/exercises/Exercise';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -135,6 +137,36 @@ const ExercisesScreen = ({ navigation }) => {
     </View>
   );
 };
+
+ExercisesScreen.navigationOptions = ({ navigation }) => {        
+  return {
+    title: '파워로그',
+    headerLeft: () => {
+      return (
+        <MaterialCommunityIcons
+          name="dumbbell"
+          color='#fffaf0'
+          size={wp('6.5%')}
+          style={{ marginLeft: wp('4%')}}
+        />
+      )
+    },
+    headerStyle: {
+      backgroundColor: "#111111",
+      marginBottom: hp('3%')
+    },
+    headerRight: () => (
+      <>
+        <LogoutButton navigation={navigation}/>
+      </>
+    ),
+    headerTitleStyle: {
+      fontWeight: 'bold',
+      color: '#fffaf0',
+      fontSize: wp('5.5%')
+    }
+  };
+}
 
 const styles = StyleSheet.create({
   icon: {

@@ -23,7 +23,7 @@ const register = dispatch => async ({ id, password }) => {
 
     dispatch({ type: 'login', payload: token });
 
-    return navigate('ExerciseList');
+    return navigate('Exercises');
   } catch (error) {
     return dispatch({ type: 'set_error', payload: error });
   }
@@ -47,7 +47,7 @@ const login = dispatch => async ({ id, password }) => {
 
     dispatch({ type: 'login', payload: token });
 
-    return navigate('ExerciseList');
+    return navigate('Exercises');
   } catch (error) {
     console.log(error)
     return dispatch({ type: 'set_error', payload: error });
@@ -66,7 +66,7 @@ const tryLocalLogin = dispatch => async () => {
       
       dispatch({ type: 'login', payload: token });
 
-      return navigate('ExerciseList');
+      return navigate('Exercises');
     } else {
       return navigate('Login');
     }
