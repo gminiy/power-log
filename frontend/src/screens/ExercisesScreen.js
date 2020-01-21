@@ -117,7 +117,7 @@ const ExercisesScreen = ({ navigation }) => {
           setAddExerciseModalVisable={setAddExerciseModalVisable}
         />
       </View>
-    )} 
+    )}
     </>
   );
 };
