@@ -37,15 +37,14 @@ const Exercise = ({ index, item, navigation: { navigate } }) => {
           ]}
         >
           <Text style={styles.title}>{item.name}</Text>
-        </TouchableOpacity>
-      {/* <ExerciseMenu
+          <ExerciseMenu
         exerciseId={item.id}
         exerciseName={item.name}
-        editExercise={editExercise}
-        deleteExercise={deleteExercise}
-      /> */}
+      />
+        </TouchableOpacity>
+
   </View>
-  )
+  );
 };
 
 
