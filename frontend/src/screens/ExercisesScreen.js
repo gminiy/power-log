@@ -54,24 +54,6 @@ const ExercisesScreen = ({ navigation }) => {
     }
   );
   
-  const addExercise = async (name) => {
-      try {
-        const response = await client.post(
-          urls.addExercise,
-          { name },
-        );
-  
-        if (response.status === 200) dispatch({
-          type: 'add_exercise',
-          payload: response.data
-        });
-  
-      } catch (error) {
-        console.log(error);
-        return dispatch({ type: 'set_error', payload: error });
-      }
-  };
-  
   // const editExercise = async ({ id, newName }) => {
   //   try {
   //     const response = await client.put(
@@ -116,7 +98,7 @@ const ExercisesScreen = ({ navigation }) => {
           <AddExerciseModal
           isVisible={addExerciseModalVisible}
           setIsVisible={setAddExerciseModalVisable}
-          addExercise={addExercise}
+          dispatch={dispatch}
           />
           <FlatList
             data={state.exercises}

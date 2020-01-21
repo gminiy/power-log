@@ -3,9 +3,43 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
+import { Context as AuthContext} from '../context/AuthContext';
+import urls from '../common/urls';
 
-const AddExerciseModal = ({ isVisible, setIsVisible, addExercise }) => {
-  const [exerciseName, setExerciseName] = useState('');
+const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
+  const { state: { token } } = useContext(AuthContext);
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const addExercise = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        urls.addExercise,
+        {
+          method: 'POST',
+          headers: {
+            token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name })
+        },
+      );
+
+      if (!response.ok) throw Error(response.status);
+      
+      const exercise = await response.json();
+      console.log(exercise)
+
+      dispatch({ type: 'set_exercises', payload: exercise });
+
+    } catch (error) {
+      return dispatch({ type: 'set_error', payload: error });
+    } finally {
+      setLoading(false);
+    }
+};
 
   return (
     <Modal
@@ -17,8 +51,8 @@ const AddExerciseModal = ({ isVisible, setIsVisible, addExercise }) => {
         <TextInput
           style={styles.input} 
           placeholder={"운동 이름"}
-          value={exerciseName}
-          onChangeText={setExerciseName}
+          value={name}
+          onChangeText={setName}
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -26,8 +60,8 @@ const AddExerciseModal = ({ isVisible, setIsVisible, addExercise }) => {
           title="추가"
           styles={buttonStyles}
           onPress={() => {
-            addExercise(exerciseName);
-            setExerciseName('');
+            addExercise(name);
+            setName('');
             setIsVisible(false);
           }}
         />
@@ -35,7 +69,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, addExercise }) => {
           title="취소"
           styles={buttonStyles}
           onPress={() => {
-            setExerciseName('');
+            setName('');
             setIsVisible(false);
           }}
         />
