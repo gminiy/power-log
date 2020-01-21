@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ExerciseMenu from './ExerciseMenu';
 
-const Exercise = ({ item, navigation: { navigate } }) => {
+const Exercise = ({ index, item, navigation: { navigate } }) => {
+  const containerColors = ['#f5f5f5', 'white'];
+
   return (
     <View>
       {/* <EditExerciseModal
@@ -20,19 +22,22 @@ const Exercise = ({ item, navigation: { navigate } }) => {
         name={exerciseName}
         deleteExercise={deleteExercise}
       /> */}
-      <TouchableOpacity
-        onPress={
-          () => {
-            navigate(
-              'ExerciseTabs',
-              { id: item.id, name: item.name }
-            )
+        <TouchableOpacity
+          onPress={
+            () => {
+              navigate(
+                'ExerciseTabs',
+                { id: item.id, name: item.name }
+              )
+            }
           }
-        }
-        style={styles.container}
-      >
-        <Text style={styles.title}>{item.name}</Text>
-      </TouchableOpacity>
+          style={[
+            styles.container,
+            { backgroundColor: containerColors[index%2] }
+          ]}
+        >
+          <Text style={styles.title}>{item.name}</Text>
+        </TouchableOpacity>
       {/* <ExerciseMenu
         exerciseId={item.id}
         exerciseName={item.name}
@@ -43,21 +48,21 @@ const Exercise = ({ item, navigation: { navigate } }) => {
   )
 };
 
+
 const styles = StyleSheet.create({
   container: {
-    width: wp('96%'),
-    height: hp('7%'),
+    width: wp('100%'),
+    height: hp('12%'),
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EFF0F1',
-    marginBottom: hp('0.5%'),
     borderRadius: 5,
     paddingLeft: wp('5%'),
     paddingRight: wp('5%'),
     alignSelf: 'center'
   },
   title: {
+    color: '#424242',
     fontSize: wp('4.5%'),
   }
 });

@@ -13,7 +13,7 @@ const LogoutButton = ({ navigation }) => {
     <View style={{ marginRight: wp('3%')}}>
       <MaterialCommunityIcons
         name="logout-variant"
-        color="#fffaf0"
+        color="#9e9e9e"
         size={wp('7%')}
         onPress={logout}
       />

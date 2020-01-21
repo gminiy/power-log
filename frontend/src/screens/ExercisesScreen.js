@@ -116,10 +116,11 @@ const ExercisesScreen = ({ navigation }) => {
       <FlatList
         data={state.exercises}
         keyExtractor={(exercise) => `${exercise.id}`}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {          
           return (
             <Exercise
               item={item}
+              index={index}
               navigation={navigation}
             />
           );

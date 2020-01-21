@@ -49,7 +49,7 @@ const switchNavigator = createSwitchNavigator({
             )
           },
           headerStyle: {
-            backgroundColor: "#1a1a1a",
+            backgroundColor: "#111111",
             marginBottom: hp('3%')
           },
           headerRight: () => (
