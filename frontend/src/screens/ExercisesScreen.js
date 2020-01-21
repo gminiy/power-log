@@ -33,7 +33,7 @@ const reducer = (state, action) => {
           })
       };
     case 'set_exercises':
-      return { ...state, exercises: state.exercises.concat(action.payload)};
+      return { ...state, exercises: action.payload.concat(state.exercises)};
     case 'set_error':
       return { ...state, error: action.payload }
     default:

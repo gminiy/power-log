@@ -30,9 +30,8 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
       if (!response.ok) throw Error(response.status);
       
       const exercise = await response.json();
-      console.log(exercise)
 
-      dispatch({ type: 'set_exercises', payload: exercise });
+      dispatch({ type: 'set_exercises', payload: [exercise] });
 
     } catch (error) {
       return dispatch({ type: 'set_error', payload: error });
