@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -14,7 +13,6 @@ import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
 import ErrorScreen from './src/screens/ErrorScreen';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -39,7 +37,7 @@ const switchNavigator = createSwitchNavigator({
           title,
           headerStyle: {
             backgroundColor: "#111111",
-            marginBottom: hp('3%')
+            marginBottom: hp('2%')
           },
           headerTitleStyle: {
             fontWeight: 'bold',

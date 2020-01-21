@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import urls from '../common/urls'
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import LogoutButton from '../components/LogoutButton';
 import useFetch from '../hooks/useFetch';
 import Exercise from '../components/exercises/Exercise';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AddExerciseButton from '../components/exercises/AddExerciseButton';
 
 
 const reducer = (state, action) => {
@@ -46,32 +47,30 @@ const ExercisesScreen = ({ navigation }) => {
   const { error, loading } = useFetch(urls.getExercises,
     {},
     (data) => {
-      console.log(data)
       if (error) {
         return dispatch({ type: 'set_error', payload: error });
       }
-      console.log(data)
       return dispatch({ type: 'set_exercises', payload: data });
     }
   );
   
-  // const addExercise = async (name) => {
-  //     try {
-  //       const response = await client.post(
-  //         urls.addExercise,
-  //         { name },
-  //       );
+  const addExercise = async (name) => {
+      try {
+        const response = await client.post(
+          urls.addExercise,
+          { name },
+        );
   
-  //       if (response.status === 200) dispatch({
-  //         type: 'add_exercise',
-  //         payload: response.data
-  //       });
+        if (response.status === 200) dispatch({
+          type: 'add_exercise',
+          payload: response.data
+        });
   
-  //     } catch (error) {
-  //       console.log(error);
-  //       return dispatch({ type: 'set_error', payload: error });
-  //     }
-  // };
+      } catch (error) {
+        console.log(error);
+        return dispatch({ type: 'set_error', payload: error });
+      }
+  };
   
   // const editExercise = async ({ id, newName }) => {
   //   try {
@@ -109,32 +108,35 @@ const ExercisesScreen = ({ navigation }) => {
   // };
 
   return (
-    <View>
-      {/* <AddExerciseModal
-        isVisible={addExerciseModalVisible}
-        setIsVisible={setAddExerciseModalVisable}
-        addExercise={addExercise}
-      /> */}
-      <FlatList
-        data={state.exercises}
-        keyExtractor={(exercise) => `${exercise.id}`}
-        renderItem={({ item, index }) => {          
-          return (
-            <Exercise
-              item={item}
-              index={index}
-              navigation={navigation}
-            />
-          );
-        }}
-      />
-      <TouchableOpacity 
-        onPress={() => setAddExerciseModalVisable(true)}
-        style={styles.icon}
-      >
-        <AntDesign name="pluscircle" size={wp('15%')} color='#26306c' />
-      </TouchableOpacity>
-    </View>
+    <>
+      {loading ? (
+        <ActivityIndicator size="large" color="#7B6E66" style={{ flex: 1 }}/>
+      ) : (
+        <View>
+          <AddExerciseModal
+          isVisible={addExerciseModalVisible}
+          setIsVisible={setAddExerciseModalVisable}
+          addExercise={addExercise}
+          />
+          <FlatList
+            data={state.exercises}
+            keyExtractor={(exercise) => `${exercise.id}`}
+            renderItem={({ item, index }) => {          
+              return (
+                <Exercise
+                  item={item}
+                  index={index}
+                  navigation={navigation}
+                />
+              );
+            }}
+          />
+        <AddExerciseButton
+          setAddExerciseModalVisable={setAddExerciseModalVisable}
+        />
+      </View>
+    )} 
+    </>
   );
 };
 
@@ -153,7 +155,7 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     },
     headerStyle: {
       backgroundColor: "#111111",
-      marginBottom: hp('3%')
+      marginBottom: hp('2%')
     },
     headerRight: () => (
       <>
@@ -167,15 +169,5 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     }
   };
 }
-
-const styles = StyleSheet.create({
-  icon: {
-    position: 'absolute',
-    top: hp('77%'),
-    left: wp('77%'),
-    width: wp('16%'),
-    height: hp('10%')
-  },
-});
 
 export default ExercisesScreen;
