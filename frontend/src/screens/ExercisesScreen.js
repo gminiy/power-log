@@ -8,7 +8,6 @@ import useFetch from '../hooks/useFetch';
 import Exercise from '../components/exercises/Exercise';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AddExerciseButton from '../components/exercises/AddExerciseButton';
-import DatePicker from '../components/DatePicker';
 
 const reducer = (state, action) => {
   switch (action.type) {

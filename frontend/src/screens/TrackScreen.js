@@ -17,12 +17,14 @@ const TrackScreen = ({ navigation }) => {
   const [updateMode, setUpdateMode] = useState({ on: false, id: null });
   const [error, setError] = useState(null);
 
-  //useEffect(() => { initSetList(today) }, []);
+  useEffect(() => { initSetList() }, []);
 
-  const initSetList = async (date) => {
+  const initSetList = async () => {
     try {
+      const dateForm = date.format().slice(0, 10);
+      
       const response = await client.get(
-        `${urls.getSets}?exerciseId=${exerciseId}&date=${date}`
+        `${urls.getSets}?exerciseId=${exerciseId}&date=${dateForm}`
       );
       
       if(response.data[0] !== undefined) {
