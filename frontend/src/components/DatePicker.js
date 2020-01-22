@@ -1,16 +1,16 @@
-import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet , Image} from "react-native";
+import React, { useState, useEffect } from 'react';;
+import { Text, View, TouchableOpacity, StyleSheet , Image} from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const DatePicker = ({ date, setDate }) => {  
+const DatePicker = ({ date, setDate }) => {
   const leftArrowPressHandle = () => {
     setDate(date.clone().subtract(1, 'day'));
-  }
+  };
 
   const rightArrowPressHandle = () => {
     setDate(date.clone().add(1, 'day'));
-  }
+  };
 
   const dateMapping = (date) => {
     const dateArr = date.split(' ');
@@ -34,11 +34,11 @@ const DatePicker = ({ date, setDate }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={leftArrowPressHandle}>
-        <SimpleLineIcons name="arrow-left" size={wp('8%')} />
+        <SimpleLineIcons name="arrow-left" size={wp('7%')} />
       </TouchableOpacity>
-      <Text>{dateMapping(date.format('MMM Do dddd'))}</Text>
+      <Text style={styles.text}>{dateMapping(date.format('MMM Do dddd'))}</Text>
       <TouchableOpacity onPress={rightArrowPressHandle}>
-        <SimpleLineIcons name="arrow-right" size={wp('8%')} />
+        <SimpleLineIcons name="arrow-right" size={wp('7%')} />
       </TouchableOpacity>
     </View>
   )
@@ -48,10 +48,17 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: hp('5%'),
-    alignItems: 'center'
+    height: hp('7%'),
+    alignItems: 'center',
+    paddingLeft: wp('4%'),
+    paddingRight: wp('4%'),
+    paddingTop: hp('1.5%'),
+    paddingBottom: hp('1.5%'),
+    backgroundColor: '#f5f5f5'
   },
-
+  text: {
+    fontSize: wp('4.5%')
+  }
 });
 
 export default DatePicker;

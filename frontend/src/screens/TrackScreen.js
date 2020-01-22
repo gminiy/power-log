@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Context as AuthContext} from '../context/AuthContext';
 import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
@@ -9,33 +10,38 @@ import DatePicker from '../components/DatePicker';
 
 const TrackScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
-  const [setList, setSetList] = useState([]);
-  const [dayId, setDayId] = useState(null);
+  const { state: { token } } = useContext(AuthContext);
+  const [daySets, setDaySets] = useState({ id: null, sets: [] });
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
   const [date, setDate] = useState(moment());
   const [updateMode, setUpdateMode] = useState({ on: false, id: null });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => { initSetList() }, []);
+  useEffect(() => {initSets()}, [date]);
 
-  const initSetList = async () => {
+  const initSets = async () => {
     try {
       const dateForm = date.format().slice(0, 10);
       
-      const response = await client.get(
-        `${urls.getSets}?exerciseId=${exerciseId}&date=${dateForm}`
+      const response = await fetch(
+        `${urls.getSets}?exerciseId=${exerciseId}&date=${dateForm}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        },
       );
-      
-      if(response.data[0] !== undefined) {
-        setSetList(response.data[0].sets);
-        setDayId(response.data[0].id);
-      
-        return;
-      }
 
-      setSetList([]);
-      setDayId(null);
+      if (!response.ok) throw Error(response.status);
+
+      const data = await response.json();
+    
+      if (data.length === 0) return setDaySets({ id: null, sets: [] });
+
+      setDaySets(data[0]);
     } catch (error) {
       console.log(error);
       return setError(error);
@@ -44,12 +50,12 @@ const TrackScreen = ({ navigation }) => {
 
   const addSet = async () => {
     try {
-      if (dayId === null) {
+      if (daySets.id === null) {
         const response = await client.post(
           urls.addSetWithDate,
           { weight, reps, exerciseId, date },
         );
-        setSetList(setList.concat(response.data.set));
+        setSetList(daySets.concat(response.data.set));
         setDayId(response.data.id);
         return;
       }
@@ -59,7 +65,7 @@ const TrackScreen = ({ navigation }) => {
         { weight, reps, exerciseId, dayId },
       );
 
-      setSetList(setList.concat(response.data));
+      setSetList(daySets.concat(response.data));
     } catch (error) {
       console.log(error);
       return setError(error);
@@ -73,7 +79,7 @@ const TrackScreen = ({ navigation }) => {
         { weight, reps },
       );
       
-      return setSetList(setList.map((set) => {
+      return setSetList(daySets.map((set) => {
         return set.id === id 
         ? { ...set, weight, reps }
         : set
@@ -86,14 +92,14 @@ const TrackScreen = ({ navigation }) => {
   
   const deleteSet = async (id) => {
     try {
-      if (setList.length === 1) {
+      if (daySets.length === 1) {
         await client.delete(`${url.deleteDay}/${dayId}`);
         
         return initSetList(date);
       }
       await client.delete(`${urls.deleteSet}/${id}`);
   
-      setSetList(setList.filter((set) => set.id !== id));
+      setSetList(daySets.filter((set) => set.id !== id));
     } catch (error) {
       console.log(error);
       return setError(error);
@@ -174,7 +180,7 @@ const TrackScreen = ({ navigation }) => {
         <View style={styles.spacer}/>
       </View>
       <FlatList
-        data={setList}
+        data={daySets.sets}
         keyExtractor={(set) => `${set.id}`}
         renderItem={({ item }) => {
           return (
