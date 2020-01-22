@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ExerciseMenu from './ExerciseMenu';
 import DeleteExerciseModal from '../../modals/DeleteExerciseModal';
+import EditExerciseModal from '../../modals/EditExerciseModal';
 const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
   const [editModalVisible, setEditModalVisable] = useState(false);
   const [deleteModalVisible, setDeleteModalVisable] = useState(false);
@@ -10,13 +11,13 @@ const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
 
   return (
     <View>
-      {/* <EditExerciseModal
+      <EditExerciseModal
         isVisible={editModalVisible}
         setIsVisible={setEditModalVisable}
         id={item.id}
         name={item.name}
-        // editExercise={editExercise}
-      /> */}
+        dispatch={dispatch}
+      />
       <DeleteExerciseModal
         isVisible={deleteModalVisible}
         setIsVisible={setDeleteModalVisable}

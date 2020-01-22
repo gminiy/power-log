@@ -10,7 +10,6 @@ import Exercise from '../components/exercises/Exercise';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AddExerciseButton from '../components/exercises/AddExerciseButton';
 
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'delete_exercise':
@@ -54,26 +53,6 @@ const ExercisesScreen = ({ navigation }) => {
     }
   );
   
-  // const editExercise = async ({ id, newName }) => {
-  //   try {
-  //     const response = await client.put(
-  //       `${urls.updateExercise}/${id}`,
-  //       { name: newName },
-  //     );
-  
-  //     if (response.status === 200) dispatch({
-  //       type: 'edit_exercise',
-  //       payload: { id, newName }
-  //     });
-  
-  //   } catch (error) {
-  //     console.log(error);
-  //     return dispatch({ type: 'set_error', payload: error });
-  //   }
-  // };
-  
-
-
   return (
     <>
       {loading ? (

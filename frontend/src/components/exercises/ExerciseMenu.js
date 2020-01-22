@@ -16,7 +16,7 @@ const ExerciseMenu = ({ setDeleteModalVisable, setEditModalVisable }) => {
   };
 
   const showEditExerciseModal = () => {
-    //setEditExerciseModalVisable(true);
+    setEditModalVisable(true);
     return menu.hide();
   };
 

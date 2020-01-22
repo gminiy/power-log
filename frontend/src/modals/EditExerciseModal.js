@@ -3,9 +3,29 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
+import urls from '../common/urls';
+import client from '../api/client';
 
-const EditExerciseModal = ({ isVisible, setIsVisible, id, name, editExercise }) => {
+const EditExerciseModal = ({ isVisible, setIsVisible, id, name, dispatch }) => {
   const [exerciseName, setExerciseName] = useState(name);
+
+  const editExercise = async ({ id, newName }) => {
+    try {
+      const response = await client.put(
+        `${urls.updateExercise}/${id}`,
+        { name: newName },
+      );
+
+      if (response.status === 200) dispatch({
+        type: 'edit_exercise',
+        payload: { id, newName }
+      });
+
+    } catch (error) {
+      console.log(error);
+      return dispatch({ type: 'set_error', payload: error });
+    }
+  };
 
   return (
     <Modal
