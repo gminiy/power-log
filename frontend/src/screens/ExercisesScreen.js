@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from 'react';
 import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import urls from '../common/urls'
+import urls from '../common/urls';
 import { AntDesign } from '@expo/vector-icons';
 import AddExerciseModal from '../modals/AddExerciseModal';
 import LogoutButton from '../components/LogoutButton';
@@ -72,22 +72,7 @@ const ExercisesScreen = ({ navigation }) => {
   //   }
   // };
   
-  // const deleteExercise = async (id) => {
-  //   try {
-  //     const response = await client.delete(
-  //       `${urls.deleteExercise}/${id}`,
-  //     );
-  
-  //     if (response.status === 200) dispatch({
-  //       type: 'delete_exercise',
-  //       payload: { id }
-  //     });
-  
-  //   } catch (error) {
-  //     console.log(error);
-  //     return dispatch({ type: 'set_error', payload: error });
-  //   }
-  // };
+
 
   return (
     <>
@@ -109,6 +94,7 @@ const ExercisesScreen = ({ navigation }) => {
                   item={item}
                   index={index}
                   navigation={navigation}
+                  dispatch={dispatch}
                 />
               );
             }}

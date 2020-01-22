@@ -1,49 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ExerciseMenu from './ExerciseMenu';
-
-const Exercise = ({ index, item, navigation: { navigate } }) => {
+import DeleteExerciseModal from '../../modals/DeleteExerciseModal';
+const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
+  const [editModalVisible, setEditModalVisable] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisable] = useState(false);
   const containerColors = ['#f5f5f5', 'white'];
 
   return (
     <View>
       {/* <EditExerciseModal
-        isVisible={editExerciseModalVisible}
-        setIsVisible={setEditExerciseModalVisable}
-        id={exerciseId}
-        name={exerciseName}
-        editExercise={editExercise}
-      />
-      <DeleteExerciseModal
-        isVisible={deleteExerciseModalVisible}
-        setIsVisible={setDeleteExerciseModalVisable}
-        id={exerciseId}
-        name={exerciseName}
-        deleteExercise={deleteExercise}
+        isVisible={editModalVisible}
+        setIsVisible={setEditModalVisable}
+        id={item.id}
+        name={item.name}
+        // editExercise={editExercise}
       /> */}
-        <TouchableOpacity
-          onPress={
-            () => {
-              navigate(
-                'ExerciseTabs',
-                { id: item.id, name: item.name }
-              )
-            }
-          }
-          style={[
-            styles.container,
-            { backgroundColor: containerColors[index%2] }
-          ]}
-        >
-          <Text style={styles.title}>{item.name}</Text>
-          <ExerciseMenu
-        exerciseId={item.id}
-        exerciseName={item.name}
+      <DeleteExerciseModal
+        isVisible={deleteModalVisible}
+        setIsVisible={setDeleteModalVisable}
+        id={item.id}
+        name={item.name}
+        dispatch={dispatch}
       />
-        </TouchableOpacity>
-
-  </View>
+      <TouchableOpacity
+        onPress={
+          () => {
+            navigate(
+              'ExerciseTabs',
+              { id: item.id, name: item.name }
+            )
+          }
+        }
+        style={[
+          styles.container,
+          { backgroundColor: containerColors[index%2] }
+        ]}
+      >
+        <Text style={styles.title}>{item.name}</Text>
+        <ExerciseMenu
+          setDeleteModalVisable={setDeleteModalVisable}
+          setEditModalVisable={setEditModalVisable}
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 

@@ -4,10 +4,7 @@ import Menu, { MenuItem } from 'react-native-material-menu';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const ExerciseMenu = ({ exerciseId, exerciseName, editExercise, deleteExercise }) => {
-  // const [editExerciseModalVisible, setEditExerciseModalVisable] = useState(false);
-  // const [deleteExerciseModalVisible, setDeleteExerciseModalVisable] = useState(false);
-
+const ExerciseMenu = ({ setDeleteModalVisable, setEditModalVisable }) => {
   let menu = null;
 
   const setMenuRef = ref => {
@@ -24,7 +21,7 @@ const ExerciseMenu = ({ exerciseId, exerciseName, editExercise, deleteExercise }
   };
 
   const showDeleteExerciseModal = () => {
-    //setDeleteExerciseModalVisable(true);
+    setDeleteModalVisable(true);
     return menu.hide();
   };
 
