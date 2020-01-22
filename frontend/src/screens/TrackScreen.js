@@ -4,22 +4,20 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
-import DateInput from '../components/DateInput';
+import moment from 'moment';
+import DatePicker from '../components/DatePicker';
 
 const TrackScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
-  const now = new Date;
-  const today = now.toISOString().slice(0,10);
-
   const [setList, setSetList] = useState([]);
   const [dayId, setDayId] = useState(null);
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState(moment());
   const [updateMode, setUpdateMode] = useState({ on: false, id: null });
   const [error, setError] = useState(null);
 
-  useEffect(() => { initSetList(today) }, []);
+  //useEffect(() => { initSetList(today) }, []);
 
   const initSetList = async (date) => {
     try {
@@ -108,12 +106,9 @@ const TrackScreen = ({ navigation }) => {
 
   return (
     <>
-      <DateInput
-        today={date}
-        onChange={async (date) => {
-          setDate(date);
-          initSetList(date);
-        }}
+      <DatePicker
+        date={date}
+        setDate={setDate}
       />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>무게</Text>

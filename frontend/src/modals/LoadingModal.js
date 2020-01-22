@@ -5,9 +5,7 @@ import Modal from 'react-native-modal';
 
 const LoadingModal = ({ isVisible }) => {
   return (
-    <Modal
-      isVisible={isVisible}
-    >
+    <Modal isVisible={isVisible}>
       <ActivityIndicator size="large" color="#7B6E66" style={{ flex: 1 }}/>
     </Modal>
   )
