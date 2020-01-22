@@ -56,7 +56,7 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
         onBackButtonPress={() => setIsVisible(false)}
       >
         <View style={styles.container}>
-          <Text>수정할 운동의 이름을 입력해주세요.</Text>
+          <Text style={styles.text}>수정할 운동의 이름을 입력해주세요.</Text>
           <TextInput
             style={styles.input} 
             value={newName}
@@ -70,20 +70,22 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
           {isExist && (
             <Text style={styles.warningText}>이미 등록한 운동입니다.</Text>
           )}
-          <Button
-            title="수정"
-            styles={buttonStyles}
-            onPress={editExercise}
-          />
-          <Button
-            title="취소"
-            styles={buttonStyles}
-            onPress={() => {
-              setIsVisible(false);
-              setIsExist(false);
-              setNewName(originalName);
-            }}
-          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="수정"
+              styles={buttonStyles}
+              onPress={editExercise}
+            />
+            <Button
+              title="취소"
+              styles={buttonStyles}
+              onPress={() => {
+                setIsVisible(false);
+                setIsExist(false);
+                setNewName(originalName);
+              }}
+            />
+          </View>
         </View>
       </Modal>
     </>
@@ -95,32 +97,49 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'center',
     width: wp('80%'),
-    height: hp('40%'),
+    height: hp('24%'),
     borderRadius: 5,
+    padding: wp('4%')
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: wp('45%'),
+    alignSelf: 'flex-end',
+  },
+  text: {
+    fontSize: wp('4.3%')
+  },
+  warningText: {
+    color: '#e15249',
+    alignSelf: 'flex-end',
+    marginTop: hp('0.5%')
   },
   input: {
-    borderBottomWidth : 0.5,
+    marginTop: hp('2%'),
     borderColor: '#888',
     width: wp('70%'),
-    height: hp('8%'),
+    height: hp('6%'),
     paddingLeft: wp('3%'),
-    fontSize: wp('3.5%')
-  },
+    fontSize: wp('3.5%'),
+    backgroundColor: '#f5f5f5'
+  }
 });
 
 const buttonStyles = StyleSheet.create({
   button: {
-    width: wp('70%'),
-    height: hp('5.3%'),
+    marginTop: hp('2%'),
+    width: wp('21%'),
+    height: hp('4.3%'),
+    alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    borderWidth: 1,
-    marginTop: 20,
-    marginBottom: 20,
+    backgroundColor: '#7B6E66'
   },
   title: {
     fontSize: wp('4.5%'),
+    color: '#fffaf0'
   }
 });
 
