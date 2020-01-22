@@ -15,7 +15,7 @@ const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
         isVisible={editModalVisible}
         setIsVisible={setEditModalVisable}
         id={item.id}
-        name={item.name}
+        originalName={item.name}
         dispatch={dispatch}
       />
       <DeleteExerciseModal

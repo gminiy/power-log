@@ -11,7 +11,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
   const { state: { token } } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [isValidate, setIsValidate] = useState(true);
-  const [isAlreadyExist, setIsAlreadyExist] = useState(false);
+  const [isExist, setIsExist] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const addExercise = async () => {
@@ -31,7 +31,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
         },
       );
       if (!response.ok) throw Error(response.status);
-      setIsAlreadyExist(false);
+      setIsExist(false);
       closeModal();
       
       const exercise = await response.json();
@@ -39,7 +39,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
       dispatch({ type: 'set_exercises', payload: [exercise] });
     } catch (error) {
       if (error.message === '409') {
-        return setIsAlreadyExist(true);
+        return setIsExist(true);
       }
       return dispatch({ type: 'set_error', payload: error });
     } finally {
@@ -74,7 +74,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
           {!isValidate && (
             <Text style={styles.warningText}>이름은 최소한 한글자 이상이어야 합니다.</Text>
           )}          
-          {isAlreadyExist && (
+          {isExist && (
             <Text style={styles.warningText}>이미 등록한 운동입니다.</Text>
           )}
           <Button

@@ -1,8 +1,7 @@
 import React, { useState, useReducer } from 'react';
-import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
+import { View, ActivityIndicator, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import urls from '../common/urls';
-import { AntDesign } from '@expo/vector-icons';
 import AddExerciseModal from '../modals/AddExerciseModal';
 import LogoutButton from '../components/LogoutButton';
 import useFetch from '../hooks/useFetch';
