@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import Button from '../components/Button';
 import urls from '../common/urls';
-import client from '../api/client';
+import { Context as AuthContext} from '../context/AuthContext';
 
-const EditExerciseModal = ({ isVisible, setIsVisible, id, name, dispatch }) => {
-  const [exerciseName, setExerciseName] = useState(name);
+const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch }) => {
+  const { state: { token } } = useContext(AuthContext);
+  const [newName, setNewName] = useState(originalName);
 
-  const editExercise = async ({ id, newName }) => {
+  const editExercise = async () => {
+    console.log(newName)
     try {
-      const response = await client.put(
+      const response = await fetch(
         `${urls.updateExercise}/${id}`,
-        { name: newName },
+        {
+          method: 'PUT',
+          headers: {
+            token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: newName })
+        },
       );
 
       if (response.status === 200) dispatch({
@@ -36,8 +45,8 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name, dispatch }) => {
         <Text>수정할 운동의 이름을 입력해주세요.</Text>
         <TextInput
           style={styles.input} 
-          value={exerciseName}
-          onChangeText={setExerciseName}
+          value={newName}
+          onChangeText={setNewName}
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -45,8 +54,8 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name, dispatch }) => {
           title="수정"
           styles={buttonStyles}
           onPress={() => {
-            editExercise({ id, newName: exerciseName });
-            setExerciseName('');
+            editExercise();
+            setNewName('');
             setIsVisible(false);
           }}
         />
@@ -54,7 +63,7 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, name, dispatch }) => {
           title="취소"
           styles={buttonStyles}
           onPress={() => {
-            setExerciseName('');
+            setNewName('');
             setIsVisible(false);
           }}
         />
