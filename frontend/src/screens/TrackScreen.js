@@ -7,6 +7,7 @@ import client from '../api/client';
 import urls from '../common/urls';
 import moment from 'moment';
 import DatePicker from '../components/DatePicker';
+import TrackInputForm from '../components/track/TrackInputForm';
 
 const TrackScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
@@ -49,61 +50,61 @@ const TrackScreen = ({ navigation }) => {
   };
 
   const addSet = async () => {
-    try {
-      if (daySets.id === null) {
-        const response = await client.post(
-          urls.addSetWithDate,
-          { weight, reps, exerciseId, date },
-        );
-        setSetList(daySets.concat(response.data.set));
-        setDayId(response.data.id);
-        return;
-      }
+    // try {
+    //   if (daySets.id === null) {
+    //     const response = await client.post(
+    //       urls.addSetWithDate,
+    //       { weight, reps, exerciseId, date },
+    //     );
+    //     setSetList(daySets.concat(response.data.set));
+    //     setDayId(response.data.id);
+    //     return;
+    //   }
 
-      const response = await client.post(
-        urls.addSet,
-        { weight, reps, exerciseId, dayId },
-      );
+    //   const response = await client.post(
+    //     urls.addSet,
+    //     { weight, reps, exerciseId, dayId },
+    //   );
 
-      setSetList(daySets.concat(response.data));
-    } catch (error) {
-      console.log(error);
-      return setError(error);
-    }
+    //   setSetList(daySets.concat(response.data));
+    // } catch (error) {
+    //   console.log(error);
+    //   return setError(error);
+    // }
   };
   
   const updateSet = async (id) => {
-    try {
-      await client.put(
-        `${urls.addSet}/${id}`,
-        { weight, reps },
-      );
+    // try {
+    //   await client.put(
+    //     `${urls.addSet}/${id}`,
+    //     { weight, reps },
+    //   );
       
-      return setSetList(daySets.map((set) => {
-        return set.id === id 
-        ? { ...set, weight, reps }
-        : set
-      }));
-    } catch (error) {
-      console.log(error);
-      return setError(error);
-    }
+    //   return setSetList(daySets.map((set) => {
+    //     return set.id === id 
+    //     ? { ...set, weight, reps }
+    //     : set
+    //   }));
+    // } catch (error) {
+    //   console.log(error);
+    //   return setError(error);
+    // }
   };
   
   const deleteSet = async (id) => {
-    try {
-      if (daySets.length === 1) {
-        await client.delete(`${url.deleteDay}/${dayId}`);
+    // try {
+    //   if (daySets.length === 1) {
+    //     await client.delete(`${url.deleteDay}/${dayId}`);
         
-        return initSetList(date);
-      }
-      await client.delete(`${urls.deleteSet}/${id}`);
+    //     return initSetList(date);
+    //   }
+    //   await client.delete(`${urls.deleteSet}/${id}`);
   
-      setSetList(daySets.filter((set) => set.id !== id));
-    } catch (error) {
-      console.log(error);
-      return setError(error);
-    }
+    //   setSetList(daySets.filter((set) => set.id !== id));
+    // } catch (error) {
+    //   console.log(error);
+    //   return setError(error);
+    // }
   };
 
   const initInputState = () => {
@@ -118,37 +119,9 @@ const TrackScreen = ({ navigation }) => {
         date={date}
         setDate={setDate}
       />
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>무게</Text>
-        <View style={styles.spacer}/>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="0"
-          placeholderTextColor="black"
-          style={styles.input}
-          value={weight}
-          onChangeText={setWeight}
-          keyboardType={'numeric'}
-        />
-        <Text style={styles.unit}>KG</Text>
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>회수</Text>
-        <View style={styles.spacer}/>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="0"
-          placeholderTextColor="black"
-          style={styles.input}
-          value={reps}
-          onChangeText={setReps}
-          keyboardType={'numeric'}
-        />
-        <Text style={styles.unit}>개</Text>
-      </View>
-      <View style={styles.buttonContainer}>
+      <TrackInputForm type='weight' state={weight} setState={setWeight} />
+      <TrackInputForm type='reps' state={reps} setState={setReps} />
+      {/* <View style={styles.buttonContainer}>
         {updateMode.on ? 
           <Button
             title="수정"
@@ -212,7 +185,7 @@ const TrackScreen = ({ navigation }) => {
             </View>
           );
         }}
-      />
+      /> */}
   </>
   );
 };
