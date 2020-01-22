@@ -24,11 +24,49 @@ const switchNavigator = createSwitchNavigator({
   MainStacks: createStackNavigator(
     {
       Exercises: ExercisesScreen,
-      ExerciseTabs: createMaterialTopTabNavigator({
-        Track: TrackScreen,
-        History: HistoryScreen,
-        Chart: ChartScreen,
-      })
+      ExerciseTabs: createMaterialTopTabNavigator(
+        {
+          Track: {
+            screen: TrackScreen,
+            navigationOptions: {
+             title: '기록측정'
+            } 
+          },
+          History: {
+            screen: HistoryScreen,
+            navigationOptions: {
+              title: '지난 기록'
+            }
+          },
+          Chart: {
+            screen: ChartScreen,
+            navigationOptions: {
+              title: '그래프'
+            }
+          }
+        },
+        {
+          tabBarOptions: {
+            labelStyle: {
+              fontSize: wp('3%'),
+              fontWeight: 'bold'
+            },
+            tabStyle: {
+              height: hp('7%')
+            },
+            style: {
+              backgroundColor: 'white',
+            },
+            indicatorStyle: {
+              backgroundColor: '#9c8856',
+              height: hp('0.5%')
+            },
+            inactiveTintColor: '#666666',
+            activeTintColor: '#9c8856',
+
+          }
+        }
+      )
     },
     {
       defaultNavigationOptions: ({ navigation }) => {
