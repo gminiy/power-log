@@ -19,13 +19,14 @@ const TrackScreen = ({ navigation }) => {
   const [updateMode, setUpdateMode] = useState({ on: false, id: null });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isValidate, setIsValidate] = useState(true);
 
   useEffect(() => {initSets()}, [date]);
 
   const initSets = async () => {
+    const dateForm = date.format().slice(0, 10);
+
     try {
-      const dateForm = date.format().slice(0, 10);
-      
       const response = await fetch(
         `${urls.getSets}?exerciseId=${exerciseId}&date=${dateForm}`,
         {
@@ -50,10 +51,10 @@ const TrackScreen = ({ navigation }) => {
   };
 
   const addSet = async () => {
+    if (!weight || !reps) return setIsValidate(false);
+    const dateForm = date.format().slice(0, 10);
     try {
       if (daySets.id === null) {
-        const dateForm = date.format().slice(0, 10);
-
         const response = await fetch(
           `${urls.addSetWithDate}`,
           {
@@ -98,6 +99,8 @@ const TrackScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
       return setError(error);
+    } finally {
+      initInputState();
     }
   };
   
@@ -136,9 +139,11 @@ const TrackScreen = ({ navigation }) => {
   };
 
   const initInputState = () => {
+    setIsValidate(true);
     setWeight('');
     setReps('');
     setUpdateMode({ on: false, id: null });
+
   }
 
   return (
@@ -147,6 +152,9 @@ const TrackScreen = ({ navigation }) => {
         date={date}
         setDate={setDate}
       />
+      {!isValidate && (
+        <Text style={styles.warningText}>무게와 횟수를 입력해주세요.</Text>
+      )}
       <TrackInputForm type='weight' state={weight} setState={setWeight} />
       <TrackInputForm type='reps' state={reps} setState={setReps} />
       <View style={styles.buttonContainer}>
@@ -154,27 +162,19 @@ const TrackScreen = ({ navigation }) => {
           <TrackButton
             title="수정"
             style='dark'
-            onPress={async () => {
-              await updateSet(updateMode.id);
-              initInputState();
-            }}
+            onPress={async () => await updateSet(updateMode.id)}
           />
         :
           <TrackButton
             title="기록"
             style='dark'
-            onPress={async () => {
-              await addSet();
-              initInputState();
-            }}
+            onPress={async () => await addSet()}
           />
         }
         <TrackButton
           title="초기화"
           style='light'
-          onPress={()=>{
-            initInputState();
-          }}
+          onPress={()=> initInputState()}
         />
       </View>
       <FlatList
@@ -193,6 +193,11 @@ const TrackScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  warningText: {
+    alignSelf: 'center',
+    color: '#e15249',
+    marginTop: hp('0.5%')
+  },
   setContainer: {
     flexDirection: 'row',
     alignItems: 'center'

@@ -24,7 +24,7 @@ const TrackInputForm = ({ type, state, setState }) => {
       {type === 'weight' ? (
         <Text style={styles.unit}>KG</Text>
       ) : (
-        <Text style={styles.unit}>개</Text>
+        <Text style={styles.unit}>회</Text>
       )}
     </View>
     </>
