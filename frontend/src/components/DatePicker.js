@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';;
-import { Text, View, TouchableOpacity, StyleSheet , Image} from 'react-native';
+import React from 'react';;
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 

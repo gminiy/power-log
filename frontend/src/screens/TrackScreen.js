@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Context as AuthContext} from '../context/AuthContext';
-import Button from '../components/Button';
+import TrackButton from '../components/track/TrackButton';
 import client from '../api/client';
 import urls from '../common/urls';
 import moment from 'moment';
@@ -50,27 +50,55 @@ const TrackScreen = ({ navigation }) => {
   };
 
   const addSet = async () => {
-    // try {
-    //   if (daySets.id === null) {
-    //     const response = await client.post(
-    //       urls.addSetWithDate,
-    //       { weight, reps, exerciseId, date },
-    //     );
-    //     setSetList(daySets.concat(response.data.set));
-    //     setDayId(response.data.id);
-    //     return;
-    //   }
+    try {
+      if (daySets.id === null) {
+        const dateForm = date.format().slice(0, 10);
 
-    //   const response = await client.post(
-    //     urls.addSet,
-    //     { weight, reps, exerciseId, dayId },
-    //   );
+        const response = await fetch(
+          `${urls.addSetWithDate}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              token
+            },
+            body: JSON.stringify({
+              weight, reps, exerciseId, date: dateForm
+            })
+          },
+        );
 
-    //   setSetList(daySets.concat(response.data));
-    // } catch (error) {
-    //   console.log(error);
-    //   return setError(error);
-    // }
+        if (!response.ok) throw Error(response.status);
+
+        const data = await response.json();
+
+        setDaySets({id: data.dayId, sets: daySets.sets.concat(data.set)});
+        return;
+      }
+
+      const response = await fetch(
+        `${urls.addSet}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          },
+          body: JSON.stringify({
+            weight, reps, exerciseId, dayId: daySets.id
+          })
+        },
+      );
+
+      if (!response.ok) throw Error(response.status);
+
+      const data = await response.json();
+
+      setDaySets({...daySets, sets: daySets.sets.concat(data)});
+    } catch (error) {
+      console.log(error);
+      return setError(error);
+    }
   };
   
   const updateSet = async (id) => {
@@ -121,36 +149,33 @@ const TrackScreen = ({ navigation }) => {
       />
       <TrackInputForm type='weight' state={weight} setState={setWeight} />
       <TrackInputForm type='reps' state={reps} setState={setReps} />
-      {/* <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         {updateMode.on ? 
-          <Button
+          <TrackButton
             title="수정"
-            styles={buttonStyles}
+            style='dark'
             onPress={async () => {
               await updateSet(updateMode.id);
               initInputState();
             }}
           />
         :
-          <Button
+          <TrackButton
             title="기록"
-            styles={buttonStyles}
+            style='dark'
             onPress={async () => {
               await addSet();
               initInputState();
             }}
           />
         }
-        <Button
+        <TrackButton
           title="초기화"
-          styles={buttonStyles}
+          style='light'
           onPress={()=>{
             initInputState();
           }}
         />
-      </View>
-      <View style={styles.titleContainer}>
-        <View style={styles.spacer}/>
       </View>
       <FlatList
         data={daySets.sets}
@@ -158,34 +183,11 @@ const TrackScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           return (
             <View style={styles.setContainer}>
-              <Text style={styles.set}>무게 : {item.weight} 횟수: {item.reps}</Text>
-              {updateMode.on 
-              ? <Button
-                  title="취소"
-                  styles={buttonStyles}
-                  onPress={() => initInputState()}
-                />
-              : <Button
-                  title="수정"
-                  styles={buttonStyles}
-                  onPress={() => {
-                    setWeight(item.weight.toString());
-                    setReps(item.reps.toString());
-                    setUpdateMode({ on: true, id: item.id });
-                  }}
-                />
-              }
-              {!updateMode.on &&
-               <Button
-                  title="삭제"
-                  styles={buttonStyles}
-                  onPress={() => deleteSet(item.id)}
-                />
-              }
+              <Text style={styles.set}>{item.weight} kg {item.reps} reps</Text>
             </View>
           );
         }}
-      /> */}
+      />
   </>
   );
 };
@@ -198,59 +200,15 @@ const styles = StyleSheet.create({
   set: {
     fontSize: wp('8%'),
   },
-  titleContainer: {
-    alignItems: 'center',
-    marginTop: hp('3%'),
-  },
-  title: {
-    alignSelf: 'flex-start',
-    marginLeft: wp('10%'),
-    marginBottom: hp('1%'),
-    fontSize: wp('6%')
-  },
-  spacer: {
-    width: wp('90%'),
-    height: hp('0.3%'),
-    backgroundColor: 'blue'
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-  },
-  input: {
-    textAlign: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    width: wp('30%'),
-    height: hp('8%'),
-    fontSize: wp('8%'),
-  },
-  unit: {
-    marginLeft: wp('2%'),
-    fontSize: wp('6%')
-  },
   buttonContainer: {
-    width: wp('45%'),
+    width: wp('85%'),
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: hp('3%')
+    marginTop: hp('3.5%'),
   }
 })
 
-const buttonStyles = StyleSheet.create({
-  button: {
-    width: wp('20%'),
-    height: hp('6%'),
-    borderWidth: 1,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: wp('6%')
-  }
-});
+
 
 export default TrackScreen;

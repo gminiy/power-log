@@ -32,7 +32,7 @@ const ChartScreen = ({ navigation }) => {
     error: null
   });
 
-  useEffect(() => {init()}, []);
+  //useEffect(() => {init()}, []);
  
   const init = async () => {
     const response = await client.get(

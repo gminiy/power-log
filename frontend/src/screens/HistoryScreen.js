@@ -11,7 +11,7 @@ const HistoryScreen = ({ navigation }) => {
   const [setsByDate, setSetsByDate] = useState([]);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {getSetList()}, []);
+  //useEffect(() => {getSetList()}, []);
 
   const getSetList = async () => {
     const response = await client.get(
