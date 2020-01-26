@@ -30,7 +30,7 @@ const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
           () => {
             navigate(
               'ExerciseTabs',
-              { id: item.id, name: item.name }
+              { id: item.id, sets: null }
             )
           }
         }
@@ -48,7 +48,6 @@ const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

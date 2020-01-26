@@ -6,20 +6,22 @@ import TrackButton from '../components/track/TrackButton';
 import urls from '../common/urls';
 import moment from 'moment';
 import Track from '../components/track/Track';
-import DatePicker from '../components/DatePicker';
+import DatePicker from '../components/track/DatePicker';
 import TrackInputForm from '../components/track/TrackInputForm';
+import LoadingModal from '../modals/LoadingModal';
 
 const TrackScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
   const { state: { token } } = useContext(AuthContext);
-  const [daySets, setDaySets] = useState({ id: null, sets: [] });
+  const [dayId, setDayId] = useState(null);
+  const [sets, setSets] = useState([]);
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
   const [date, setDate] = useState(moment());
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isValidate, setIsValidate] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isValidate, setIsValidate] = useState(true);
 
   useEffect(() => {initSets()}, [date]);
   useEffect(() => {
@@ -29,12 +31,16 @@ const TrackScreen = ({ navigation }) => {
     } else {
       initInputState();
     }
-  }, [selectedItem])
+  }, [selectedItem]);
+  useEffect(() => {
+    navigation.setParams({ sets });
+  }, [sets]);
 
   const initSets = async () => {
     const dateForm = date.format().slice(0, 10);
 
     try {
+      setLoading(true);
       const response = await fetch(
         `${urls.getSets}?exerciseId=${exerciseId}&date=${dateForm}`,
         {
@@ -49,20 +55,26 @@ const TrackScreen = ({ navigation }) => {
 
       const data = await response.json();
     
-      if (data.length === 0) return setDaySets({ id: null, sets: [] });
-
-      setDaySets(data[0]);
+      if (data.length === 0) {
+        setDayId(null);
+        return setSets([]);
+      }
+      setDayId(data[0].id);
+      setSets(data[0].sets);
     } catch (error) {
-      console.log(error);
       return setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addSet = async () => {
     if (!weight || !reps) return setIsValidate(false);
+
+    setLoading(true);
     const dateForm = date.format().slice(0, 10);
     try {
-      if (daySets.id === null) {
+      if (dayId === null) {
         const response = await fetch(
           `${urls.addSetWithDate}`,
           {
@@ -80,9 +92,9 @@ const TrackScreen = ({ navigation }) => {
         if (!response.ok) throw Error(response.status);
 
         const data = await response.json();
-
-        setDaySets({id: data.dayId, sets: daySets.sets.concat(data.set)});
-        return;
+        
+        setDayId(data.dayId);
+        setSets(sets.concat(data.set));
       }
 
       const response = await fetch(
@@ -94,7 +106,7 @@ const TrackScreen = ({ navigation }) => {
             token
           },
           body: JSON.stringify({
-            weight, reps, exerciseId, dayId: daySets.id
+            weight, reps, exerciseId, dayId
           })
         },
       );
@@ -103,50 +115,86 @@ const TrackScreen = ({ navigation }) => {
 
       const data = await response.json();
 
-      setDaySets({...daySets, sets: daySets.sets.concat(data)});
+      setSets(sets.concat(data));
     } catch (error) {
-      console.log(error);
       return setError(error);
     } finally {
       initInputState();
+      setLoading(false);
     }
   };
   
-  const updateSet = async (id) => {
-    // try {
-    //   await client.put(
-    //     `${urls.addSet}/${id}`,
-    //     { weight, reps },
-    //   );
+  const updateSet = async () => {
+    if (!weight || !reps) return setIsValidate(false);
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${urls.updateSet}/${dayId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          },
+          body: JSON.stringify({ weight, reps })
+        },
+      );
       
-    //   return setSetList(daySets.map((set) => {
-    //     return set.id === id 
-    //     ? { ...set, weight, reps }
-    //     : set
-    //   }));
-    // } catch (error) {
-    //   console.log(error);
-    //   return setError(error);
-    // }
+      if (!response.ok) throw Error(response.status);
+
+      return setSets(sets.map((set) => {
+        return set.id === selectedItem.id 
+        ? { ...set, weight, reps }
+        : set
+      }));
+    } catch (error) {
+      return setError(error);
+    } finally {
+      initInputState();
+      setLoading(false);
+    }
   };
   
-  const deleteSet = async (id) => {
-    // try {
-    //   if (daySets.length === 1) {
-    //     await client.delete(`${url.deleteDay}/${dayId}`);
-        
-    //     return initSetList(date);
-    //   }
-    //   await client.delete(`${urls.deleteSet}/${id}`);
-  
-    //   setSetList(daySets.filter((set) => set.id !== id));
-    // } catch (error) {
-    //   console.log(error);
-    //   return setError(error);
-    // }
+  const deleteSet = async () => {
+    setLoading(true);
+    try {
+      if (sets.length === 1) {
+        await fetch(
+          `${urls.deleteDay}/${dayId}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              token
+            },
+          }
+        );
+        setSets(sets.filter((set) => set.id !== selectedItem.id));
+        return setDayId(null);
+      }
+
+      await fetch(
+        `${urls.deleteSet}/${selectedItem.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          },
+        }
+      );
+      setSets(sets.filter((set) => set.id !== selectedItem.id));
+    } catch (error) {
+      return setError(error);
+    } finally {
+      initInputState();
+      setLoading(false);
+    }
   };
 
   const initInputState = () => {
+    setSelectedItem(null);
     setIsValidate(true);
     setWeight('');
     setReps('');
@@ -154,6 +202,7 @@ const TrackScreen = ({ navigation }) => {
 
   return (
     <>
+      <LoadingModal isVisible={loading} />
       <DatePicker
         date={date}
         setDate={setDate}
@@ -164,27 +213,36 @@ const TrackScreen = ({ navigation }) => {
       <TrackInputForm type='weight' state={weight} setState={setWeight} />
       <TrackInputForm type='reps' state={reps} setState={setReps} />
       <View style={styles.buttonContainer}>
-        {selectedItem ? 
-          <TrackButton
-            title="수정"
-            style='dark'
-            onPress={async () => {}}
-          />
-        :
-          <TrackButton
-            title="기록"
-            style='dark'
-            onPress={async () => await addSet()}
-          />
-        }
-        <TrackButton
-          title="초기화"
-          style='light'
-          onPress={()=> initInputState()}
-        />
+        {selectedItem ? (
+          <>
+            <TrackButton
+              title="수정"
+              style='update'
+              onPress={updateSet}
+            />
+            <TrackButton
+              title="삭제"
+              style='delete'
+              onPress={deleteSet}
+            />
+          </>
+        ) : (
+          <>
+            <TrackButton
+              title="기록"
+              style='add'
+              onPress={addSet}
+            />
+            <TrackButton
+              title="초기화"
+              style='init'
+              onPress={initInputState}
+            />
+          </>
+        )}
       </View>
       <FlatList
-        data={daySets.sets}
+        data={sets}
         keyExtractor={(set) => `${set.id}`}
         renderItem={({ item, index }) => {
           return (

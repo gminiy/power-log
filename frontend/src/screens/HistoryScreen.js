@@ -1,17 +1,20 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
 
 const HistoryScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
-  const size = 5;
+  const size = 10;
   const [setsByDate, setSetsByDate] = useState([]);
   const [page, setPage] = useState(1);
 
-  //useEffect(() => {getSetList()}, []);
+  useEffect(() => {
+    const { remove } = navigation.addListener('willFocus', getSetList);
+  
+    return remove;
+  }, []);
 
   const getSetList = async () => {
     const response = await client.get(

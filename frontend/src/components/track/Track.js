@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   repsTextContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    width: wp('10%')
+    width: wp('11%')
   },
   text: {
     fontSize: wp('6%'),

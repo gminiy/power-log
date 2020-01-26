@@ -5,15 +5,19 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const TrackButton = ({ title, style, onPress }) =>  {
   return (
     <View style={styles.container}>
-      {style === 'dark' ? (
-        <TouchableOpacity onPress={onPress} style={[styles.button, { backgroundColor: '#7b6d64' }]}>
-          <Text style={[styles.title, { color: 'white' }]}>{title}</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={onPress} style={[styles.button, { backgroundColor: '#d7d2cb' }]}>
-          <Text style={[styles.title, { color: '#7b6e66'}]}>{title}</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity onPress={onPress} style={[styles.button,
+        style === 'add' && styles.addButton,
+        style === 'init' && styles.initButton,
+        style === 'update' && styles.updateButton,
+        style === 'delete' && styles.deleteButton,
+      ]}>
+        <Text style={[styles.title,
+          style === 'add' && styles.addTitle,
+          style === 'init' && styles.initTitle,
+          style === 'update' && styles.updateTitle,
+          style === 'delete' && styles.deleteTitle,
+        ]}>{title}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -29,9 +33,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 3
   },
+  addButton: {
+    backgroundColor: '#7b6d64'
+  },
+  initButton: {
+    backgroundColor: '#d7d2cb'
+  },
+  updateButton: {
+    backgroundColor: '#104529'
+  },
+  deleteButton: {
+    backgroundColor: '#f55b6b'
+  },
   title: {
     fontWeight: 'bold',
     fontSize: wp('4%')
+  },
+  addTitle: {
+    color: 'white'
+  },
+  initTitile: {
+    color: '#7b6e66'
+  },
+  updateTitle: {
+    color: 'white'
+  },
+  deleteTitle: {
+    color: 'white'
   }
 });
 

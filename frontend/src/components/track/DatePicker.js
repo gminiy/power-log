@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5'
   },
   text: {
-    fontSize: wp('4.5%')
+    fontSize: wp('4.3%')
   }
 });
 

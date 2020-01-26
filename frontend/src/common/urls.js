@@ -11,6 +11,7 @@ const urls = {
   getSets: '/set',
   addSet: '/set',
   addSetWithDate: '/set/withDate',
+  updateSet: '/set',
   deleteSet: '/set',
   getSetList: '/set/list',
   getSetListWithPeriod: '/set/list/period',
