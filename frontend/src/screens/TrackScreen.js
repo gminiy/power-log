@@ -3,9 +3,9 @@ import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Context as AuthContext} from '../context/AuthContext';
 import TrackButton from '../components/track/TrackButton';
-import client from '../api/client';
 import urls from '../common/urls';
 import moment from 'moment';
+import Track from '../components/track/Track';
 import DatePicker from '../components/DatePicker';
 import TrackInputForm from '../components/track/TrackInputForm';
 
@@ -16,12 +16,20 @@ const TrackScreen = ({ navigation }) => {
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
   const [date, setDate] = useState(moment());
-  const [updateMode, setUpdateMode] = useState({ on: false, id: null });
+  const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isValidate, setIsValidate] = useState(true);
 
   useEffect(() => {initSets()}, [date]);
+  useEffect(() => {
+    if (selectedItem) {
+      setWeight(selectedItem.weight.toString());
+      setReps(selectedItem.reps.toString());
+    } else {
+      initInputState();
+    }
+  }, [selectedItem])
 
   const initSets = async () => {
     const dateForm = date.format().slice(0, 10);
@@ -142,8 +150,6 @@ const TrackScreen = ({ navigation }) => {
     setIsValidate(true);
     setWeight('');
     setReps('');
-    setUpdateMode({ on: false, id: null });
-
   }
 
   return (
@@ -158,11 +164,11 @@ const TrackScreen = ({ navigation }) => {
       <TrackInputForm type='weight' state={weight} setState={setWeight} />
       <TrackInputForm type='reps' state={reps} setState={setReps} />
       <View style={styles.buttonContainer}>
-        {updateMode.on ? 
+        {selectedItem ? 
           <TrackButton
             title="수정"
             style='dark'
-            onPress={async () => await updateSet(updateMode.id)}
+            onPress={async () => {}}
           />
         :
           <TrackButton
@@ -180,11 +186,14 @@ const TrackScreen = ({ navigation }) => {
       <FlatList
         data={daySets.sets}
         keyExtractor={(set) => `${set.id}`}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
-            <View style={styles.setContainer}>
-              <Text style={styles.set}>{item.weight} kg {item.reps} reps</Text>
-            </View>
+            <Track
+              item={item}
+              index={index}
+              isSelected={selectedItem ? (selectedItem.id === item.id) : false}
+              setSelectedItem={setSelectedItem}
+            />
           );
         }}
       />
@@ -212,8 +221,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: hp('3.5%'),
   }
-})
-
-
+});
 
 export default TrackScreen;
