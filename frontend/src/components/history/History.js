@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, FlatList, View } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const History = ({ item }) => {
+
+const History = React.memo(({ item }) => {
+
   return (
     <View style={styles.container}>
       <View style={styles.dateContainer}>
@@ -32,7 +34,7 @@ const History = ({ item }) => {
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
