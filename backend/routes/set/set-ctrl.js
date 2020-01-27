@@ -46,7 +46,7 @@ exports.register = async (req, res, next) => {
 
 exports.registerWithDate = async (req, res, next) => {
   const { weight, reps, exerciseId, date } = req.body;
-
+  
   if (!weight || !reps || !exerciseId || !date) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
@@ -110,6 +110,7 @@ exports.update = async (req, res, next) => {
 
 exports.list = async (req, res, next) => {
   const { page, size, exerciseId } = req.query;
+  
   if (!page || !size || !exerciseId) {
     return next(createError(400, 'page, size, exerciseId are required'));
   }
@@ -129,7 +130,9 @@ exports.list = async (req, res, next) => {
         order: [['date', 'DESC']]
       },
     );
-
+    
+    if (data.length === 0) return res.status(204);
+    
     return res.json(data);
   } catch (e) {
     return next(e);
