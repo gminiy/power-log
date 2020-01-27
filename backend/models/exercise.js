@@ -16,12 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'user',
     });
 
-    Exercise.hasMany(models.Set, {
-      foreignKey: 'exerciseId',
-      source: 'id',
-      as: 'sets',
-    });
-
     Exercise.hasMany(models.Day, {
       foreignKey: 'exerciseId',
       source: 'id',

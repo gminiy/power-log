@@ -79,21 +79,6 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-exports.deleteDay = async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) return next(createError(400, 'id is required'));
-  try {
-    const day = await Day.findOne({ where: { id } });
-    const sets = day.getSets();
-    sets.map(async set => await set.destroy());
-    const result = await day.destroy();
-
-    return res.json(result);
-  } catch (e) {
-    return next(e);
-  }
-};
-
 exports.update = async (req, res, next) => {
   const { id } = req.params;
   const { weight, reps } = req.body;
@@ -116,7 +101,7 @@ exports.list = async (req, res, next) => {
   }
 
   try {
-    const { count, rows: setsByDay } = await Day.findAndCountAll(
+    const { count, rows: setsByDate } = await Day.findAndCountAll(
       {
         offset: (page - 1) * size,
         limit: parseInt(size),
@@ -131,12 +116,12 @@ exports.list = async (req, res, next) => {
         distinct: true
       },
     );
-    
-    if (setsByDay.length === 0) return res.status(204).send();
+
+    if (setsByDate.length === 0) return res.status(204).send();
     
     const hasNextPage = (page * size) < count;
 
-    return res.json({ count, hasNextPage, setsByDay });
+    return res.json({ count, hasNextPage, setsByDate });
   } catch (e) {
     return next(e);
   }

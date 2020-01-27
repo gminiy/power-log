@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Set.associate = function(models) {
-    Set.belongsTo(models.Exercise, {
-      foreignKey: 'exerciseId',
+    Set.belongsTo(models.Day, {
+      foreignKey: 'dayId',
       target: 'id',
-      as: 'exercise',
+      as: 'day',
     });
   };
   
