@@ -110,13 +110,13 @@ exports.update = async (req, res, next) => {
 
 exports.list = async (req, res, next) => {
   const { page, size, exerciseId } = req.query;
-  
+
   if (!page || !size || !exerciseId) {
     return next(createError(400, 'page, size, exerciseId are required'));
   }
 
   try {
-    const data = await Day.findAll(
+    const { count, rows: setsByDay } = await Day.findAndCountAll(
       {
         offset: (page - 1) * size,
         limit: parseInt(size),
@@ -127,13 +127,16 @@ exports.list = async (req, res, next) => {
           as: 'sets',
           attributes: ['id', 'weight', 'reps']
         }],
-        order: [['date', 'DESC']]
+        order: [['date', 'DESC']],
+        distinct: true
       },
     );
     
-    if (data.length === 0) return res.status(204);
+    if (setsByDay.length === 0) return res.status(204).send();
     
-    return res.json(data);
+    const hasNextPage = (page * size) < count;
+
+    return res.json({ count, hasNextPage, setsByDay });
   } catch (e) {
     return next(e);
   }
