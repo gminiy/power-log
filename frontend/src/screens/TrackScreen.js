@@ -130,7 +130,7 @@ const TrackScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${urls.updateSet}/${dayId}`,
+        `${urls.updateSet}/${selectedItem.id}`,
         {
           method: 'PUT',
           headers: {
