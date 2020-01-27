@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ExerciseMenu from './ExerciseMenu';
 import DeleteExerciseModal from '../../modals/DeleteExerciseModal';
 import EditExerciseModal from '../../modals/EditExerciseModal';
-const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
+
+const Exercise = React.memo(({ index, item, navigation: { navigate }, dispatch }) => {
   const [editModalVisible, setEditModalVisable] = useState(false);
   const [deleteModalVisible, setDeleteModalVisable] = useState(false);
   const containerColors = ['#f5f5f5', 'white'];
@@ -47,7 +48,7 @@ const Exercise = ({ index, item, navigation: { navigate }, dispatch }) => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

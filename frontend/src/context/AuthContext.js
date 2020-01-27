@@ -17,7 +17,7 @@ const authReducer = (state, action) => {
 
 const register = dispatch => async ({ id, password }) => {
   try {
-    const response = await client.post(urls.register, { body: { id, password } });
+    const response = await client.post('/auth/register', { id, password });
     const token = response.data.token;
     await AsyncStorage.setItem('token', token);
 
