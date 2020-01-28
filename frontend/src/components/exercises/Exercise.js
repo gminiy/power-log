@@ -31,7 +31,7 @@ const Exercise = React.memo(({ index, item, navigation: { navigate }, dispatch }
           () => {
             navigate(
               'ExerciseTabs',
-              { id: item.id, sets: null }
+              { id: item.id, name: item.name }
             )
           }
         }

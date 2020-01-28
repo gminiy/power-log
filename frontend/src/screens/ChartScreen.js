@@ -1,47 +1,43 @@
-import React, { useEffect, useState, useReducer } from 'react';
-import { StyleSheet, Text, TextInput, View, FlatList } from 'react-native';
+import React, { useContext, useEffect, useState, useReducer } from 'react';
+import { StyleSheet, Text, TextInput, View, FlatList, Picker } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Button from '../components/Button';
 import client from '../api/client';
 import urls from '../common/urls';
+import { Context as AuthContext} from '../context/AuthContext';
 import { LineChart } from 'react-native-chart-kit';
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'init':
-      return {
-        ...state,
-        newestDate: action.payload.newestDate,
-        setListByDate: action.payload.setListByDate,
-        chartOption: action.payload.chartOption
-      };
-    case 'set_error':
-      return { ...state, error: action.payload }
-    default:
-      return state;
-  };
-};
-
+import SelectBox from '../components/SelectBox';
 
 const ChartScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
-  const [state, dispatch] = useReducer(reducer, {
-    newestDate: "",
-    setListByDate: [],
-    chartOption: null,
-    error: null
-  });
+  const { state: { token } } = useContext(AuthContext);
+  const types = ['volume', 'max\-weight'];
+  const [type, setType] = useState(types[0]);
+  // const [state, dispatch] = useReducer(reducer, {
+  //   newestDate: "",
+  //   setListByDate: [],
+  //   chartOption: null,
+  //   error: null
+  // });
 
-  //useEffect(() => {init()}, []);
+  useEffect(() => {console.log(navigation)}, []);
  
   const init = async () => {
-    const response = await client.get(
-      `${urls.getSetList}?page=1&size=1&exerciseId=${exerciseId}`
+    const response = await fetch(
+      `${urls.getLatestDay}?exerciseId=${exerciseId}`,
+      {
+        headers: {
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        }
+      }
     );
-    
-    if (!response.data.length) return;
-    
-    const setListByDate = await getOneMonthData(response.data[0].date);
+
+    if(!response.ok) throw Error(response.status);
+
+    const { date: latestDate } = response.json();    
+    const setListByDate = await getOneMonthData(latestDate);
     const chartOption = await makeOption(setListByDate);
     
     dispatch({ type: 'init', payload: {
@@ -97,7 +93,12 @@ const ChartScreen = ({ navigation }) => {
 
   return (
     <>
-    {state.chartOption !== null &&
+      <SelectBox
+        data={types}
+        value={type}
+        onSelect={({ item, index }) => {setType(item)}}
+      />
+    {/* {state.chartOption !== null &&
       <LineChart
         data={state.chartOption}
         width={wp('100%')}
@@ -117,7 +118,7 @@ const ChartScreen = ({ navigation }) => {
           borderRadius: 16,
         }}
       />
-      }
+      } */}
     </>
   );
 };

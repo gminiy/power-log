@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform, View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
@@ -13,6 +14,7 @@ import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
 import ErrorScreen from './src/screens/ErrorScreen';
+import TestScreen from './src/screens/TestScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -21,7 +23,7 @@ const switchNavigator = createSwitchNavigator({
     Register: RegisterScreen,
   }),
   MainStacks: createStackNavigator(
-    {
+    { 
       Exercises: ExercisesScreen,
       ExerciseTabs: createMaterialTopTabNavigator(
         {
@@ -93,8 +95,8 @@ const App = createAppContainer(switchNavigator);
 
 export default () => {
   return (
-    <AuthProvider>
-      <App ref={(navigator) => { setNavigator(navigator) }}/>
-    </AuthProvider>
+      <AuthProvider>
+        <App ref={(navigator) => { setNavigator(navigator) }}/>
+      </AuthProvider>
   );
 };
