@@ -19,7 +19,7 @@ const ChartScreen = ({ navigation }) => {
   //   error: null
   // });
 
-  useEffect(() => {console.log(navigation)}, []);
+  useEffect(() => {}, []);
  
   const init = async () => {
     const response = await fetch(
@@ -93,11 +93,14 @@ const ChartScreen = ({ navigation }) => {
 
   return (
     <>
-      <SelectBox
-        data={types}
-        value={type}
-        onSelect={({ item, index }) => {setType(item)}}
-      />
+      <View style={styles.selectBoxContainer}>
+        <Text style={styles.selectBoxTitle}>그래프 : </Text>
+        <SelectBox
+          data={types}
+          value={type}
+          onSelect={({ item, index }) => {setType(item)}}
+        />
+      </View>
     {/* {state.chartOption !== null &&
       <LineChart
         data={state.chartOption}
@@ -124,6 +127,18 @@ const ChartScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  selectBoxContainer: {
+    marginTop: hp('0.5%'),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: wp('2%'),
+    alignItems: 'center'
+  },
+  selectBoxTitle: {
+    fontSize: wp('4.2%'),
+    fontWeight: 'bold',
+    color: '#777777'
+  }
   
 })
 

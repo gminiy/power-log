@@ -15,7 +15,7 @@ const SelectBox = ({ value, data, onSelect }) => {
         style={styles.button}
       >
         <>
-          <Text>{value}</Text>
+          <Text style={styles.title}>{value}</Text>
           <Entypo name="triangle-down" size={wp('5%')}/>
         </>
       </TouchableOpacity>
@@ -62,15 +62,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingBottom: hp('0.5%')
   },
+  title: {
+    fontSize: wp('3.5%')
+  },
   button: {
-    padding: wp('1%'),
+    paddingLeft: wp('2%'),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#b3b3b3',
     width: wp('80%'),
-    height: hp('6%'),
+    height: hp('5%'),
     marginTop: 0,
   },
   item: {
