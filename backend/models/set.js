@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     reps: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    volume: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     }
   }, {
     timestamps: true,
