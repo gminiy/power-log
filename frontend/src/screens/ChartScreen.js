@@ -13,7 +13,7 @@ const ChartScreen = ({ navigation }) => {
   const types = [
     { label: '총 볼륨 (세트수 x 무게 x 횟수)', value: 'totalVolume' },
     { label: '최대 볼륨 (무게 x 횟수)', value: 'maxVolume' },
-    { label: '예상 1RM', value: 'oneRm' }
+    { label: '예상 1RM', value: 'estimatedOneRm' }
   ];
   const [type, setType] = useState(types[0]);
   const [data, setData] = useState([]);
@@ -84,6 +84,7 @@ const ChartScreen = ({ navigation }) => {
           estimatedOneRm
         });
       });
+      console.log(parsedData);
       
       return setData(parsedData);
     } catch (e) {
@@ -127,22 +128,22 @@ const ChartScreen = ({ navigation }) => {
           theme={VictoryTheme.material}
           minDomain={{ y: 0 }}
         >
-        <VictoryLine
-          style={{
-            data: { stroke: "#c43a31" },
-            parent: { border: "1px solid #ccc"}
-          }}
-          data={data}
-          x={(datum) => new Date(datum.date)}
-          y="totalVolume"
-          minDomain={{ y: 0 }}
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 }
-          }}
-        />
-      </VictoryChart>
-    )}
+          <VictoryLine
+            style={{
+              data: { stroke: "#c43a31" },
+              parent: { border: "1px solid #ccc"}
+            }}
+            data={data}
+            x={(datum) => new Date(datum.date)}
+            y={type.value}
+            minDomain={{ y: 0 }}
+            animate={{
+              duration: 2000,
+              onLoad: { duration: 1000 }
+            }}
+          />
+        </VictoryChart>
+      )}
     </>
   );
 };
