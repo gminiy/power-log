@@ -151,7 +151,7 @@ exports.listWithPeriod = async (req, res, next) => {
         include: [{
           model: Set,
           as: 'sets',
-          attributes: ['id', 'weight', 'reps']
+          attributes: ['id', 'weight', 'reps', 'volume']
         }],
         order: [['date', 'DESC']]
       },
