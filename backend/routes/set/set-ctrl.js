@@ -31,7 +31,8 @@ exports.register = async (req, res, next) => {
   if (!weight || !reps || !exerciseId || !dayId) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
-    const set = await Set.create({ weight, reps, exerciseId, dayId });
+    const volume = weight * reps;
+    const set = await Set.create({ weight, reps, volume, exerciseId, dayId });
     const sendingData = {
       id: set.id,
       weight: set.weight,
@@ -50,8 +51,9 @@ exports.registerWithDate = async (req, res, next) => {
   if (!weight || !reps || !exerciseId || !date) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
+    const volume = weight * reps;
     const day = await Day.create({ exerciseId, date: new Date(date) });
-    const set = await Set.create({ weight, reps, exerciseId, dayId: day.id });
+    const set = await Set.create({ weight, reps, volume, exerciseId, dayId: day.id });
     const sendingData = {
       dayId: set.dayId,
       set: {
