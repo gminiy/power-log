@@ -86,7 +86,8 @@ exports.update = async (req, res, next) => {
   const { weight, reps } = req.body;
   if (!weight || !reps) return next(createError(400, 'weight and reps are required'));
   try {
-    const result = await Set.update({ weight, reps }, { where: { id }});
+    const volume = weight * reps;
+    const result = await Set.update({ weight, reps, volume }, { where: { id }});
     if (!result[0]) return next(createError(404));
 
     return res.send();
