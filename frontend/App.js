@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
@@ -17,6 +16,7 @@ import ErrorScreen from './src/screens/ErrorScreen';
 import TestScreen from './src/screens/TestScreen';
 
 const switchNavigator = createSwitchNavigator({
+  // Test: TestScreen,
   ResolveAuth: ResolveAuthScreen,
   LoginStacks: createStackNavigator({
     Login: LoginScreen,

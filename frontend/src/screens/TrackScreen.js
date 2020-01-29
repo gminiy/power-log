@@ -94,7 +94,7 @@ const TrackScreen = ({ navigation }) => {
         const data = await response.json();
         
         setDayId(data.dayId);
-        setSets(sets.concat(data.set));
+        return setSets(sets.concat(data.set));
       }
 
       const response = await fetch(
@@ -115,12 +115,12 @@ const TrackScreen = ({ navigation }) => {
 
       const data = await response.json();
 
-      setSets(sets.concat(data));
+      return setSets(sets.concat(data));
     } catch (error) {
       return setError(error);
     } finally {
       initInputState();
-      setLoading(false);
+      return setLoading(false);
     }
   };
   

@@ -45,7 +45,7 @@ const SelectBox = ({ value, data, onSelect }) => {
                     setModalVisible(false);
                   }}
                 >
-                  <Text style={styles.item}>{item}</Text>
+                  <Text style={styles.item}>{item.label}</Text>
                 </TouchableOpacity>
               );
             }}
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('0.5%')
   },
   title: {
-    fontSize: wp('3.5%')
+    fontSize: wp('3.5%'),
   },
   button: {
     paddingLeft: wp('2%'),
