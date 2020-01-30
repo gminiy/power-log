@@ -17,17 +17,22 @@ const ChartScreen = ({ navigation }) => {
   ];
   const [type, setType] = useState(types[0]);
   const [data, setData] = useState([]);
+  const [month, setMonth] = useState(1);
   const [isLackData, setIsLackData] = useState(false);
+  const [latestDate, setLatestDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const { remove } = navigation.addListener('willFocus', init);
+    const { remove } = navigation.addListener('willFocus', async () => {
+      const latestDate = await getLatestDate();
+      setMonthlyData({ latestDate, month: 1 });
+    });
   
     return remove;
   }, []);
  
-  const init = async () => {
+  const getLatestDate = async () => {
     try {
       setIsLackData(false);
       setLoading(true);
@@ -45,9 +50,11 @@ const ChartScreen = ({ navigation }) => {
   
       if(response.status == 204) return setIsLackData(true);
       
-      const { date: latestDate } = await response.json();
+      const { date } = await response.json();
       
-      return setMonthlyData({ latestDate, month: 1 });
+      setLatestDate(date);
+
+      return date;
     } catch (e) {
       console.log(e);
       setError(e);

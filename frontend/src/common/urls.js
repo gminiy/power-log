@@ -1,4 +1,4 @@
-const base = 'http://3c7dced1.ngrok.io';
+const base = 'http://7c631510.ngrok.io';
 
 const urls = {
   register: '/auth/register',
