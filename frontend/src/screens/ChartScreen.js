@@ -120,6 +120,16 @@ const ChartScreen = ({ navigation }) => {
     return values;
   }
 
+  const dateMapping = (date) => {
+    const dateArr = date.split(' ');
+    const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const month = `${monthList.indexOf(dateArr[1]) + 1}` + '월';
+    const day = `${parseInt(dateArr[2])}` + '일';
+
+    return month + ' ' + day;
+  }
+
   return (
     <>
       <LoadingModal isVisible={loading} />
@@ -150,13 +160,15 @@ const ChartScreen = ({ navigation }) => {
                 tickValues={getTickXValues()}
                 tickFormat={
                   (x, index, ticks) => {
+                    const date = dateMapping(x.toString().slice(0,10))
+
                     if (ticks.length > 4) {
                       if (index % (Math.floor(ticks.length / 3)) === 0) {
-                        return x.toString().slice(0,10);
+                        return date;
                       }
                       return;
                     }
-                    return x.toString().slice(0,10);
+                    return date;
                   }
                 }
               />
