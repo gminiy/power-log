@@ -36,7 +36,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
       
       const exercise = await response.json();
 
-      dispatch({ type: 'set_exercises', payload: [exercise] });
+      dispatch({ type: 'add_exercise', payload: [exercise] });
     } catch (error) {
       if (error.message === '409') {
         return setIsExist(true);

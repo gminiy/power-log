@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import urls from '../common/urls';
 import { Context as AuthContext} from '../context/AuthContext';
 import SelectBox from '../components/SelectBox';
-import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native";
+import { VictoryLine, VictoryChart, VictoryTheme, VictoryScatter, VictoryGroup,VictoryAxis } from "victory-native";
 import LoadingModal from '../modals/LoadingModal';
 
 const ChartScreen = ({ navigation }) => {
@@ -84,7 +84,6 @@ const ChartScreen = ({ navigation }) => {
           estimatedOneRm
         });
       });
-      console.log(parsedData);
       
       return setData(parsedData);
     } catch (e) {
@@ -112,6 +111,15 @@ const ChartScreen = ({ navigation }) => {
     return estimatedOneRm;
   }
 
+  const getTickXValues = () => {
+    const values = [];
+    data.forEach((datum) => {
+      values.push(new Date(datum.date))
+    });
+
+    return values;
+  }
+
   return (
     <>
       <LoadingModal isVisible={loading} />
@@ -124,25 +132,67 @@ const ChartScreen = ({ navigation }) => {
         />
       </View>
       {data.length !== 0 && (
-        <VictoryChart
-          theme={VictoryTheme.material}
-          minDomain={{ y: 0 }}
-        >
-          <VictoryLine
-            style={{
-              data: { stroke: "#c43a31" },
-              parent: { border: "1px solid #ccc"}
-            }}
-            data={data}
-            x={(datum) => new Date(datum.date)}
-            y={type.value}
+        <>
+          <VictoryChart
+            theme={VictoryTheme.material}
             minDomain={{ y: 0 }}
-            animate={{
-              duration: 2000,
-              onLoad: { duration: 1000 }
-            }}
-          />
-        </VictoryChart>
+            animate={{duration: 500}}
+            width={wp('100%')}
+            height={hp('60%')}
+            scale={{ x: "time" }}
+          >
+            <VictoryGroup
+              data={data}
+              x={(datum) => new Date(datum.date)}
+              y={type.value}
+            >
+              <VictoryAxis
+                standalone={false}
+                tickValues={getTickXValues()}
+                tickFormat={
+                  (x, index, ticks) => {
+                    if (ticks.length > 4) {
+                      if (index % (Math.floor(ticks.length / 3)) === 0) {
+                        console.log(index, ticks.length)
+                        return x.toString().slice(0,10);
+                      }
+                      return;
+                    }
+                    return x.toString().slice(0,10);
+                  }
+                }
+              />
+              {/* <VictoryAxis dependentAxis
+                standalone={false}
+                
+                tickFormat={
+                  (x) => {
+                    const date = new Date(x);
+                    return date.toString().slice(0, 15);
+                  }
+                }
+              /> */}
+              <VictoryLine
+                style={{
+                  data: { stroke: "black", strokeWidth: 2 },
+                }}
+                animate={{
+                  onExit: {
+                    duration: 500,
+                    before: () => ({
+                      _y: 0,
+                    })
+                  }
+                }}
+              />
+              <VictoryScatter
+                style={{ data: { fill: "#081852" } }}
+                size={3}
+              />
+            </VictoryGroup>
+          </VictoryChart>
+          <Text style={styles.graphNoticeText}>* 그래프의 점을 선택하시면 자세한 기록을 볼 수 있습니다.</Text>
+        </>
       )}
     </>
   );
@@ -160,6 +210,11 @@ const styles = StyleSheet.create({
     fontSize: wp('4.2%'),
     fontWeight: 'bold',
     color: '#777777'
+  },
+  graphNoticeText: {
+    fontSize: wp('2.5%'),
+    alignSelf: 'flex-end',
+    marginRight: wp('5%')
   }
 })
 
