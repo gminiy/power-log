@@ -14,6 +14,10 @@ exports.getLatest = async (req, res, next) => {
       },
     );
     
+    if (!data) {
+      return res.status(204).send();
+    }
+    
     return res.json(data);
   } catch (e) {
     return next(e);
