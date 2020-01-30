@@ -136,10 +136,9 @@ const ChartScreen = ({ navigation }) => {
           <VictoryChart
             theme={VictoryTheme.material}
             minDomain={{ y: 0 }}
-            animate={{duration: 500}}
             width={wp('100%')}
             height={hp('60%')}
-            scale={{ x: "time" }}
+            scale={{ x: "time", y: "linear" }}
           >
             <VictoryGroup
               data={data}
@@ -153,7 +152,6 @@ const ChartScreen = ({ navigation }) => {
                   (x, index, ticks) => {
                     if (ticks.length > 4) {
                       if (index % (Math.floor(ticks.length / 3)) === 0) {
-                        console.log(index, ticks.length)
                         return x.toString().slice(0,10);
                       }
                       return;
@@ -162,27 +160,12 @@ const ChartScreen = ({ navigation }) => {
                   }
                 }
               />
-              {/* <VictoryAxis dependentAxis
+              <VictoryAxis dependentAxis
                 standalone={false}
-                
-                tickFormat={
-                  (x) => {
-                    const date = new Date(x);
-                    return date.toString().slice(0, 15);
-                  }
-                }
-              /> */}
+              />
               <VictoryLine
                 style={{
                   data: { stroke: "black", strokeWidth: 2 },
-                }}
-                animate={{
-                  onExit: {
-                    duration: 500,
-                    before: () => ({
-                      _y: 0,
-                    })
-                  }
                 }}
               />
               <VictoryScatter
