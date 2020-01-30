@@ -17,6 +17,7 @@ const ChartScreen = ({ navigation }) => {
   ];
   const [type, setType] = useState(types[0]);
   const [data, setData] = useState([]);
+  const [isLackData, setIsLackData] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -28,6 +29,7 @@ const ChartScreen = ({ navigation }) => {
  
   const init = async () => {
     try {
+      setIsLackData(false);
       setLoading(true);
       const response = await fetch(
         `${urls.getLatestDay}?exerciseId=${exerciseId}`,
@@ -41,9 +43,11 @@ const ChartScreen = ({ navigation }) => {
   
       if(!response.ok) throw Error(response.status);
   
+      if(response.status == 204) return setIsLackData(true);
+      
       const { date: latestDate } = await response.json();
-
-      setMonthlyData({ latestDate, month: 1 });
+      
+      return setMonthlyData({ latestDate, month: 1 });
     } catch (e) {
       console.log(e);
       setError(e);
@@ -71,6 +75,9 @@ const ChartScreen = ({ navigation }) => {
       
       const monthlyData = await response.json();
 
+      if(monthlyData.length < 2) return setIsLackData(true);
+
+      setIsLackData(false);
       const parsedData = [];
       monthlyData.forEach((data) => {
         const { totalVolume, maxVolumeSet } = getVolumeInfo(data.sets);
@@ -141,7 +148,13 @@ const ChartScreen = ({ navigation }) => {
           onSelect={({ item, index }) => {setType(item)}}
         />
       </View>
-      {data.length !== 0 && (
+      {isLackData && (
+        <View>
+          <Text>그래프를 그리기 위해선 최소 이틀치의 기록이 필요해요.</Text>
+          <Text>꾸준히 기록해서 멋진 그래프를 만들어 보세요.</Text>
+        </View>
+      )}
+      {data.length >= 2 && (
         <>
           <VictoryChart
             theme={VictoryTheme.material}
@@ -161,7 +174,6 @@ const ChartScreen = ({ navigation }) => {
                 tickFormat={
                   (x, index, ticks) => {
                     const date = dateMapping(x.toString().slice(0,10))
-
                     if (ticks.length > 4) {
                       if (index % (Math.floor(ticks.length / 3)) === 0) {
                         return date;
@@ -186,7 +198,7 @@ const ChartScreen = ({ navigation }) => {
               />
             </VictoryGroup>
           </VictoryChart>
-          <Text style={styles.graphNoticeText}>* 그래프의 점을 선택하시면 자세한 기록을 볼 수 있습니다.</Text>
+          {/* <Text style={styles.graphNoticeText}>* 그래프의 점을 선택하시면 자세한 기록을 볼 수 있습니다.</Text> */}
         </>
       )}
     </>
