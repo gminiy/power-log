@@ -167,7 +167,7 @@ const ChartScreen = ({ navigation }) => {
 
   const estimateOneRm = (maxVolumeSet) => {
     const { reps, weight } = maxVolumeSet;
-    const estimatedOneRm = Math.floor((weight * 36) / ( 37 - reps));
+    const estimatedOneRm = Math.floor((weight + weight * reps * 0.025));
 
     return estimatedOneRm;
   }
