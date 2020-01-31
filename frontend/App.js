@@ -13,10 +13,8 @@ import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
 import ErrorScreen from './src/screens/ErrorScreen';
-import TestScreen from './src/screens/TestScreen';
 
 const switchNavigator = createSwitchNavigator({
-  // Test: TestScreen,
   ResolveAuth: ResolveAuthScreen,
   LoginStacks: createStackNavigator({
     Login: LoginScreen,

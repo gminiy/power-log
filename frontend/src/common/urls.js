@@ -1,4 +1,4 @@
-const base = 'http://7c631510.ngrok.io';
+const base = 'http://fbdcfeb7.ngrok.io';
 
 const urls = {
   register: '/auth/register',
@@ -14,7 +14,9 @@ const urls = {
   updateSet: '/set',
   deleteSet: '/set',
   getSetList: '/set/list',
+  getLatestDay: '/day/latest',
   getSetListWithPeriod: '/set/list/period',
+  getSetListAll: '/set/list/all',
   deleteDay: '/day',
   getLatestDay: '/day/latest',
 };
