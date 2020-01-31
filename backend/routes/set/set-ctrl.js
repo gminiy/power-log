@@ -134,11 +134,41 @@ exports.list = async (req, res, next) => {
   }
 };
 
+exports.all = async (req, res, next) => {
+  const { exerciseId } = req.query;
+
+  if (!exerciseId) {
+    return next(createError(400, 'exerciseId are required'));
+  }
+
+  try {
+    const sets = await Day.findAll(
+      {
+        where: { exerciseId },
+        attributes: ['id', 'date'],
+        include: [{
+          model: Set,
+          as: 'sets',
+          attributes: ['id', 'weight', 'reps', 'volume']
+        }],
+        order: [['date', 'DESC']],
+        distinct: true
+      },
+    );
+
+    if (sets.length === 0) return res.status(204).send();
+    
+    return res.json(sets);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 exports.listWithPeriod = async (req, res, next) => {
   const { exerciseId, from, until} = req.query;
 
-  if (!exerciseId || !from || !until) {
-    return next(createError(400, 'exerciseId, from, until are required'));
+  if (!exerciseId || !(from || until)) {
+    return next(createError(400));
   }
 
   try {
