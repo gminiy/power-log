@@ -213,9 +213,9 @@ const ChartScreen = ({ navigation }) => {
         </View>
       </View>
       {isLackData && (
-        <View>
-          <Text>그래프를 그리기 위해선 최소 이틀치의 기록이 필요해요.</Text>
-          <Text>꾸준히 기록해서 멋진 그래프를 만들어 보세요.</Text>
+        <View style={styles.graphNoticeTextContainer}>
+          <Text style={styles.graphNoticeText}>그래프를 그리기 위해선 적어도 이틀치의 기록이 필요해요.</Text>
+          <Text style={styles.graphNoticeText}>꾸준히 기록해서 멋진 그래프를 만들어 보세요.</Text>
         </View>
       )}
       {periodData[month].data.length >= 2 && (
@@ -281,10 +281,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#777777'
   },
+  graphNoticeTextContainer: {
+    height: hp('40%'),
+    alignSelf: 'center',
+    justifyContent: 'center'
+  },
   graphNoticeText: {
-    fontSize: wp('2.5%'),
-    alignSelf: 'flex-end',
-    marginRight: wp('5%')
+    fontSize: wp('3.5%'),
+    fontWeight: 'bold',
+    color: '#777777'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -301,7 +306,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#777777'
   }
-})
+});
 
 
 export default ChartScreen;

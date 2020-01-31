@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Context as AuthContext} from '../context/AuthContext';
 import History from '../components/history/History';
 import urls from '../common/urls';
@@ -60,9 +61,8 @@ const HistoryScreen = ({ navigation }) => {
     <>
       <LoadingModal isVisible={loading} />
       {isLackData ? (
-        <View>
-          <Text>아직 기록이 없네요.</Text>
-          <Text>오늘부터 기록해보세요.</Text>
+        <View style={styles.noticeTextContainer}>
+          <Text style={styles.noticeText}>당신만의 운동 기록을 만들어보세요.</Text>
         </View>
       ) : (
         <FlatList
@@ -85,5 +85,18 @@ const HistoryScreen = ({ navigation }) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  noticeTextContainer: {
+    height: hp('70%'),
+    alignSelf: 'center',
+    justifyContent: 'center'
+  },
+  noticeText: {
+    fontSize: wp('3.5%'),
+    fontWeight: 'bold',
+    color: '#777777'
+  },
+});
 
 export default HistoryScreen;
