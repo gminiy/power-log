@@ -1,27 +1,46 @@
-import React, { useContext, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Button from '../components/Button';
-import AuthForm from '../components/AuthForm';
 import { Context as AuthContext } from '../context/AuthContext';
+import KakaoLogins from '@react-native-seoul/kakao-login';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
-  const { state: { error } } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (error) navigation.navigate('Error', { error });
-  }, [error]);
+  const KakaoLogin = async () => {
+    try {
+      await KakaoLogins.login();
+
+      const { id: kakaoId } = await KakaoLogins.getProfile();
+
+      return login({ kakaoId });
+    } catch (e) {
+      if (e.code === 'E_CANCELLED_OPERATION') {
+        console.log('login stopped');
+      } else {
+        console.log(e)
+        setError(e);
+      }
+    }
+  }
 
   return (
     <View style={styles.container}>
-      <AuthForm type="login"/>
-      <Text>아직 회원이 아니신가요? </Text>
-      <Text>간편하게 가입하고 운동을 기록해보세요.</Text>
-      <Button
-        title="회원가입"
-        styles={buttonStyles}
-        onPress={() => navigation.navigate('Register')}
-      />
+      <View style={styles.titleContainer}>
+        <MaterialCommunityIcons
+            name="dumbbell"
+            color='#fffaf0'
+            size={wp('12%')}
+        />
+        <Text style={styles.title}>파워 로그</Text>
+      </View>
+      <TouchableOpacity onPress={KakaoLogin}>
+        <Image 
+          source={require('../../public/kakao_account_login_btn_medium_wide.png')}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -34,24 +53,21 @@ LoginScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    height: hp('100%'),
     alignItems: 'center',
-    marginBottom: hp('15%')
+    justifyContent: 'center',
+    backgroundColor: '#181818'
   },
-});
-
-const buttonStyles = StyleSheet.create({
-  button: {
-    alignSelf: 'flex-end',
-    marginTop: hp('1%'),
-    marginRight: wp('18%'),
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('6%')
   },
   title: {
-    fontSize: wp('4%'),
-    color: 'blue'
-  },
+    fontSize: wp('10%'),
+    color: 'white',
+    marginLeft: wp('3%')
+  }
 });
-
 
 export default LoginScreen;

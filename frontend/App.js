@@ -5,7 +5,6 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { setNavigator } from './src/common/navigationRef';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import LoginScreen from './src/screens/LoginScreen';
-import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExercisesScreen from './src/screens/ExercisesScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
@@ -16,10 +15,7 @@ import ErrorScreen from './src/screens/ErrorScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
-  LoginStacks: createStackNavigator({
-    Login: LoginScreen,
-    Register: RegisterScreen,
-  }),
+  Login: LoginScreen,
   MainStacks: createStackNavigator(
     { 
       Exercises: ExercisesScreen,

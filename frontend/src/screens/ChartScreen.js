@@ -7,7 +7,7 @@ import SelectBox from '../components/SelectBox';
 import { VictoryLine, VictoryChart, VictoryTheme, VictoryScatter, VictoryGroup,VictoryAxis } from "victory-native";
 import LoadingModal from '../modals/LoadingModal';
 import PeriodButton from '../components/chart/PeriodButton';
-//Todo LackData 어떻게 처리하징
+
 const ChartScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
   const { state: { token } } = useContext(AuthContext);

@@ -1,6 +1,5 @@
 import { AsyncStorage } from 'react-native';
 import createDataContext from './createDataContext';
-import client from '../api/client';
 import { navigate } from '../common/navigationRef';
 import urls from '../common/urls';
 
@@ -15,28 +14,14 @@ const authReducer = (state, action) => {
   }
 };
 
-const register = dispatch => async ({ id, password }) => {
-  try {
-    const response = await client.post('/auth/register', { id, password });
-    const token = response.data.token;
-    await AsyncStorage.setItem('token', token);
-
-    dispatch({ type: 'login', payload: token });
-
-    return navigate('Exercises');
-  } catch (error) {
-    return dispatch({ type: 'set_error', payload: error });
-  }
-};
-
-const login = dispatch => async ({ id, password }) => {
+const login = dispatch => async ({ kakaoId }) => {
   try {
     const response = await fetch(urls.login, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, password })
+      body: JSON.stringify({ kakaoId })
     });
 
     if(!response.ok) throw Error(response.status);
@@ -67,9 +52,9 @@ const tryLocalLogin = dispatch => async () => {
       dispatch({ type: 'login', payload: token });
 
       return navigate('Exercises');
-    } else {
-      return navigate('Login');
     }
+
+    return navigate('Login');
   } catch (error) {
     return dispatch({ type: 'set_error', payload: error });
   }
@@ -77,6 +62,6 @@ const tryLocalLogin = dispatch => async () => {
 
 export const { Context, Provider } = createDataContext(
   authReducer,
-  { register, login, tryLocalLogin },
+  { login, tryLocalLogin },
   { token: null, error: null }
 );
