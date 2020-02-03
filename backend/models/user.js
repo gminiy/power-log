@@ -6,15 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
       unique: true,
-    },
-    refreshToken: {
-      type: DataTypes.STRING(64),
-      allowNull: false,
-    },
-    refreshTokenExpiresAt: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
+    }
   }, {
     timestamps: true,
     paranoid: true,

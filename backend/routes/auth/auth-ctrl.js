@@ -3,24 +3,19 @@ const { User } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res, next) => {
-  const { kakaoId, refreshToken, refreshTokenExpiresAt } = req.body;
+  const { kakaoId } = req.body;
 
-  if (!kakaoId || !refreshToken || !refreshTokenExpiresAt) {
-    next(createError(400, 'kakaoId, refreshToken, refreshTokenExpiresAt required'));
+  if (!kakaoId) {
+    next(createError(400, 'kakaoId is required'));
   }
 
   try {
-    const user = await User.findOrCreate({
+    const [user] = await User.findOrCreate({
       where: { kakaoId },
-      defaults: {
-        refreshToken,
-        refreshTokenExpiresAt
-      }
     });
-
+    
     const token = generateToken({
       kakaoId: user.kakaoId,
-      refreshTokenExpiresAt: user.refreshTokenExpiresAt
     });
 
     return res.json({ token })

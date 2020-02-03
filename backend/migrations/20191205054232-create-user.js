@@ -8,14 +8,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      refreshToken: {
-        type: Sequelize.STRING(64),
-        allowNull: false,
-      },
-      refreshTokenExpiresAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
