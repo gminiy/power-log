@@ -4,7 +4,7 @@ const { Exercise, Record } = require('../../models');
 exports.register = async (req, res, next) => {
   const { name } = req.body;
   if (!name) return next(createError(400, 'name is required'));
-  const exerciseData = { name, userId: req.user.id }
+  const exerciseData = { name, userId: req.user.kakaoId }
   try {
     let exercise = await Exercise.findOne({ where: exerciseData });
     if (exercise) return next(createError(409, 'Exist exercise'));

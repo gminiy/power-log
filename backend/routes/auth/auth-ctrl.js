@@ -27,7 +27,7 @@ exports.login = async (req, res, next) => {
 exports.check = async (req, res, next) => {
   if (!req.user) return res.status(401).send();
 
-  return res.json({ id: req.user.id });
+  return res.json({ kakaoId: req.user.kakaoId });
 };
 
 const generateToken = dataObj => {

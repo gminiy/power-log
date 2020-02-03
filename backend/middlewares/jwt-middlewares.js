@@ -5,8 +5,9 @@ exports.decodeJwt = (req, res, next) => {
   if (!token) return next();
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     req.user = {
-      id: decoded.id,
+      kakaoId: decoded.kakaoId,
       expires: decoded.exp
     }
 
