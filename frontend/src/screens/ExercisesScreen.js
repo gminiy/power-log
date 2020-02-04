@@ -3,12 +3,13 @@ import { View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import urls from '../common/urls';
 import AddExerciseModal from '../modals/AddExerciseModal';
-import LogoutButton from '../components/LogoutButton';
+import LogoutButton from '../components/exercises/LogoutButton';
 import Exercise from '../components/exercises/Exercise';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AddExerciseButton from '../components/exercises/AddExerciseButton';
 import { Context as AuthContext} from '../context/AuthContext';
 import LoadingModal from '../modals/LoadingModal';
+import ErrorModal from '../modals/ErrorModal';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -49,13 +50,12 @@ const ExercisesScreen = ({ navigation }) => {
   const [addExerciseModalVisible, setAddExerciseModalVisable] = useState(false);
   const [paginationInfo, setPagenationInfo] = useState({ hasNextPage: true, page: 1 });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
 
   useEffect(() => { loadExercises() }, []);
 
   const loadExercises = async () => {
     setLoading(true);
-
     try {
       const response = await fetch(
         `${urls.getExercises}?size=${pageSize}&page=${paginationInfo.page}`,
@@ -77,9 +77,9 @@ const ExercisesScreen = ({ navigation }) => {
       });
 
       return dispatch({ type: 'set_exercises', payload: data.exercises });
-    } catch (e) {
-      console.log(e)
-      return setError(e);
+    } catch (error) {
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       return setLoading(false);
     }
@@ -87,12 +87,13 @@ const ExercisesScreen = ({ navigation }) => {
   
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       <View>
         <AddExerciseModal
-        isVisible={addExerciseModalVisible}
-        setIsVisible={setAddExerciseModalVisable}
-        dispatch={dispatch}
+          isVisible={addExerciseModalVisible}
+          setIsVisible={setAddExerciseModalVisable}
+          dispatch={dispatch}
         />
         <FlatList
           data={state.exercises}

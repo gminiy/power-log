@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
     width: wp('100%'),
     backgroundColor: 'black',
   }
-})
+});
 
 export default ResolveAuthScreen;

@@ -11,7 +11,6 @@ import { Provider as AuthProvider } from './src/context/AuthContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
-import ErrorScreen from './src/screens/ErrorScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
@@ -24,7 +23,7 @@ const switchNavigator = createSwitchNavigator({
           Track: {
             screen: TrackScreen,
             navigationOptions: {
-             title: '기록측정'
+             title: '기록하기'
             } 
           },
           History: {
@@ -58,7 +57,6 @@ const switchNavigator = createSwitchNavigator({
             },
             inactiveTintColor: '#666666',
             activeTintColor: '#9c8856',
-
           }
         }
       )
@@ -82,7 +80,6 @@ const switchNavigator = createSwitchNavigator({
       }
     }
   ),
-  Error: ErrorScreen,
 });
 
 const App = createAppContainer(switchNavigator); 

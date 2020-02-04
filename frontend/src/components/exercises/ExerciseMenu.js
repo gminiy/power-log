@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import Menu, { MenuItem } from 'react-native-material-menu';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

@@ -78,14 +78,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   contentText: {
-    fontSize: wp('6%'),
-    
+    fontSize: wp('6%'), 
   },
   unitText: {
     fontSize: wp('4%'),
     color: '#777777'
   }
-
 });
 
 export default History

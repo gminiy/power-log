@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState, useReducer } from 'react';
-import { StyleSheet, Text, TextInput, View, FlatList, Picker } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View} from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import urls from '../common/urls';
 import { Context as AuthContext} from '../context/AuthContext';
-import SelectBox from '../components/SelectBox';
+import SelectBox from '../components/chart/SelectBox';
 import { VictoryLine, VictoryChart, VictoryTheme, VictoryScatter, VictoryGroup,VictoryAxis } from "victory-native";
 import LoadingModal from '../modals/LoadingModal';
 import PeriodButton from '../components/chart/PeriodButton';
+import ErrorModal from '../modals/ErrorModal';
 
 const ChartScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
@@ -28,7 +29,7 @@ const ChartScreen = ({ navigation }) => {
   const [isLackData, setIsLackData] = useState(false);
   const [latestDate, setLatestDate] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
 
   useEffect(() => {
     const { remove } = navigation.addListener('willFocus', async () => {
@@ -81,8 +82,8 @@ const ChartScreen = ({ navigation }) => {
 
       return date;
     } catch (e) {
-      console.log(e);
-      setError(e);
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       setLoading(false);
     }
@@ -130,8 +131,8 @@ const ChartScreen = ({ navigation }) => {
       
       return parsedData;
     } catch (e) {
-      console.log(e);
-      setError(e);
+
+      return setError({ error, errorModalVisible: true });
     }
   };
 
@@ -193,13 +194,14 @@ const ChartScreen = ({ navigation }) => {
 
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       <View style={styles.selectBoxContainer}>
         <Text style={styles.selectBoxTitle}>그래프 : </Text>
         <SelectBox
           data={types}
           value={type.label}
-          onSelect={({ item, index }) => {setType(item)}}
+          onSelect={({ item, index }) => setType(item)}
         />
       </View>
       <View style={styles.periodButtonContainer}>

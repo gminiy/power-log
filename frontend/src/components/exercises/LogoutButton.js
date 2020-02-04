@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LogoutButton = ({ navigation }) => {
   const logout = async () => {
     await AsyncStorage.removeItem('token');
     navigation.navigate('ResolveAuth');
   }
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
   container: {
     marginRight: wp('3%')
   },
+  
   text: {
     color: 'white',
     alignSelf: 'center',
 
   }
-})
+});
 
 export default LogoutButton;

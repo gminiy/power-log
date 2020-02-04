@@ -34,7 +34,7 @@ const login = dispatch => async ({ kakaoId }) => {
 
     return navigate('Exercises');
   } catch (error) {
-    console.log(error)
+    
     return dispatch({ type: 'set_error', payload: error });
   }
 };
@@ -56,6 +56,7 @@ const tryLocalLogin = dispatch => async () => {
 
     return navigate('Login');
   } catch (error) {
+
     return dispatch({ type: 'set_error', payload: error });
   }
 };

@@ -5,6 +5,7 @@ import { Context as AuthContext} from '../context/AuthContext';
 import History from '../components/history/History';
 import urls from '../common/urls';
 import LoadingModal from '../modals/LoadingModal';
+import ErrorModal from '../modals/ErrorModal';
 
 const HistoryScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
@@ -13,7 +14,7 @@ const HistoryScreen = ({ navigation }) => {
   const [setsByDate, setSetsByDate] = useState([]);
   const [isLackData, setIsLackData] = useState(false);
   const [paginationInfo, setPagenationInfo] = useState({ hasNextPage: true, page: 1 });
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,8 @@ const HistoryScreen = ({ navigation }) => {
 
       setSetsByDate(setsByDate.concat(data.setsByDate));
     } catch (e) {
-      return setError(e);
+      
+      return setError({ error, errorModalVisible: true });
     } finally {
       setLoading(false);
     }
@@ -59,6 +61,7 @@ const HistoryScreen = ({ navigation }) => {
 
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       {isLackData ? (
         <View style={styles.noticeTextContainer}>

@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import LoadingModal from './LoadingModal';
-import Button from '../components/Button';
 import urls from '../common/urls';
 import { Context as AuthContext} from '../context/AuthContext';
+import ErrorModal from '../modals/ErrorModal';
 
 const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch }) => {
   const { state: { token } } = useContext(AuthContext);
@@ -13,10 +13,17 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
   const [loading, setLoading] = useState(false);
   const [isValidate, setIsValidate] = useState(true);
   const [isExist, setIsExist] = useState(false);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
 
   const editExercise = async () => {
     try {
       if (!newName) return setIsValidate(false);
+      if (newName === originalName) {
+        setIsExist(false);
+        setIsVisible(false);
+
+        return;
+      }
       setIsValidate(true);
       setLoading(true);
 
@@ -37,12 +44,10 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
       setIsVisible(false);
 
       dispatch({ type: 'edit_exercise', payload: { id, newName } });
-
     } catch (error) {
-      if (error.message === '409') {
-        return setIsExist(true);
-      }
-      return dispatch({ type: 'set_error', payload: error });
+      if (error.message === '409') return setIsExist(true);
+
+      setError({ error, errorModalVisible: true });
     } finally {
       setLoading(false);
     }
@@ -50,6 +55,7 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
 
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       <Modal
         isVisible={isVisible}
@@ -71,20 +77,22 @@ const EditExerciseModal = ({ isVisible, setIsVisible, id, originalName, dispatch
             <Text style={styles.warningText}>이미 등록한 운동입니다.</Text>
           )}
           <View style={styles.buttonContainer}>
-            <Button
-              title="수정"
-              styles={buttonStyles}
+            <TouchableOpacity
+              style={styles.button}
               onPress={editExercise}
-            />
-            <Button
-              title="취소"
-              styles={buttonStyles}
+            >
+              <Text style={styles.buttonText}>수정</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
               onPress={() => {
                 setIsVisible(false);
                 setIsExist(false);
                 setNewName(originalName);
               }}
-            />
+            >
+              <Text style={styles.buttonText}>취소</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -123,10 +131,7 @@ const styles = StyleSheet.create({
     paddingLeft: wp('3%'),
     fontSize: wp('3.5%'),
     backgroundColor: '#f5f5f5'
-  }
-});
-
-const buttonStyles = StyleSheet.create({
+  },
   button: {
     marginTop: hp('2%'),
     width: wp('21%'),
@@ -137,10 +142,14 @@ const buttonStyles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#7B6E66'
   },
-  title: {
+  buttonText: {
     fontSize: wp('4.5%'),
     color: '#fffaf0'
   }
+});
+
+const buttonStyles = StyleSheet.create({
+
 });
 
 export default EditExerciseModal;

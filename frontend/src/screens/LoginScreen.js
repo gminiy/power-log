@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
   const KakaoLogin = async () => {
     try {
       await KakaoLogins.login();
-
+      
       const { id: kakaoId } = await KakaoLogins.getProfile();
 
       return login({ kakaoId });
@@ -20,7 +20,6 @@ const LoginScreen = ({ navigation }) => {
       if (e.code === 'E_CANCELLED_OPERATION') {
         console.log('login stopped');
       } else {
-        console.log(e)
         setError(e);
       }
     }
