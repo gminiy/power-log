@@ -74,6 +74,7 @@ exports.remove = async (req, res, next) => {
       where: { id },
       individualHooks: true,
     });
+    
     if (!result) return next(createError(400, 'no exercise'));
 
     return res.json(result);

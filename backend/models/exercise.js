@@ -24,8 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Exercise.addHook('afterDestroy', async exercise => {
       try {
-        const sets = await exercise.getSets();
-        return sets.map(async set => await set.destroy());
+        const days = await exercise.getDays();
+        
+        return days.map(async day => await day.destroy());
       } catch (e) {
         throw e;
       }

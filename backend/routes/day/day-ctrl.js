@@ -28,10 +28,12 @@ exports.delete = async (req, res, next) => {
   const { id } = req.params;
   if (!id) return next(createError(400, 'id is required'));
   try {
-    const day = await Day.findOne({ where: { id } });
-    const sets = day.getSets();
-    sets.map(async set => await set.destroy());
-    const result = await day.destroy();
+    const result = await Day.destroy({ 
+      where: { id },
+      individualHooks: true,
+    });
+
+    if (!result) return next(createError(400, 'no day'));
 
     return res.json(result);
   } catch (e) {

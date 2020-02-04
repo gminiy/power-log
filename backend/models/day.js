@@ -21,5 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Day.addHook('afterDestroy', async day => {
+    try {
+      const sets = await day.getSets();
+      
+      return sets.map(async set => await set.destroy());
+    } catch (e) {
+      throw e;
+    }
+  });
+
   return Day;
 };
