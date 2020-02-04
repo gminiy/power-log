@@ -33,7 +33,7 @@ exports.list = async (req, res, next) => {
     const { count, rows: exercises } = await Exercise.findAndCountAll({ 
       offset: (page - 1) * size,
       limit: parseInt(size),
-      where: { userId: req.user.id },
+      where: { userId: req.user.kakaoId },
       attributes: ['id', 'name'],
       order: [['id', 'DESC']]
     });
@@ -88,7 +88,7 @@ exports.update = async (req, res, next) => {
 
   if (!id || !name) return next(createError(400, 'id and name are required'));
 
-  const exerciseData = { name, userId: req.user.id }
+  const exerciseData = { name, userId: req.user.kakaoId }
 
   try {
     let exercise = await Exercise.findOne({ where: exerciseData });
