@@ -26,7 +26,7 @@ exports.login = async (req, res, next) => {
 
 exports.checkToken = async (req, res, next) => {
   if (!req.user) return res.status(401).send();
-  
+
   const restDays = (req.user.expires * 1000 - Date.now()) / (1000 * 60 * 60 * 24);
   let isReissued = (restDays < 15) ? true : false;
   let token = (restDays < 15) ? generateToken({ kakaoId: req.user.kakaoId }) : null;
@@ -39,7 +39,7 @@ const generateToken = dataObj => {
     dataObj,
     process.env.JWT_SECRET,
     {
-      expiresIn: '1d'
+      expiresIn: '30d'
     }
   );
 
