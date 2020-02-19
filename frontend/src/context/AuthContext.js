@@ -2,7 +2,10 @@ import { AsyncStorage } from 'react-native';
 import createDataContext from './createDataContext';
 import { navigate } from '../common/navigationRef';
 import urls from '../common/urls';
+import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 
+// Token 만료시 어떻게 할것인가
+// reduce error 로직
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'login':
@@ -34,21 +37,27 @@ const login = dispatch => async ({ kakaoId }) => {
 
     return navigate('Exercises');
   } catch (error) {
-    
     return dispatch({ type: 'set_error', payload: error });
   }
 };
 
 const tryLocalLogin = dispatch => async () => {
   try {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      const response = await fetch(urls.checkAuth,{
-        headers: { token }
+    const localToken = await AsyncStorage.getItem('token');
+
+    if (localToken) {
+      const response = await fetch(urls.checkToken,{
+        headers: { token: localToken }
       });
 
-      await response.json();
-      
+      if (!response.ok) throw Error(response.status);
+
+      const { isReissued, token: reissuedToken } = await response.json();
+      console.log(isReissued, reissuedToken)
+
+      if (isReissued) await AsyncStorage.setItem('token', reissuedToken);
+
+      const token = isReissued ? reissuedToken : localToken;
       dispatch({ type: 'login', payload: token });
 
       return navigate('Exercises');
@@ -56,6 +65,10 @@ const tryLocalLogin = dispatch => async () => {
 
     return navigate('Login');
   } catch (error) {
+    // expired token
+    if (error.message === '403') {
+      return navigate('Login');
+    }
 
     return dispatch({ type: 'set_error', payload: error });
   }

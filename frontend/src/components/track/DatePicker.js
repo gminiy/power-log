@@ -1,6 +1,6 @@
 import React from 'react';;
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const DatePicker = ({ date, setDate }) => {
@@ -34,11 +34,11 @@ const DatePicker = ({ date, setDate }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={leftArrowPressHandle}>
-        <SimpleLineIcons name="arrow-left" size={wp('7%')} />
+        <Icon name="arrow-left" size={wp('7%')} />
       </TouchableOpacity>
       <Text style={styles.text}>{dateMapping(date.format('MMM Do dddd'))}</Text>
       <TouchableOpacity onPress={rightArrowPressHandle}>
-        <SimpleLineIcons name="arrow-right" size={wp('7%')} />
+        <Icon name="arrow-right" size={wp('7%')} />
       </TouchableOpacity>
     </View>
   )

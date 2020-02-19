@@ -5,7 +5,7 @@ import urls from '../common/urls';
 import AddExerciseModal from '../modals/AddExerciseModal';
 import LogoutButton from '../components/exercises/LogoutButton';
 import Exercise from '../components/exercises/Exercise';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddExerciseButton from '../components/exercises/AddExerciseButton';
 import { Context as AuthContext} from '../context/AuthContext';
 import LoadingModal from '../modals/LoadingModal';
@@ -126,7 +126,7 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     title: '파워로그',
     headerLeft: () => {
       return (
-        <MaterialCommunityIcons
+        <Icon
           name="dumbbell"
           color='#fffaf0'
           size={wp('6.5%')}
@@ -136,7 +136,7 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     },
     headerStyle: {
       backgroundColor: "#111111",
-      marginBottom: hp('2%')
+      // marginBottom: hp('2%')
     },
     headerRight: () => (
       <>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Entypo } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Entypo';
 
 
 const SelectBox = ({ value, data, onSelect }) => {
@@ -16,7 +16,7 @@ const SelectBox = ({ value, data, onSelect }) => {
       >
         <>
           <Text style={styles.title}>{value}</Text>
-          <Entypo name="triangle-down" size={wp('5%')}/>
+          <Icon name="triangle-down" size={wp('5%')}/>
         </>
       </TouchableOpacity>
       <Modal

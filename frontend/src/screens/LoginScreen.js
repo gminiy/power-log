@@ -3,14 +3,17 @@ import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Context as AuthContext } from '../context/AuthContext';
 import KakaoLogins from '@react-native-seoul/kakao-login';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import LoadingModal from '../modals/LoadingModal';
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const KakaoLogin = async () => {
     try {
+      setLoading(true);
       await KakaoLogins.login();
       
       const { id: kakaoId } = await KakaoLogins.getProfile();
@@ -22,25 +25,30 @@ const LoginScreen = ({ navigation }) => {
       } else {
         setError(e);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <MaterialCommunityIcons
-            name="dumbbell"
-            color='#fffaf0'
-            size={wp('12%')}
-        />
-        <Text style={styles.title}>파워 로그</Text>
+    <>
+      <LoadingModal isVisible={loading} />
+      <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Icon
+              name="dumbbell"
+              color='#fffaf0'
+              size={wp('12%')}
+          />
+          <Text style={styles.title}>파워 로그</Text>
+        </View>
+        <TouchableOpacity onPress={KakaoLogin}>
+          <Image 
+            source={require('../../public/kakao_account_login_btn_medium_wide.png')}
+          />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={KakaoLogin}>
-        <Image 
-          source={require('../../public/kakao_account_login_btn_medium_wide.png')}
-        />
-      </TouchableOpacity>
-    </View>
+    </>
   );
 };
 

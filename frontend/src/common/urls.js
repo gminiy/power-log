@@ -1,9 +1,9 @@
-const base = 'http://8a2fcefe.ngrok.io';
+const base = 'http://13.124.85.234';
 
 const urls = {
   register: '/auth/register',
   login: '/auth/login',
-  checkAuth: '/auth/check',
+  checkToken: '/auth/check',
   getExercises: '/exercise',
   addExercise: '/exercise',
   updateExercise: '/exercise',

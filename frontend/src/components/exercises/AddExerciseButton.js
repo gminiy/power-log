@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { AntDesign } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const AddExerciseButton = ({ setAddExerciseModalVisable }) => {
   return (
@@ -10,7 +10,7 @@ const AddExerciseButton = ({ setAddExerciseModalVisable }) => {
         onPress={() => setAddExerciseModalVisable(true)}
         style={styles.icon}
       >
-        <AntDesign name="pluscircle" size={wp('15%')} color='#7B6E66' />
+        <Icon name="pluscircle" size={wp('15%')} color='#7B6E66' />
       </TouchableOpacity>
     </>
   )
