@@ -15,7 +15,7 @@ module.exports = {
       });  
     });
     
-    return queryInterface.bulkInsert('exercises', data);
+    return queryInterface.bulkInsert('Exercises', data);
   },
 
   down: (queryInterface, Sequelize) => {

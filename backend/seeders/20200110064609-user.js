@@ -10,7 +10,7 @@ module.exports = {
     }];
     console.log(Sequelize.Model);
 
-    return queryInterface.bulkInsert('users', users);
+    return queryInterface.bulkInsert('Users', users);
   },
 
   down: (queryInterface, Sequelize) => {

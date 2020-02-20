@@ -28,7 +28,7 @@ module.exports = {
       if (!(dayId % EXERCISE_LENGTH)) weight = weight + 1;
     });
   
-    return queryInterface.bulkInsert('sets', data); 
+    return queryInterface.bulkInsert('Sets', data); 
   },
 
   down: (queryInterface, Sequelize) => {

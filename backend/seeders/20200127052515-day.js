@@ -26,7 +26,7 @@ module.exports = {
       });
     }
 
-    return queryInterface.bulkInsert('days', data); 
+    return queryInterface.bulkInsert('Days', data); 
   },
 
   down: (queryInterface, Sequelize) => {
