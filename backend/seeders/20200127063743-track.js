@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const EXERCISE_LENGTH = 11;
-    const INITIAL_WEIGHT = 150;
+    const INITIAL_WEIGHT = 250;
     const REPS = 10;    
     const { Day } = require('../models');
     
