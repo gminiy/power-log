@@ -8,17 +8,23 @@ module.exports = (sequelize, DataTypes) => {
     reps: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    volume: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     }
   }, {
     timestamps: true,
     paranoid: true,
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
   });
 
   Set.associate = function(models) {
-    Set.belongsTo(models.Exercise, {
-      foreignKey: 'exerciseId',
+    Set.belongsTo(models.Day, {
+      foreignKey: 'dayId',
       target: 'id',
-      as: 'exercise',
+      as: 'day',
     });
   };
   

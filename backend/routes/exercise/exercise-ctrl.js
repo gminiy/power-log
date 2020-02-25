@@ -4,7 +4,7 @@ const { Exercise, Record } = require('../../models');
 exports.register = async (req, res, next) => {
   const { name } = req.body;
   if (!name) return next(createError(400, 'name is required'));
-  const exerciseData = { name, userId: req.user.id }
+  const exerciseData = { name, userId: req.user.kakaoId }
   try {
     let exercise = await Exercise.findOne({ where: exerciseData });
     if (exercise) return next(createError(409, 'Exist exercise'));
@@ -22,15 +22,25 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.list = async (req, res, next) => {
-  if (!req.user.id) return next(createError(401));
+exports.list = async (req, res, next) => {  
+  const { page, size } = req.query;
+
+  if (!page || !size ) {
+    return next(createError(400, 'page, size, exerciseId are required'));
+  }
+  
   try {
-    const exercises = await Exercise.findAll({ 
-      where: { userId: req.user.id },
+    const { count, rows: exercises } = await Exercise.findAndCountAll({ 
+      offset: (page - 1) * size,
+      limit: parseInt(size),
+      where: { userId: req.user.kakaoId },
       attributes: ['id', 'name'],
+      order: [['id', 'DESC']]
     });
 
-    return res.json(exercises);
+    const hasNextPage = (page * size) < count;
+
+    return res.json({ hasNextPage, exercises });
   } catch (e) {
     return next(e);
   }
@@ -64,6 +74,7 @@ exports.remove = async (req, res, next) => {
       where: { id },
       individualHooks: true,
     });
+    
     if (!result) return next(createError(400, 'no exercise'));
 
     return res.json(result);
@@ -75,8 +86,15 @@ exports.remove = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
+
   if (!id || !name) return next(createError(400, 'id and name are required'));
+
+  const exerciseData = { name, userId: req.user.kakaoId }
+
   try {
+    let exercise = await Exercise.findOne({ where: exerciseData });
+    if (exercise) return next(createError(409, 'Exist exercise'));
+
     const result = await Exercise.update({ name }, { where: { id }});
     if (!result[0]) return next(createError(404));
 

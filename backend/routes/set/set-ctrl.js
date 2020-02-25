@@ -19,6 +19,10 @@ exports.read = async (req, res, next) => {
       ],
     });
 
+    if (!data) {
+      return res.status(204).send();
+    }
+
     return res.json(data);
   } catch (e) {
     return next(e);
@@ -31,7 +35,8 @@ exports.register = async (req, res, next) => {
   if (!weight || !reps || !exerciseId || !dayId) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
-    const set = await Set.create({ weight, reps, exerciseId, dayId });
+    const volume = weight * reps;
+    const set = await Set.create({ weight, reps, volume, exerciseId, dayId });
     const sendingData = {
       id: set.id,
       weight: set.weight,
@@ -46,12 +51,13 @@ exports.register = async (req, res, next) => {
 
 exports.registerWithDate = async (req, res, next) => {
   const { weight, reps, exerciseId, date } = req.body;
-
+  
   if (!weight || !reps || !exerciseId || !date) return next(createError(400, 'weight, reps, exerciseId, dayId are required'));
   
   try {
+    const volume = weight * reps;
     const day = await Day.create({ exerciseId, date: new Date(date) });
-    const set = await Set.create({ weight, reps, exerciseId, dayId: day.id });
+    const set = await Set.create({ weight, reps, volume, exerciseId, dayId: day.id });
     const sendingData = {
       dayId: set.dayId,
       set: {
@@ -79,27 +85,13 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-exports.deleteDay = async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) return next(createError(400, 'id is required'));
-  try {
-    const day = await Day.findOne({ where: { id } });
-    const sets = day.getSets();
-    sets.map(async set => await set.destroy());
-    const result = await day.destroy();
-
-    return res.json(result);
-  } catch (e) {
-    return next(e);
-  }
-};
-
 exports.update = async (req, res, next) => {
   const { id } = req.params;
   const { weight, reps } = req.body;
   if (!weight || !reps) return next(createError(400, 'weight and reps are required'));
   try {
-    const result = await Set.update({ weight, reps }, { where: { id }});
+    const volume = weight * reps;
+    const result = await Set.update({ weight, reps, volume }, { where: { id }});
     if (!result[0]) return next(createError(404));
 
     return res.send();
@@ -110,12 +102,13 @@ exports.update = async (req, res, next) => {
 
 exports.list = async (req, res, next) => {
   const { page, size, exerciseId } = req.query;
+
   if (!page || !size || !exerciseId) {
     return next(createError(400, 'page, size, exerciseId are required'));
   }
 
   try {
-    const data = await Day.findAll(
+    const { count, rows: setsByDate } = await Day.findAndCountAll(
       {
         offset: (page - 1) * size,
         limit: parseInt(size),
@@ -126,11 +119,46 @@ exports.list = async (req, res, next) => {
           as: 'sets',
           attributes: ['id', 'weight', 'reps']
         }],
-        order: [['date', 'DESC']]
+        order: [['date', 'DESC']],
+        distinct: true
       },
     );
 
-    return res.json(data);
+    if (setsByDate.length === 0) return res.status(204).send();
+    
+    const hasNextPage = (page * size) < count;
+
+    return res.json({ count, hasNextPage, setsByDate });
+  } catch (e) {
+    return next(e);
+  }
+};
+
+exports.all = async (req, res, next) => {
+  const { exerciseId } = req.query;
+
+  if (!exerciseId) {
+    return next(createError(400, 'exerciseId are required'));
+  }
+
+  try {
+    const sets = await Day.findAll(
+      {
+        where: { exerciseId },
+        attributes: ['id', 'date'],
+        include: [{
+          model: Set,
+          as: 'sets',
+          attributes: ['id', 'weight', 'reps', 'volume']
+        }],
+        order: [['date', 'DESC']],
+        distinct: true
+      },
+    );
+
+    if (sets.length === 0) return res.status(204).send();
+    
+    return res.json(sets);
   } catch (e) {
     return next(e);
   }
@@ -139,8 +167,8 @@ exports.list = async (req, res, next) => {
 exports.listWithPeriod = async (req, res, next) => {
   const { exerciseId, from, until} = req.query;
 
-  if (!exerciseId || !from || !until) {
-    return next(createError(400, 'exerciseId, from, until are required'));
+  if (!exerciseId || !(from || until)) {
+    return next(createError(400));
   }
 
   try {
@@ -157,7 +185,7 @@ exports.listWithPeriod = async (req, res, next) => {
         include: [{
           model: Set,
           as: 'sets',
-          attributes: ['id', 'weight', 'reps']
+          attributes: ['id', 'weight', 'reps', 'volume']
         }],
         order: [['date', 'DESC']]
       },

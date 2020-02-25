@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: true,
     paranoid: true,
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
   });
 
   Day.associate = function(models) {
@@ -20,6 +22,16 @@ module.exports = (sequelize, DataTypes) => {
       as: 'sets',
     });
   };
+
+  Day.addHook('afterDestroy', async day => {
+    try {
+      const sets = await day.getSets();
+      
+      return sets.map(async set => await set.destroy());
+    } catch (e) {
+      throw e;
+    }
+  });
 
   return Day;
 };

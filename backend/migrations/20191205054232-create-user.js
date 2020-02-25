@@ -2,15 +2,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Users', {
-      id: {
-        type: Sequelize.STRING(64),
+      kakaoId: {
+        type: Sequelize.STRING(16),
         primaryKey: true,
         allowNull: false,
         unique: true,
-      },
-      hashedPassword: {
-        type: Sequelize.STRING(128),
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,

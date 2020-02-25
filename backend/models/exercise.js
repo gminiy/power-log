@@ -8,18 +8,15 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: true,
     paranoid: true,
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
   });
+  
   Exercise.associate = function(models) {
     Exercise.belongsTo(models.User, {
       foreignKey: 'userId',
       target: 'id',
       as: 'user',
-    });
-
-    Exercise.hasMany(models.Set, {
-      foreignKey: 'exerciseId',
-      source: 'id',
-      as: 'sets',
     });
 
     Exercise.hasMany(models.Day, {
@@ -30,8 +27,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Exercise.addHook('afterDestroy', async exercise => {
       try {
-        const sets = await exercise.getSets();
-        return sets.map(async set => await set.destroy());
+        const days = await exercise.getDays();
+        
+        return days.map(async day => await day.destroy());
       } catch (e) {
         throw e;
       }

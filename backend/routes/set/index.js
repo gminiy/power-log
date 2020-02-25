@@ -6,9 +6,9 @@ router.get('/', ctrl.read);
 router.post('/', ctrl.register);
 router.post('/withDate', ctrl.registerWithDate);
 router.delete('/:id', ctrl.delete);
-router.delete('/day/:id', ctrl.deleteDay);
 router.put('/:id', ctrl.update);
 router.get('/list', ctrl.list);
 router.get('/list/period', ctrl.listWithPeriod);
+router.get('/list/all', ctrl.all);
 
 module.exports = router;
