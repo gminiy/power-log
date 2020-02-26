@@ -1,25 +1,27 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Context as AuthContext } from '../context/AuthContext';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LoadingModal from '../modals/LoadingModal';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const { login } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const KakaoLogin = async () => {
     try {
-      setLoading(true);
       await KakaoLogins.login();
+      console.log('loginSuccess')
+      setLoading(true);
       
       const { id: kakaoId } = await KakaoLogins.getProfile();
 
       return login({ kakaoId });
     } catch (e) {
+      console.log(e)
       if (e.code === 'E_CANCELLED_OPERATION') {
         console.log('login stopped');
       } else {

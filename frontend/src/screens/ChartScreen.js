@@ -40,11 +40,10 @@ const ChartScreen = ({ navigation }) => {
         year: { isUpdated: false, data: [] },
         all: { isUpdated: false, data: [] }
       });
-
       setIsLackData(false);
-
       setMonth('oneMonth');
       const latestDate = await getLatestDate();
+      // 운동 기록이 없음
       if (latestDate === undefined) return;
       
       const oneMonthData = await getMonthlyData({ latestDate, month: 1 });

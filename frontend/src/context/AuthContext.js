@@ -2,10 +2,7 @@ import { AsyncStorage } from 'react-native';
 import createDataContext from './createDataContext';
 import { navigate } from '../common/navigationRef';
 import urls from '../common/urls';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 
-// Token 만료시 어떻게 할것인가
-// reduce error 로직
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'login':
@@ -53,7 +50,6 @@ const tryLocalLogin = dispatch => async () => {
       if (!response.ok) throw Error(response.status);
 
       const { isReissued, token: reissuedToken } = await response.json();
-      console.log(isReissued, reissuedToken)
 
       if (isReissued) await AsyncStorage.setItem('token', reissuedToken);
 

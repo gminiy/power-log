@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Context as AuthContext } from '../context/AuthContext';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const ResolveAuthScreen = ({ navigation }) => {
+const ResolveAuthScreen = () => {
   const { tryLocalLogin } = useContext(AuthContext);
 
   useEffect(() => {
