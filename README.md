@@ -1,22 +1,32 @@
 # 파워로그
-개인 운동 일지를 기록할 수 있는 모바일 서비스
 
-## 필요 기능
-- 회원 인증 및 권한 설정
-- 운동한 날짜 기록
-- 개인 운동 목록 설정
-- 그날 한 운동의 무게/회수/세트 기록
-- 각 운동 종목별 Volume, max-weight 그래프화
+가장 간단한 운동 일지 작성 애플리케이션
 
-## Frontend
-- react-native
+## 소개
 
-## Backend
-- node.js, express
-- MongoDB, Mongoose
+헬스를 좋아합니다. 운동을 하면 할 수록 기록이 꼭 필요하다는 것을 알게 되었죠.
+여러가지 운동 기록 앱을 써봤으나 복잡하고 답답하더군요.
+그저 기록하고 확인하고 싶을 뿐인데 어떻게 써야하는지 따로 공부해야 할 정도니까요.
+그래서 만들었습니다.
+간단합니다. 기록하세요.
+보여 드릴게요.
 
-## deploy
-- 미정
+## 기능
 
-### 사용자 경험 참고
-- fitNotes(Android application)
+### 카카오로 로그인하기
+
+![kakao-login](./frontend/public/kakao-login.gif)
+### 나만의 운동 등록하기
+
+![exercise](./frontend/public/exercise.gif)
+### 운동 기록하기
+
+![track-add](./frontend/public/track-add.gif)
+### 운동 기록 확인하기
+- 지난 운동 기록 보기
+
+![show-history](./frontend/public/show-history.gif)
+
+- 운동 능력 성장 그래프 보기
+
+![chart-period](./frontend/public/chart-period.gif)
