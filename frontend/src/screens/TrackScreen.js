@@ -9,6 +9,7 @@ import Track from '../components/track/Track';
 import DatePicker from '../components/track/DatePicker';
 import TrackInputForm from '../components/track/TrackInputForm';
 import LoadingModal from '../modals/LoadingModal';
+import ErrorModal from '../modals/ErrorModal';
 
 const TrackScreen = ({ navigation }) => {
   const exerciseId = navigation.getParam('id');
@@ -21,9 +22,10 @@ const TrackScreen = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isValidate, setIsValidate] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
 
   useEffect(() => {initSets()}, [date]);
+
   useEffect(() => {
     if (selectedItem) {
       setWeight(selectedItem.weight.toString());
@@ -32,6 +34,7 @@ const TrackScreen = ({ navigation }) => {
       initInputState();
     }
   }, [selectedItem]);
+
   useEffect(() => {
     navigation.setParams({ sets });
   }, [sets]);
@@ -62,7 +65,8 @@ const TrackScreen = ({ navigation }) => {
       setDayId(data[0].id);
       setSets(data[0].sets);
     } catch (error) {
-      return setError(error);
+      
+      return setError({ error, errorModalVisible: true });
     } finally {
       setLoading(false);
     }
@@ -94,7 +98,7 @@ const TrackScreen = ({ navigation }) => {
         const data = await response.json();
         
         setDayId(data.dayId);
-        setSets(sets.concat(data.set));
+        return setSets(sets.concat(data.set));
       }
 
       const response = await fetch(
@@ -115,12 +119,13 @@ const TrackScreen = ({ navigation }) => {
 
       const data = await response.json();
 
-      setSets(sets.concat(data));
+      return setSets(sets.concat(data));
     } catch (error) {
-      return setError(error);
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       initInputState();
-      setLoading(false);
+      return setLoading(false);
     }
   };
   
@@ -149,7 +154,8 @@ const TrackScreen = ({ navigation }) => {
         : set
       }));
     } catch (error) {
-      return setError(error);
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       initInputState();
       setLoading(false);
@@ -186,7 +192,8 @@ const TrackScreen = ({ navigation }) => {
       );
       setSets(sets.filter((set) => set.id !== selectedItem.id));
     } catch (error) {
-      return setError(error);
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       initInputState();
       setLoading(false);
@@ -202,6 +209,7 @@ const TrackScreen = ({ navigation }) => {
 
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       <DatePicker
         date={date}

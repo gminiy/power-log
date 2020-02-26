@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import LoadingModal from './LoadingModal';
-import Button from '../components/Button';
 import { Context as AuthContext} from '../context/AuthContext';
 import urls from '../common/urls';
+import ErrorModal from '../modals/ErrorModal';
 
 const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
   const { state: { token } } = useContext(AuthContext);
@@ -13,6 +13,7 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
   const [isValidate, setIsValidate] = useState(true);
   const [isExist, setIsExist] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
 
   const addExercise = async () => {
     try {
@@ -36,12 +37,13 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
       
       const exercise = await response.json();
 
-      dispatch({ type: 'set_exercises', payload: [exercise] });
+      dispatch({ type: 'add_exercise', payload: [exercise] });
     } catch (error) {
       if (error.message === '409') {
         return setIsExist(true);
       }
-      return dispatch({ type: 'set_error', payload: error });
+
+      return setError({ error, errorModalVisible: true });
     } finally {
       setLoading(false);
     }
@@ -50,10 +52,11 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
   const closeModal = () => {
     setName('');
     setIsVisible(false);
-  }
+  };
 
   return (
     <>
+      <ErrorModal error={error} setError={setError} />
       <LoadingModal isVisible={loading} />
       <Modal
         isVisible={isVisible}
@@ -77,13 +80,12 @@ const AddExerciseModal = ({ isVisible, setIsVisible, dispatch }) => {
           {isExist && (
             <Text style={styles.warningText}>이미 등록한 운동입니다.</Text>
           )}
-          <Button
-            title="추가"
-            styles={buttonStyles}
-            onPress={() => {
-              addExercise();
-            }}
-          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={addExercise}
+          >
+            <Text style={styles.buttonText}>추가</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </>
@@ -115,10 +117,7 @@ const styles = StyleSheet.create({
     paddingLeft: wp('3%'),
     fontSize: wp('3.5%'),
     backgroundColor: '#f5f5f5'
-  }
-});
-
-const buttonStyles = StyleSheet.create({
+  },
   button: {
     marginTop: hp('2%'),
     width: wp('21%'),
@@ -129,7 +128,7 @@ const buttonStyles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#7B6E66'
   },
-  title: {
+  buttonText: {
     fontSize: wp('4.5%'),
     color: '#fffaf0'
   }

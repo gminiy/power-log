@@ -1,13 +1,15 @@
-import React, { useState, useReducer } from 'react';
-import { View, ActivityIndicator, FlatList } from 'react-native';
+import React, { useState, useReducer, useEffect, useContext } from 'react';
+import { View, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import urls from '../common/urls';
 import AddExerciseModal from '../modals/AddExerciseModal';
-import LogoutButton from '../components/LogoutButton';
-import useFetch from '../hooks/useFetch';
+import LogoutButton from '../components/exercises/LogoutButton';
 import Exercise from '../components/exercises/Exercise';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddExerciseButton from '../components/exercises/AddExerciseButton';
+import { Context as AuthContext} from '../context/AuthContext';
+import LoadingModal from '../modals/LoadingModal';
+import ErrorModal from '../modals/ErrorModal';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -30,8 +32,10 @@ const reducer = (state, action) => {
               : exercise
           })
       };
-    case 'set_exercises':
+    case 'add_exercise':
       return { ...state, exercises: action.payload.concat(state.exercises)};
+    case 'set_exercises':
+      return { ...state, exercises: state.exercises.concat(action.payload)};
     case 'set_error':
       return { ...state, error: action.payload }
     default:
@@ -40,48 +44,79 @@ const reducer = (state, action) => {
 };
 
 const ExercisesScreen = ({ navigation }) => {
+  const pageSize = 15;
+  const { state: { token } } = useContext(AuthContext);
   const [state, dispatch] = useReducer(reducer, { exercises: [], error: null });
   const [addExerciseModalVisible, setAddExerciseModalVisable] = useState(false);
-  const { error, loading } = useFetch(urls.getExercises,
-    {},
-    (data) => {
-      if (error) {
-        return dispatch({ type: 'set_error', payload: error });
-      }
-      return dispatch({ type: 'set_exercises', payload: data });
+  const [paginationInfo, setPagenationInfo] = useState({ hasNextPage: true, page: 1 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ error: null, errorModalVisible: false });
+
+  useEffect(() => { loadExercises() }, []);
+
+  const loadExercises = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${urls.getExercises}?size=${pageSize}&page=${paginationInfo.page}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        },
+      );
+
+      if (!response.ok) throw Error(response.status);
+
+      const data = await response.json();
+
+      setPagenationInfo({
+        hasNextPage: data.hasNextPage,
+        page: (paginationInfo.page + 1)
+      });
+
+      return dispatch({ type: 'set_exercises', payload: data.exercises });
+    } catch (error) {
+
+      return setError({ error, errorModalVisible: true });
+    } finally {
+      return setLoading(false);
     }
-  );
+  };
   
   return (
     <>
-      {loading ? (
-        <ActivityIndicator size="large" color="#7B6E66" style={{ flex: 1 }}/>
-      ) : (
-        <View>
-          <AddExerciseModal
+      <ErrorModal error={error} setError={setError} />
+      <LoadingModal isVisible={loading} />
+      <View>
+        <AddExerciseModal
           isVisible={addExerciseModalVisible}
           setIsVisible={setAddExerciseModalVisable}
           dispatch={dispatch}
-          />
-          <FlatList
-            data={state.exercises}
-            keyExtractor={(exercise) => `${exercise.id}`}
-            renderItem={({ item, index }) => {          
-              return (
-                <Exercise
-                  item={item}
-                  index={index}
-                  navigation={navigation}
-                  dispatch={dispatch}
-                />
-              );
-            }}
-          />
-        <AddExerciseButton
-          setAddExerciseModalVisable={setAddExerciseModalVisable}
         />
-      </View>
-    )}
+        <FlatList
+          data={state.exercises}
+          keyExtractor={(exercise) => `${exercise.id}`}
+          renderItem={({ item, index }) => {          
+            return (
+              <Exercise
+                item={item}
+                index={index}
+                navigation={navigation}
+                dispatch={dispatch}
+              />
+            );
+          }}
+          onEndReached={() => {
+            if (paginationInfo.hasNextPage) loadExercises();
+          }}
+          onEndReachedThreshold={0.4}
+        />
+      <AddExerciseButton
+        setAddExerciseModalVisable={setAddExerciseModalVisable}
+      />
+    </View>
     </>
   );
 };
@@ -91,7 +126,7 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     title: '파워로그',
     headerLeft: () => {
       return (
-        <MaterialCommunityIcons
+        <Icon
           name="dumbbell"
           color='#fffaf0'
           size={wp('6.5%')}
@@ -101,7 +136,7 @@ ExercisesScreen.navigationOptions = ({ navigation }) => {
     },
     headerStyle: {
       backgroundColor: "#111111",
-      marginBottom: hp('2%')
+      // marginBottom: hp('2%')
     },
     headerRight: () => (
       <>

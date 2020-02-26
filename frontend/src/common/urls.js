@@ -1,9 +1,9 @@
-const base = 'http://30691574.ngrok.io';
+const base = 'http://13.124.85.234';
 
 const urls = {
   register: '/auth/register',
   login: '/auth/login',
-  checkAuth: '/auth/check',
+  checkToken: '/auth/check',
   getExercises: '/exercise',
   addExercise: '/exercise',
   updateExercise: '/exercise',
@@ -14,8 +14,11 @@ const urls = {
   updateSet: '/set',
   deleteSet: '/set',
   getSetList: '/set/list',
+  getLatestDay: '/day/latest',
   getSetListWithPeriod: '/set/list/period',
-  deleteDay: '/set/day',
+  getSetListAll: '/set/list/all',
+  deleteDay: '/day',
+  getLatestDay: '/day/latest',
 };
 
 for (const url of Object.keys(urls) ) {

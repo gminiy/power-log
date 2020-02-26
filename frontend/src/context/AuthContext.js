@@ -1,6 +1,5 @@
 import { AsyncStorage } from 'react-native';
 import createDataContext from './createDataContext';
-import client from '../api/client';
 import { navigate } from '../common/navigationRef';
 import urls from '../common/urls';
 
@@ -15,28 +14,14 @@ const authReducer = (state, action) => {
   }
 };
 
-const register = dispatch => async ({ id, password }) => {
-  try {
-    const response = await client.post(urls.register, { body: { id, password } });
-    const token = response.data.token;
-    await AsyncStorage.setItem('token', token);
-
-    dispatch({ type: 'login', payload: token });
-
-    return navigate('Exercises');
-  } catch (error) {
-    return dispatch({ type: 'set_error', payload: error });
-  }
-};
-
-const login = dispatch => async ({ id, password }) => {
+const login = dispatch => async ({ kakaoId }) => {
   try {
     const response = await fetch(urls.login, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, password })
+      body: JSON.stringify({ kakaoId })
     });
 
     if(!response.ok) throw Error(response.status);
@@ -49,34 +34,44 @@ const login = dispatch => async ({ id, password }) => {
 
     return navigate('Exercises');
   } catch (error) {
-    console.log(error)
     return dispatch({ type: 'set_error', payload: error });
   }
 };
 
 const tryLocalLogin = dispatch => async () => {
   try {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      const response = await fetch(urls.checkAuth,{
-        headers: { token }
+    const localToken = await AsyncStorage.getItem('token');
+
+    if (localToken) {
+      const response = await fetch(urls.checkToken,{
+        headers: { token: localToken }
       });
 
-      await response.json();
-      
+      if (!response.ok) throw Error(response.status);
+
+      const { isReissued, token: reissuedToken } = await response.json();
+
+      if (isReissued) await AsyncStorage.setItem('token', reissuedToken);
+
+      const token = isReissued ? reissuedToken : localToken;
       dispatch({ type: 'login', payload: token });
 
       return navigate('Exercises');
-    } else {
+    }
+
+    return navigate('Login');
+  } catch (error) {
+    // expired token
+    if (error.message === '403') {
       return navigate('Login');
     }
-  } catch (error) {
+
     return dispatch({ type: 'set_error', payload: error });
   }
 };
 
 export const { Context, Provider } = createDataContext(
   authReducer,
-  { register, login, tryLocalLogin },
+  { login, tryLocalLogin },
   { token: null, error: null }
 );

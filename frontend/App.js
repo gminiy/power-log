@@ -5,30 +5,25 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { setNavigator } from './src/common/navigationRef';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import LoginScreen from './src/screens/LoginScreen';
-import RegisterScreen from './src/screens/RegisterScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import ExercisesScreen from './src/screens/ExercisesScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import TrackScreen from './src/screens/TrackScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ChartScreen from './src/screens/ChartScreen';
-import ErrorScreen from './src/screens/ErrorScreen';
 
 const switchNavigator = createSwitchNavigator({
   ResolveAuth: ResolveAuthScreen,
-  LoginStacks: createStackNavigator({
-    Login: LoginScreen,
-    Register: RegisterScreen,
-  }),
+  Login: LoginScreen,
   MainStacks: createStackNavigator(
-    {
+    { 
       Exercises: ExercisesScreen,
       ExerciseTabs: createMaterialTopTabNavigator(
         {
           Track: {
             screen: TrackScreen,
             navigationOptions: {
-             title: '기록측정'
+             title: '기록하기'
             } 
           },
           History: {
@@ -62,7 +57,6 @@ const switchNavigator = createSwitchNavigator({
             },
             inactiveTintColor: '#666666',
             activeTintColor: '#9c8856',
-
           }
         }
       )
@@ -86,15 +80,14 @@ const switchNavigator = createSwitchNavigator({
       }
     }
   ),
-  Error: ErrorScreen,
 });
 
 const App = createAppContainer(switchNavigator); 
 
 export default () => {
   return (
-    <AuthProvider>
-      <App ref={(navigator) => { setNavigator(navigator) }}/>
-    </AuthProvider>
+      <AuthProvider>
+        <App ref={(navigator) => { setNavigator(navigator) }}/>
+      </AuthProvider>
   );
 };
