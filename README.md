@@ -15,18 +15,19 @@
 
 ### 카카오로 로그인하기
 
-![kakao-login](./frontend/public/kakao-login.gif)
+![kakao-login](./public/kakao-login.gif)
 ### 나만의 운동 등록하기
 
-![exercise](./frontend/public/exercise.gif)
+![exercise](./public/exercise.gif)
 ### 운동 기록하기
 
-![track-add](./frontend/public/track-add.gif)
+![track-add](./public/track-add.gif)
 ### 운동 기록 확인하기
 - 지난 운동 기록 보기
 
-![show-history](./frontend/public/show-history.gif)
+![show-history](./public/show-history.gif)
 
 - 운동 능력 성장 그래프 보기
 
-![chart-period](./frontend/public/chart-period.gif)
+![chart-period](./public/chart-period.gif)
+![chart-class](./public/chart-class.gif)
